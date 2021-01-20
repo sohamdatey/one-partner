@@ -95,8 +95,8 @@
 						<div class="form-group catForm">
 							<label>Category</label>
 
-							<%=HTMLUtility.getCategoryListForProducts("categoryId",
-					DataUtility.getStringData(String.valueOf(bean.getId())), l)%>
+							<%=HTMLUtility.getCategoryListForProductsSelected("categoryId",
+					DataUtility.getStringData(String.valueOf(bean.getId())), l, l)%>
 
 
 							<aside onclick="$('#addCat').modal('show');">

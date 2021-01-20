@@ -120,10 +120,7 @@ public class ManagePartnersCtl extends BaseCtl {
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
-
 		String[] ids = request.getParameterValues("ids");
-		String description = DataUtility.getString(request.getParameter("description"));
-
 		UserModel model = new UserModel();
 
 		if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -147,7 +144,7 @@ public class ManagePartnersCtl extends BaseCtl {
 			return;
 
 		}
-		if (search != null) {
+		if (op != null && search != null) {
 			try {
 				System.out.println("pro....." + search);
 				List list = null;
@@ -166,7 +163,24 @@ public class ManagePartnersCtl extends BaseCtl {
 			}
 
 		}
-		ServletUtility.forward(getView(), request, response);
+
+		if (op == null && search == null) {
+
+			System.out.println("manage partners search....." + search);
+			List list = null;
+			try {
+				list = model.search(bean, 0, 0);
+			} catch (ApplicationException e) {
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found ", request);
+			}
+			ServletUtility.setList(list, request);
+
+			ServletUtility.forward(getView(), request, response);
+		}
 	}
 
 	@Override

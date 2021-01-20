@@ -136,6 +136,21 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 
 		}
 
+		if (op == null && search == null && bean.getProductName() == null && catID == 0) {
+
+			System.out.println("manage partners searcmmmmmmmh....." + search);
+			List list = null;
+			try {
+				list = model.searchProducts(bean, 0, 0);
+			} catch (ApplicationException e) {
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found ", request);
+			}
+			ServletUtility.setList(list, request);
+		}
 		ServletUtility.forward(getView(), request, response);
 		return;
 	}
