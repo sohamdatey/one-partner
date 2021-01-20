@@ -28,7 +28,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "WelcomeCtl", urlPatterns = { "/OnePartner/WelcomeCtl" })
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 @MultipartConfig
 public class WelcomeCtl extends BaseCtl {
 

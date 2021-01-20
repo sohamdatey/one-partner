@@ -25,7 +25,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/OnePartner/ctl/ManageMarketPlaceCtl" })
+@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/ctl/ManageMarketPlaceCtl" })
 public class ManageMarketPlaceCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
