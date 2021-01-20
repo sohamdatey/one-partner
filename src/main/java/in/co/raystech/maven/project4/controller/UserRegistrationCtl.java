@@ -28,7 +28,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
+@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/OnePartner/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
 
 	public static final String OP_SIGN_UP = "SignUp";

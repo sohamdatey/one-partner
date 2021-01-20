@@ -24,7 +24,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageProductCtl
  */
 
-@WebServlet(name = "ManageProductCtl", urlPatterns = { "/ctl/ManageProductCtl" })
+@WebServlet(name = "ManageProductCtl", urlPatterns = { "/OnePartner/ctl/ManageProductCtl" })
 public class ManageProductCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
