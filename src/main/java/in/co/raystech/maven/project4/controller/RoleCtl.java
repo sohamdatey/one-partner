@@ -30,7 +30,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
 
  */
-@WebServlet(name = "RoleCtl", urlPatterns = { "/OnePartner/ctl/RoleCtl" })
+@WebServlet(name = "RoleCtl", urlPatterns = { "/ctl/RoleCtl" })
 public class RoleCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;

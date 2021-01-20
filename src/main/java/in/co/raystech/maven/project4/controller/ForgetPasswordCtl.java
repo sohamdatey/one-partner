@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/OnePartner/ForgetPasswordCtl" })
+@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/ForgetPasswordCtl" })
 public class ForgetPasswordCtl extends BaseCtl {
 
 	@Override

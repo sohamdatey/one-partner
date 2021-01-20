@@ -60,7 +60,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM st_user");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM ST_USER");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -81,7 +81,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM category");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM CATEGORY");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -102,7 +102,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM product_table");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM PRODUCT_TABLE");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -175,7 +175,7 @@ public class UserModel {
 	 */
 
 	public UserBean findByMobileNumber(String mobileNumber) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE MOBILE_NO=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE MOBILE_NO=?");
 		UserBean bean = null;
 		Connection conn = null;
 		System.out.println("sql" + sql);
@@ -231,7 +231,7 @@ public class UserModel {
 			pk = nextPK();
 			System.out.println(pk + " in ModelJDBC");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO st_user VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ST_USER VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getName());
 			pstmt.setString(3, bean.getLogin());
@@ -277,7 +277,7 @@ public class UserModel {
 
 	public CategoryBean findByCategory(String cat) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE category=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 		System.out.println("sql  " + sql);
@@ -337,7 +337,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE st_user SET `name`=?,LOGIN=?,PASSWORD=?,MOBILE_NO=?,ROLE_ID=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=?, description=? WHERE ID=?");
+					"UPDATE ST_USER SET `name`=?,LOGIN=?,PASSWORD=?,MOBILE_NO=?,ROLE_ID=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=?, description=? WHERE ID=?");
 			pstmt.setString(1, bean.getName());
 			pstmt.setString(2, bean.getLogin());
 			pstmt.setString(3, bean.getPassword());
@@ -377,7 +377,7 @@ public class UserModel {
 			pk = nextCategoryPK();
 			System.out.println(pk + " in Model addCategory");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO category VALUES(?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO CATEGORY VALUES(?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getCategory());
 			pstmt.executeUpdate();
@@ -439,7 +439,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO product_category VALUES(?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_CATEGORY VALUES(?,?)");
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, idd);
 			pstmt.executeUpdate();
@@ -468,7 +468,7 @@ public class UserModel {
 			pk = nextProductPK();
 			System.out.println(pk + " in Model addProducts");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO product_table VALUES(?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_TABLE VALUES(?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getProductName());
 			pstmt.setString(3, bean.getDescription());
@@ -515,7 +515,7 @@ public class UserModel {
 	}
 
 	public UserBean findByPK(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE ID=?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -607,7 +607,7 @@ public class UserModel {
 	public UserBean authenticate(String login, String password) throws ApplicationException {
 
 		System.out.println("IN MODEL AUTHENTICATE");
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE LOGIN = ? AND PASSWORD = ?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE LOGIN = ? AND PASSWORD = ?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -633,7 +633,6 @@ public class UserModel {
 
 			}
 		} catch (Exception e) {
-			
 			throw new ApplicationException("Exception : Exception in get roles");
 
 		} finally {
@@ -648,7 +647,7 @@ public class UserModel {
 	}
 
 	public List search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
@@ -720,7 +719,7 @@ public class UserModel {
 	}
 
 	public List searchSpecific(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE");
 
 		if (bean != null) {
 
@@ -843,7 +842,7 @@ public class UserModel {
 	}
 
 	public List searchCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
@@ -991,7 +990,7 @@ public class UserModel {
 
 	public List categoryList(int pageNo, int pageSize) throws ApplicationException {
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("SELECT * FROM category");
+		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1025,7 +1024,7 @@ public class UserModel {
 
 	public List productsList(int pageNo, int pageSize) throws ApplicationException {
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table");
+		StringBuffer sql = new StringBuffer("SELECT * FROM PRODUCT_TABLE");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1229,7 +1228,7 @@ public class UserModel {
 
 	public List list(int pageNo, int pageSize) throws ApplicationException {
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from st_user");
+		StringBuffer sql = new StringBuffer("select * from ST_USER");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1295,7 +1294,7 @@ public class UserModel {
 
 	public UserBean findByLogin(String login) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM st_user WHERE LOGIN=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE LOGIN=?");
 		UserBean bean = null;
 		Connection conn = null;
 	
@@ -1338,7 +1337,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM st_user WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ST_USER WHERE ID=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -1361,7 +1360,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM category WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM CATEGORY WHERE ID=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -1384,7 +1383,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM product_table WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM PRODUCT_TABLE WHERE ID=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction

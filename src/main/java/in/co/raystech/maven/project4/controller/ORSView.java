@@ -13,8 +13,6 @@ public interface ORSView {
 	public String APP_CONTEXT = "/OnePartner";
 	public String LAYOUT_VIEW = "/BaseLayout.jsp";
 	public String PAGE_FOLDER = "/jsp";
-	
-	
 	public String JAVA_DOC_VIEW = APP_CONTEXT + "/doc/index.html";
 	public String ERROR_VIEW = PAGE_FOLDER + "/ErrorView.jsp";
 	public String MARKSHEET_VIEW = PAGE_FOLDER + "/MarksheetView.jsp";
