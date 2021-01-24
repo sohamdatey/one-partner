@@ -27,7 +27,6 @@ public abstract class BaseCtl extends HttpServlet {
 	public static final String OP_ADD = "Add";
 	public static final String OP_EDIT = "Edit";
 	public static final String OP_SAVE = "save";
-
 	public static final String OP_CANCEL = "Cancel";
 	public static final String OP_DELETE = "Delete";
 	public static final String OP_LIST = "List";

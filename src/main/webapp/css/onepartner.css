@@ -812,6 +812,7 @@ a {
 	top: 0;
 	bottom: 0;
 	margin: auto;
+	overflow:auto;
 }
 
 .login-html .sign-in, .login-html .sign-up, .login-form .group .check {

@@ -17,6 +17,9 @@ import javax.servlet.http.Part;
 
 public class ProductsBean extends BaseBean {
 
+	public ProductsBean() {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * 
 	 */

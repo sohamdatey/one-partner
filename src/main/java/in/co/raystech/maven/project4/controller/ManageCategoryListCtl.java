@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.UserBean;
@@ -27,14 +29,14 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 @WebServlet(name = "ManageCategoryListCtl", urlPatterns = { "/ctl/ManageCategoryListCtl" })
 public class ManageCategoryListCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
-
+	private static Logger log = Logger.getLogger(ManageCategoryListCtl.class);
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		log.debug("ManageCategoryListCtl Method doGet Started");
 		List list = null;
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		UserModel model = new UserModel();
-
 		try {
 			list = null;
 			list = model.searchCategory(bean, 0, 0);
@@ -45,16 +47,17 @@ public class ManageCategoryListCtl extends BaseCtl {
 			ServletUtility.setList(list, request);
 			ServletUtility.forward(getView(), request, response);
 		} catch (ApplicationException e) {
+			log.error(e);
 			ServletUtility.setBean(bean, request);
 			ServletUtility.setErrorMessage(e.getMessage(), request);
 		}
 		ServletUtility.forward(getView(), request, response);
+		log.debug("ManageCategoryListCtl Method doGet Ended");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		System.out.println("post post post post=======================================");
+		log.debug("ManageCategoryListCtl Method doPost Started");
 		CategoryBean bean = new CategoryBean();
 		try {
 			List list = null;
@@ -69,10 +72,11 @@ public class ManageCategoryListCtl extends BaseCtl {
 			ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
 
 		} catch (ApplicationException e) {
+			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-
+		log.debug("ManageCategoryListCtl Method doPost Ended");
 	}
 
 	@Override

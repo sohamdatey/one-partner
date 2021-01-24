@@ -11,6 +11,9 @@ package in.co.raystech.maven.project4.bean;
  */
 
 public class RoleBean extends BaseBean {
+	public RoleBean() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Predefined Role constants

@@ -14,6 +14,14 @@ import java.sql.Timestamp;
 
 public abstract class BaseBean implements Serializable, DropdownListBean, Comparable<BaseBean> {
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public BaseBean() {
+	}
 	/**
 	 * Non Business primary key
 	 */

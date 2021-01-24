@@ -25,8 +25,8 @@
 		scope="request"></jsp:useBean>
 
 
-	<form id="addProductForm" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>" method="post"
-		enctype="multipart/form-data">
+	<form id="addProductForm" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>"
+		method="post" enctype="multipart/form-data">
 		<%
 			List<CategoryBean> l = (List) request.getAttribute("categoryList");
 		%>
@@ -40,8 +40,8 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<div class="pull-right">
-							<a class="iconCir" title="Cancel" data-dismiss="modal">
-								<i class="fa fa-times"></i>
+							<a class="iconCir" title="Cancel" data-dismiss="modal"> <i
+								class="fa fa-times"></i>
 							</a>
 						</div>
 
@@ -68,7 +68,6 @@
 
 						<div class="form-group">
 							<label>Product Name </label> <input required type="text"
-								value="<%=DataUtility.getStringData(bean.getProductName())%>"
 								name="productName" class="form-control"
 								placeholder="Enter Product Name" />
 						</div>
@@ -80,14 +79,12 @@
 
 						<div class="form-group">
 							<label>Partnership Offer</label> <input type="text"
-								value="<%=DataUtility.getStringData(bean.getPartnershipOffer())%>"
 								name="partnershipOffer" class="form-control"
 								placeholder="Enter Offer Details" />
 						</div>
 
 						<div class="form-group">
 							<label>Form Link </label> <input required type="text"
-								value="<%=DataUtility.getStringData(bean.getFormLink())%>"
 								name="formLink" class="form-control"
 								placeholder="Enter Google form or Typeform link" />
 						</div>
@@ -95,8 +92,8 @@
 						<div class="form-group catForm">
 							<label>Category</label>
 
-							<%=HTMLUtility.getCategoryListForProductsSelected("categoryId",
-					DataUtility.getStringData(String.valueOf(bean.getId())), l, l)%>
+							<%=HTMLUtility.getCategoryListForProducts("categoryId",
+					DataUtility.getStringData(String.valueOf(bean.getId())), l)%>
 
 
 							<aside onclick="$('#addCat').modal('show');">
@@ -118,14 +115,15 @@
 		</div>
 	</form>
 
-	<form id="editProductForm" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>" method="post"
-		enctype="multipart/form-data">
+	<form id="editProductForm" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>"
+		method="post" enctype="multipart/form-data">
 
 
 		<%
 			bean2 = new ProductsBean();
 			bean2 = (ProductsBean) request.getAttribute("productBeanAttr");
 			List listOfCats = (List) request.getAttribute("listOfCats");
+			List allCategoriesList = (List) request.getAttribute("allCategoriesList");
 		%>
 
 
@@ -139,14 +137,10 @@
 
 
 							<a class="iconCir" title="Delete"
-								onclick="$('#delConfirm').modal('show');">
-								<i class="fa fa-trash"></i>
-							</a>
-
-
-							<a class="iconCir" title="Cancel"
-								data-dismiss="modal">
-								<i class="fa fa-times"></i>
+								onclick="$('#delConfirm').modal('show');"> <i
+								class="fa fa-trash"></i>
+							</a> <a class="iconCir" title="Cancel" data-dismiss="modal"> <i
+								class="fa fa-times"></i>
 							</a>
 						</div>
 
@@ -234,25 +228,20 @@
 								class="form-control" name="formLink"
 								placeholder="Enter Google form or Typeform link" />
 						</div>
-
 						<div class="form-group catForm">
-							<!-- <label>Category</label> -->
-
+							<label>Category</label>
 							<%
 								if (bean2 != null) {
 							%>
-							<%=HTMLUtility.getCategoryListForProductsSelected("categoryId",
-						DataUtility.getStringData(String.valueOf(bean.getId())), listOfCats, l)%>
 
-							<%
-								} else {
-							%>
-							<%=HTMLUtility.getCategoryListForProducts("categoryId",
-						DataUtility.getStringData(String.valueOf(bean.getId())), l)%>
+							<%=HTMLUtility.getCategoryListForProductsSelected("categoryId", String.valueOf(bean.getId()),
+						listOfCats, allCategoriesList)%>
+
 							<%
 								}
 							%>
-
+						</div>
+						<div class="form-group catForm">
 							<aside onclick="$('#addCat').modal('show');">
 								<i class="fa fa-plus"></i>
 							</aside>
@@ -308,12 +297,12 @@
 			$('#addCategory').modal('show');
 		});
 		$('.catForm').on('keyup keypress', function(e) {
-			  var keyCode = e.keyCode || e.which;
-			  if (keyCode === 13) { 
-			    e.preventDefault();
-			    return false;
-			  }
-			});
+			var keyCode = e.keyCode || e.which;
+			if (keyCode === 13) {
+				e.preventDefault();
+				return false;
+			}
+		});
 	</script>
 </body>
 </html>

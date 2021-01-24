@@ -38,7 +38,7 @@ public class UserCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(UserCtl.class);
-
+	
 	@Override
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
@@ -274,6 +274,7 @@ public class UserCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
+				log.error(e);
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 			}

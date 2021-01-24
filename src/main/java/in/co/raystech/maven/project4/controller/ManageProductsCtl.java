@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.log4j.Logger;
+
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.ProductsBean;
@@ -31,32 +33,28 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 @WebServlet(name = "ManageProductsCtl", urlPatterns = { "/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
+	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-
+		log.debug("ManageProductsCtl Method populateBean Started");
 		ProductsBean bean = new ProductsBean();
-
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-
 		bean.setProductName(DataUtility.getString(request.getParameter("productName")));
-
 		bean.setDescription(DataUtility.getString(request.getParameter("description")));
-
 		bean.setCatId(DataUtility.getLong(request.getParameter("categoryId")));
-
 		bean.setPartnershipOffer(DataUtility.getString(request.getParameter("partnershipOffer")));
-
 		bean.setFormLink(DataUtility.getString(request.getParameter("formLink")));
-
 		populateDTO(bean, request);
-
+		log.debug("ManageProductsCtl Method populateBean ended");
 		return bean;
 	}
 
 	@Override
 	protected void preload(HttpServletRequest request) {
+
+		log.debug("ManageProductsCtl Method preload Started");
 		UserModel model = new UserModel();
 
 		try {
@@ -67,22 +65,22 @@ public class ManageProductsCtl extends BaseCtl {
 				buttonNumber++;
 			}
 			request.setAttribute("buttonNumber", buttonNumber);
-
 			List categoryList = model.categoryList(0, 0);
 			CategoryBean categoryBean = new CategoryBean();
 			request.setAttribute("categoryList", categoryList);
 		} catch (ApplicationException e) {
+			log.error(e);
 			e.printStackTrace();
 		}
+		log.debug("ManageProductsCtl Method populateBean ended");
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		log.debug("ManageProductsCtl Method doget Started");
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
-
 		String op = DataUtility.getString(request.getParameter("operation"));
-
 		try {
 			List list = null;
 			ProductsBean bean = new ProductsBean();
@@ -92,22 +90,41 @@ public class ManageProductsCtl extends BaseCtl {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 		} catch (ApplicationException e1) {
+			log.error(e);
 			e1.printStackTrace();
 		}
-
+		System.out.println("into the get id  list ------"+ id);
+		
 		if (id > 0) {
-
 			ProductsBean productsBean;
 			try {
 				productsBean = model.findByPKProducts(id);
 				System.out.println(productsBean.getId());
 				System.out.println(productsBean.getProductName());
-				List list = model.createCategoryBeans(productsBean.getId());
-
+				List<CategoryBean> list = model.createCategoryBeans(productsBean.getId());
+				List<CategoryBean> list2 = model.categoryList();
 				request.setAttribute("listOfCats", list);
+				request.setAttribute("allCategoriesList", list2);
+				CategoryBean catBean = new CategoryBean();
+				Iterator<CategoryBean> it = list.iterator();
+				int size = list.size();
+				while (it.hasNext()) {
+					catBean = it.next();
+					System.out.println(catBean.getCategory());
+				}
+				System.out.println("-------------------------------");
+				Iterator<CategoryBean> it2 = list2.iterator();
+				int size2 = list2.size();
+				while (it.hasNext()) {
+					catBean = it.next();
+					System.out.println(catBean.getCategory());
+
+				}
+
 				ServletUtility.setBean(productsBean, request);
 				request.setAttribute("productBeanAttr", productsBean);
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
@@ -115,11 +132,14 @@ public class ManageProductsCtl extends BaseCtl {
 		}
 
 		ServletUtility.forward(getView(), request, response);
+
+		log.debug("ManageProductsCtl Method doGet Ended");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		log.debug("ManageProductsCtl Method dopost Started");
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
@@ -137,6 +157,7 @@ public class ManageProductsCtl extends BaseCtl {
 					model.deleteProduct(bean);
 
 				} catch (ApplicationException e) {
+					log.error(e);
 					e.printStackTrace();
 				}
 				ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
@@ -164,6 +185,8 @@ public class ManageProductsCtl extends BaseCtl {
 
 							DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart, String.valueOf(pk) + ".jpg");
 						} catch (ImageSaveException e) {
+							log.error(e);
+							
 							ServletUtility.handleException(e, request, response);
 						}
 						bean.setId(pk);
@@ -184,13 +207,20 @@ public class ManageProductsCtl extends BaseCtl {
 									DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart,
 											String.valueOf(bean.getId()) + ".jpg");
 								} catch (ImageSaveException e) {
+									log.error(e);
+									
 									ServletUtility.handleException(e, request, response);
 								}
+
 								ServletUtility.setBean(bean, request);
 								ServletUtility.setSuccessMessage("product is  successfully Updated", request);
 							} catch (ApplicationException e) {
+								log.error(e);
+								
 								e.printStackTrace();
 							} catch (DuplicateRecordException e) {
+								log.error(e);
+								
 								e.printStackTrace();
 							}
 						}
@@ -199,13 +229,16 @@ public class ManageProductsCtl extends BaseCtl {
 					}
 
 				} catch (ApplicationException e) {
+					log.error(e);
 					ServletUtility.handleException(e, request, response);
 					return;
 				} catch (DuplicateRecordException e) {
+					log.error(e);
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage(e.getMessage(), request);
 
 				} catch (DatabaseException e) {
+					log.error(e);
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage(e.getMessage(), request);
 				}
@@ -230,6 +263,7 @@ public class ManageProductsCtl extends BaseCtl {
 				ServletUtility.setList(list, request);
 
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
@@ -239,10 +273,13 @@ public class ManageProductsCtl extends BaseCtl {
 		try {
 			list = model.searchProducts(bean, 0, 0);
 		} catch (ApplicationException e) {
+			log.error(e);
 			e.printStackTrace();
 		}
 		ServletUtility.setList(list, request);
 		ServletUtility.forward(getView(), request, response);
+
+		log.debug("ManageProductsCtl Method doPost Ended");
 	}
 
 	@Override

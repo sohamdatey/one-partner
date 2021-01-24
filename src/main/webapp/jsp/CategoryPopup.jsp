@@ -42,7 +42,6 @@
 						<div class="form-group">
 
 							<label>Category Name </label> <input type="text"
-								value="<%=DataUtility.getStringData(bean.getCategory())%>"
 								name="category" class="form-control"
 								placeholder="Enter Category Name" />
 						</div>

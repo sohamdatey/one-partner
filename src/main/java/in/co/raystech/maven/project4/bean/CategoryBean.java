@@ -12,6 +12,9 @@ package in.co.raystech.maven.project4.bean;
 
 public class CategoryBean extends BaseBean {
 
+	public CategoryBean() {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * 
 	 */
@@ -47,4 +50,39 @@ public class CategoryBean extends BaseBean {
 
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
+		result = prime * result + categoryId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CategoryBean other = (CategoryBean) obj;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
+		if (categoryId != other.categoryId)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryBean [category=" + category + ", categoryId=" + categoryId + "]";
+	}
+
+	
+	
 }

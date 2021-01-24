@@ -51,16 +51,20 @@
 						<form action="<%=ORSView.MANAGE_CATEGORY_CTL%>" method="post"
 							id="categoryForm">
 							<div class="srchWrp pull-right mrR1">
-								<i class="fa fa-search"></i> <input type="text" name="search"
-									value="<%=DataUtility.getStringData(bean.getCategory())%>"
-									placeholder="Search" /> <input type="submit"
-									style="display: none" name="operation" value="opsearch"
-									id="triggerSrch">
+								<i class="fa fa-search"></i> 
+								
+								<input type="text" name="search"
+									value="<%=ServletUtility.getParameter("category", request)%>"
+									placeholder="Search" />
+									
+									 <input
+									type="submit" name="operation" style="display: none"
+									value="<%=ManageCategoryCtl.OP_SEARCH%>" id="triggerSrch">
 
 							</div>
 						</form>
 						<script type="text/javascript">
-							$('input').keypress(function(e) {
+							$('#triggerSrch').keypress(function(e) {
 								if (e.which == 13) {
 									e.preventDefault();
 									$('#categoryForm').submit();

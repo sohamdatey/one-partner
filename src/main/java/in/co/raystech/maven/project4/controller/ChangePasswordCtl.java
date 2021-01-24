@@ -32,60 +32,49 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 public class ChangePasswordCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
-
 	public static final String OP_CHANGE_MY_PROFILE = "Change My Profile";
-
 	private static Logger log = Logger.getLogger(ChangePasswordCtl.class);
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
 		log.debug("ChangePasswordCtl Method validate Started");
-
 		boolean pass = true;
 		String op = request.getParameter("operation");
 		String oldPassword = request.getParameter("oldPassword");
 		String newPassword = request.getParameter("newPassword");
 		String confirmPassword = request.getParameter("confirmPassword");
-
 		if (OP_CHANGE_MY_PROFILE.equalsIgnoreCase(op)) {
-
 			return pass;
 		}
-
 		if (DataValidator.isNull(oldPassword)) {
 			request.setAttribute("oldPassword", PropertyReader.getValue("error.require", "Password"));
 			pass = false;
 		}
-
 		if (DataValidator.isNotNull(oldPassword)) {
 			if (!DataValidator.checkPasswordLength(oldPassword)) {
 				request.setAttribute("oldPassword", PropertyReader.getValue("error.checkpassword", "Password"));
 				pass = false;
 			}
 		}
-
 		if (DataValidator.isNotNull(oldPassword) && DataValidator.checkPasswordLength(oldPassword)) {
 			if (DataValidator.isNull(newPassword)) {
 				request.setAttribute("newPassword", PropertyReader.getValue("error.require", "New Password"));
 				pass = false;
 			}
 		}
-
 		if (DataValidator.isNotNull(newPassword)) {
 			if (!DataValidator.checkPasswordLength(newPassword)) {
 				request.setAttribute("newPassword", PropertyReader.getValue("error.checkpassword", "Password"));
 				pass = false;
 			}
 		}
-
 		if (DataValidator.isNotNull(newPassword) && DataValidator.checkPasswordLength(newPassword)) {
 			if (DataValidator.isNull(confirmPassword)) {
 				request.setAttribute("confirmPassword", PropertyReader.getValue("error.require", "Confirm Password"));
 				pass = false;
 			}
 		}
-
 		if (DataValidator.isNotNull(newPassword) && DataValidator.isNotNull(confirmPassword)) {
 			if (!newPassword.equals(confirmPassword)) {
 				request.setAttribute("confirmPassword",
@@ -93,28 +82,19 @@ public class ChangePasswordCtl extends BaseCtl {
 				pass = false;
 			}
 		}
-
 		log.debug("ChangePasswordCtl Method validate Ended");
-
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("ChangePasswordCtl Method populatebean Started");
-
 		UserBean bean = new UserBean();
-
 		bean.setPassword(DataUtility.getString(request.getParameter("oldPassword")));
-
 		bean.setConfirmPassword(DataUtility.getString(request.getParameter("confirmPassword")));
-
 		bean.setNewPassword(request.getParameter("newPassword"));
-
 		populateDTO(bean, request);
-
 		log.debug("ChangePasswordCtl Method populatebean Ended");
-
 		return bean;
 	}
 
@@ -131,22 +111,14 @@ public class ChangePasswordCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		HttpSession session = request.getSession(true);
-
 		log.debug("ChangePasswordCtl Method doGet Started");
-
 		String op = DataUtility.getString(request.getParameter("operation"));
-
 		// get model
 		UserModel model = new UserModel();
-
 		UserBean bean = (UserBean) populateBean(request);
-
 		UserBean UserBean = (UserBean) session.getAttribute("user");
-
 		long id = UserBean.getId();
-
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				boolean flag = model.changePassword(id, bean.getPassword(), bean.getNewPassword());
@@ -162,16 +134,14 @@ public class ChangePasswordCtl extends BaseCtl {
 				session.setAttribute("chngpwd", e.getMessage());
 				ServletUtility.handleException(e, request, response);
 				return;
-
 			} catch (RecordNotFoundException e) {
+				log.error(e);
 				ServletUtility.setErrorMessage("Old Password is Invalid", request);
 			}
-
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.CHANGE_PASSWORD_CTL, request, response);
 			return;
 		}
-
 		ServletUtility.forward(ORSView.CHANGE_PASSWORD_VIEW, request, response);
 		log.debug("ChangePasswordCtl Method doGet Ended");
 	}

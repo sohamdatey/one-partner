@@ -51,22 +51,28 @@
 					<div class="col-sm-6">
 						<div class="clearfix">
 							<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
+						
 							<div class="srchWrp pull-right">
-								<i class="fa fa-search"></i> <input type="text"
-									name="search"
-									value="<%=ServletUtility.getParameter("search", request)%>"
-									placeholder="Search" /> <input type="submit"
-									style="display: none" name="operation"
-									value="<%=ManagePartnersCtl.OP_SEARCH%>" id="triggerSrch">
+								<i class="fa fa-search"></i>
+								
+								
+								<input type="text" name="search"
+									value="<%=ServletUtility.getParameter("name", request)%>"
+									placeholder="Search" />
+									
+									 <input
+									type="submit" name="operation"
+									value="<%=ManagePartnersCtl.OP_SEARCH%>" id="triggerPrtnr">
 							</div>
+						
 							<script type="text/javascript">
-								$('input').keypress(function(e) {
-									if (e.which == 13) {
-										e.preventDefault();
-										$('#partnerForm').submit();
-									}
-								});
-							</script>
+							$('#triggerPrtnr').keypress(function(e) {
+								if (e.which == 13) {
+									e.preventDefault();
+									$('#partnerForm').submit();
+								}
+							});
+						</script>
 
 						</div>
 					</div>

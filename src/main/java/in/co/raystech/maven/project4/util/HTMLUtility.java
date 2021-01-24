@@ -126,8 +126,7 @@ public class HTMLUtility {
 		}
 		return sb.toString();
 	}
-	
-	
+
 	public static String abhikimethod(String name, String selectedVal, List list) {
 		System.out.println("categoryList.................");
 
@@ -151,18 +150,14 @@ public class HTMLUtility {
 			if (key.trim().equals(selectedVal)) {
 
 				sb.append("<a class='hilit'><label><input type='checkbox' checked id='check" + val + "' value='"
-						+ key.trim() + "' name='" + name + "'><span> " + val
-						+ " </span></label></a>");
+						+ key.trim() + "' name='" + name + "'><span> " + val + " </span></label></a>");
 			} else {
-				sb.append("<a class='hilit'><label><input type='checkbox'   value='" + key.trim()
-						+ "' name='" + name + "'><span> " + val + " </span></label></a>");
+				sb.append("<a class='hilit'><label><input type='checkbox'   value='" + key.trim() + "' name='" + name
+						+ "'><span> " + val + " </span></label></a>");
 			}
 		}
 		return sb.toString();
 	}
-	
-	
-	
 
 	public static String getCategoryListForProducts(String name, String selectedVal, List list) {
 
@@ -198,12 +193,12 @@ public class HTMLUtility {
 	 * 
 	 */
 
-	public static String getCategoryListForProductsSelected(String name, String selectedVal, List list, List list2) {
+	public static String getCategoryListForProductsSelected(String name, String selectedVal, List<CategoryBean> list, List<CategoryBean> list2) {
 
-		Collections.sort(list);
-		Collections.sort(list2);
-		List<DropdownListBean> dd = (List<DropdownListBean>) list;
-		List<DropdownListBean> dd2 = (List<DropdownListBean>) list2;
+
+		list2.removeAll(list);
+		System.out.println(list2);
+		System.out.println(list	);
 
 		StringBuffer sb = new StringBuffer(
 				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
@@ -224,7 +219,7 @@ public class HTMLUtility {
 		}
 		List<DropdownListBean> dd3 = (List<DropdownListBean>) newList;
 
-		for (DropdownListBean obj : dd) {
+		for (DropdownListBean obj : list) {
 			key = obj.getKey();
 			val = obj.getValue();
 

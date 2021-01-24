@@ -971,8 +971,8 @@ public class UserModel {
 		return list(0, 0);
 	}
 
-	public List categoryList() throws ApplicationException {
-		return list(0, 0);
+	public List<CategoryBean> categoryList() throws ApplicationException {
+		return categoryList(0, 0);
 	}
 
 	public List productsList() throws ApplicationException {
@@ -988,8 +988,8 @@ public class UserModel {
 	 * @throws DatabaseException
 	 */
 
-	public List categoryList(int pageNo, int pageSize) throws ApplicationException {
-		ArrayList list = new ArrayList();
+	public List<CategoryBean> categoryList(int pageNo, int pageSize) throws ApplicationException {
+		List<CategoryBean> list = new ArrayList<CategoryBean>();
 		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {

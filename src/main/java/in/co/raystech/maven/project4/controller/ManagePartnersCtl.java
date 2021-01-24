@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.UserBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
@@ -27,6 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  */
 @WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/ctl/ManagePartnersCtl" })
 public class ManagePartnersCtl extends BaseCtl {
+	private static Logger log = Logger.getLogger(ManagePartnersCtl.class);
 
 	/**
 	 * 
@@ -35,32 +38,28 @@ public class ManagePartnersCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-
+		log.debug("ManageMarketPartnersCtl Method validate Started");
 		boolean pass = true;
-
 		String op = DataUtility.getString(request.getParameter("operation"));
 		if (DataValidator.isNull(request.getParameter("collegeId"))) {
 			request.setAttribute("collegeId", PropertyReader.getValue("error.require", "College Name"));
 			pass = false;
 		}
-
 		if (DataValidator.isNull(request.getParameter("userId"))) {
 			request.setAttribute("userId", PropertyReader.getValue("error.require", "Student Name"));
 			pass = false;
 		}
-
+		log.debug("ManageMarketPartnersCtl Method validate Ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-
+		log.debug("ManageMarketPartnersCtl Method populateBean Started");
 		UserBean bean = new UserBean();
-
 		bean.setName(DataUtility.getString(request.getParameter("name")));
-
 		populateDTO(bean, request);
-
+		log.debug("ManageMarketPartnersCtl Method PopulateBean Ended");
 		return bean;
 	}
 
@@ -69,16 +68,12 @@ public class ManagePartnersCtl extends BaseCtl {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("into managepartnersListCtl do get........................................");
+		log.debug("ManageMarketPartnersCtl Method doGet Started");
 		List list = null;
 		UserModel model = new UserModel();
 		UserBean bean = (UserBean) populateBean(request);
 		long id = DataUtility.getLong(request.getParameter("id"));
 		String description = DataUtility.getString(request.getParameter("description"));
-
-		System.out.println("desssssss" + description);
-		System.out.println("iddddddd" + id);
-
 		if (id > 0) {
 			try {
 				bean = model.findByPK(id);
@@ -86,22 +81,20 @@ public class ManagePartnersCtl extends BaseCtl {
 				model.updatePartner(bean);
 				ServletUtility.setBean(bean, request);
 			} catch (Exception e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
 			ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
 			return;
-
 		} else {
-
 			try {
 				list = model.search(bean, 0, 0);
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
@@ -109,6 +102,8 @@ public class ManagePartnersCtl extends BaseCtl {
 
 			ServletUtility.forward(getView(), request, response);
 		}
+		log.debug("ManageMarketPartnersCtl Method doGet Ended");
+
 	}
 
 	/**
@@ -116,13 +111,12 @@ public class ManagePartnersCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("do post manage partners.........");
+		log.debug("ManageMarketPartnersCtl Method doPost Started");
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
 		String[] ids = request.getParameterValues("ids");
 		UserModel model = new UserModel();
-
 		if (OP_DELETE.equalsIgnoreCase(op)) {
 			if (ids != null && ids.length > 0) {
 				UserBean deletebean = new UserBean();
@@ -131,7 +125,7 @@ public class ManagePartnersCtl extends BaseCtl {
 					try {
 						model.delete(deletebean);
 					} catch (ApplicationException e) {
-						// TODO Auto-generated catch block
+						log.error(e);
 						e.printStackTrace();
 					}
 					ServletUtility.setSuccessMessage("Record deleted successfully", request);
@@ -139,12 +133,10 @@ public class ManagePartnersCtl extends BaseCtl {
 			} else {
 				ServletUtility.setErrorMessage("Select at least one record", request);
 			}
-
 			ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
 			return;
-
 		}
-		if (op != null && search != null) {
+		if (search != null) {
 			try {
 				System.out.println("pro....." + search);
 				List list = null;
@@ -158,29 +150,27 @@ public class ManagePartnersCtl extends BaseCtl {
 				ServletUtility.setList(list, request);
 
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
-		}
-
-		if (op == null && search == null) {
-
-			System.out.println("manage partners search....." + search);
-			List list = null;
-			try {
-				list = model.search(bean, 0, 0);
-			} catch (ApplicationException e) {
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-			if (list == null || list.size() == 0) {
-				ServletUtility.setErrorMessage("No record found ", request);
-			}
-			ServletUtility.setList(list, request);
-
 			ServletUtility.forward(getView(), request, response);
+			return;
 		}
+		List list = null;
+		try {
+			list = model.search(bean, 0, 0);
+		} catch (ApplicationException e) {
+			log.error(e);
+			ServletUtility.handleException(e, request, response);
+			return;
+		}
+		if (list == null || list.size() == 0) {
+			ServletUtility.setErrorMessage("No record found ", request);
+		}
+		ServletUtility.setList(list, request);
+		ServletUtility.forward(getView(), request, response);
+		log.debug("ManageMarketPartnersCtl Method doPost Ended");
 	}
 
 	@Override

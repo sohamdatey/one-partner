@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.RoleBean;
 import in.co.raystech.maven.project4.bean.UserBean;
@@ -30,14 +32,12 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  */
 @WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
-
+	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
 	public static final String OP_SIGN_UP = "SignUp";
-
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-
+		log.debug("UserRegistrationCtl Method validat Started");
 		boolean pass = true;
-
 		String login = request.getParameter("login");
 		String dob = request.getParameter("dob");
 		String password = request.getParameter("password");
@@ -97,33 +97,24 @@ public class UserRegistrationCtl extends BaseCtl {
 				pass = false;
 			}
 		}
-
+		log.debug("UserRegistrationCtl Method validat ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-
+		log.debug("UserRegistrationCtl Method populateBean Started");
 		UserBean bean = new UserBean();
-
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-
 		bean.setRoleId(RoleBean.STUDENT);
-
 		bean.setName(DataUtility.getString(request.getParameter("name")));
-
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
-
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
-
 		bean.setConfirmPassword(DataUtility.getString(request.getParameter("confirmPassword")));
-
 		bean.setMobileNo(DataUtility.getString(request.getParameter("contactNumber")));
-
 		populateDTO(bean, request);
-
+		log.debug("UserRegistrationCtl Method populateBean Ended");
 		return bean;
-
 	}
 
 	/**
@@ -140,6 +131,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		log.debug("UserRegistrationCtl Method doPpost Started");
 		System.out.println("in post method");
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -156,11 +148,13 @@ public class UserRegistrationCtl extends BaseCtl {
 				ServletUtility.redirect(ORSView.LOGIN_CTL, request, response);
 				return;
 			} catch (ApplicationException e) {
+				log.error(e);
 				HttpSession session = request.getSession(true);
 				session.setAttribute("chngpwd", e.getMessage());
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
+				log.error(e);
 				HttpSession session = request.getSession(true);
 				session.setAttribute("duplicateRecords", e.getMessage());
 				ServletUtility.setBean(bean, request);
@@ -175,6 +169,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, request, response);
 			return;
 		}
+		log.debug("UserRegistrationCtl Method doPost Ended");
 
 	}
 

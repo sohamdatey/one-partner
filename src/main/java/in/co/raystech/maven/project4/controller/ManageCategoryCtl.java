@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.UserBean;
@@ -27,26 +29,23 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 @WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/ctl/ManageCategoryCtl" })
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
+	private static Logger log = Logger.getLogger(ManageCategoryCtl.class);
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-
+		log.debug("ManageCategoryCtl Method populateBean Started");
 		CategoryBean bean = new CategoryBean();
-
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-
 		bean.setCategory(DataUtility.getString(request.getParameter("search")));
-
 		populateDTO(bean, request);
-
+		log.debug("ManageCategoryCtl Method populateBean Ended");
 		return bean;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		log.debug("ManageCategoryCtl Method doGet Started");
 		System.out.println("manageCategoryCtl do get..........");
-
 		List list = null;
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		UserModel model = new UserModel();
@@ -59,18 +58,22 @@ public class ManageCategoryCtl extends BaseCtl {
 			ServletUtility.setList(list, request);
 			ServletUtility.forward(getView(), request, response);
 		} catch (ApplicationException e) {
+			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
+		log.debug("ManageCategoryCtl Method doGet Ended");
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		log.debug("ManageCategoryCtl Method doPost Started");
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
-
+		System.out.println(search + " ..search ");
+		System.out.println(op + ".. this is operation");
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 		System.out.println("manageCategoryCtl do post..");
@@ -85,8 +88,10 @@ public class ManageCategoryCtl extends BaseCtl {
 							ServletUtility.setBean(bean, request);
 							ServletUtility.setSuccessMessage("Category is successfully Updated", request);
 						} catch (ApplicationException e) {
+							log.error(e);
 							e.printStackTrace();
 						} catch (DuplicateRecordException e) {
+							log.error(e);
 							e.printStackTrace();
 						}
 					} else {
@@ -100,9 +105,11 @@ public class ManageCategoryCtl extends BaseCtl {
 				}
 
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
+				log.error(e);
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 
@@ -111,10 +118,8 @@ public class ManageCategoryCtl extends BaseCtl {
 			return;
 		}
 
-		else if (search != null) {
-			System.out.println("opsearchhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+		else if (OP_SEARCH.equalsIgnoreCase(op) && search != null) {
 			try {
-
 				System.out.println("cat....." + bean.getCategory());
 				List list = null;
 				list = model.searchCategory(bean, 0, 0);
@@ -126,12 +131,13 @@ public class ManageCategoryCtl extends BaseCtl {
 				ServletUtility.setList(list, request);
 
 			} catch (ApplicationException e) {
+				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
 			ServletUtility.forward(getView(), request, response);
 		}
-
+		log.debug("ManageCategoryCtl Method doPost Started");
 	}
 
 	@Override
