@@ -149,84 +149,95 @@ public class ManageProductsCtl extends BaseCtl {
 			long id = DataUtility.getLong(request.getParameter("id"));
 			System.out.println("manageProductsCtl do post..idddddddddddd   " + id);
 			if (OP_DELETE.equalsIgnoreCase(op)) {
+				bean.setId(id);
 				try {
-					bean.setId(id);
 					model.deleteProduct(bean);
 				} catch (ApplicationException e) {
-					log.error(e);
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
 				return;
 			}
 			if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
-				try {
-					long pk = 0;
-					if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
-						String[] ids = request.getParameterValues("categoryId");
-						// saveimagehere
+				long pk = 0;
+				if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
+					String[] ids = request.getParameterValues("categoryId");
+					// saveimagehere
+					try {
 						bean.setImage("..\\productImages\\" + String.valueOf(UserModel.nextProductPK()) + ".jpg");
+					} catch (DatabaseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
 						pk = model.addProducts(bean);
-						for (String idd : ids) {
-							System.out.println(idd + "ididididid");
+					} catch (ApplicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (DuplicateRecordException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					for (String idd : ids) {
+						System.out.println(idd + "ididididid");
+						try {
 							model.addProductCategory(idd, pk);
+						} catch (ApplicationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (DuplicateRecordException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					try {
+						DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart, String.valueOf(pk) + ".jpg");
+					} catch (ImageSaveException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					bean.setId(pk);
+					ServletUtility.setSuccessMessage("Category added successfully", request);
+					ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
+					return;
+				}
+				if (id > 0) {
+					if (OP_EDIT.equalsIgnoreCase(op)) {
+						try {
+							pk = UserModel.nextProductPK();
+						} catch (DatabaseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						model = new UserModel();
+						bean.setImage("..\\productImages\\" + String.valueOf(bean.getId()) + ".jpg");
+						try {
+							model.updateProducts(bean);
+						} catch (ApplicationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (DuplicateRecordException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 						try {
-							DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart, String.valueOf(pk) + ".jpg");
+							DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart,
+									String.valueOf(bean.getId()) + ".jpg");
 						} catch (ImageSaveException e) {
-							log.error(e);
-
-							ServletUtility.handleException(e, request, response);
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						bean.setId(pk);
-						ServletUtility.setSuccessMessage("Category added successfully", request);
-						ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-						return;
-					}
-					if (id > 0) {
-						if (OP_EDIT.equalsIgnoreCase(op)) {
-							try {
-								pk = UserModel.nextProductPK();
-								model = new UserModel();
-								bean.setImage("..\\productImages\\" + String.valueOf(bean.getId()) + ".jpg");
-								model.updateProducts(bean);
-								try {
-									DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart,
-											String.valueOf(bean.getId()) + ".jpg");
-								} catch (ImageSaveException e) {
-									log.error(e);
-									ServletUtility.handleException(e, request, response);
-								}
-								ServletUtility.setBean(bean, request);
-								ServletUtility.setSuccessMessage("product is  successfully Updated", request);
-							} catch (ApplicationException e) {
-								log.error(e);
-								e.printStackTrace();
-							} catch (DuplicateRecordException e) {
-								log.error(e);
-								e.printStackTrace();
-							}
-						}
-						ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-						return;
-					}
 
-				} catch (ApplicationException e) {
-					log.error(e);
-					ServletUtility.handleException(e, request, response);
+						ServletUtility.setBean(bean, request);
+						ServletUtility.setSuccessMessage("product is  successfully Updated", request);
+
+					}
+					ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
 					return;
-				} catch (DuplicateRecordException e) {
-					log.error(e);
-					ServletUtility.setBean(bean, request);
-					ServletUtility.setErrorMessage(e.getMessage(), request);
-
-				} catch (DatabaseException e) {
-					log.error(e);
-					ServletUtility.setBean(bean, request);
-					ServletUtility.setErrorMessage(e.getMessage(), request);
 				}
-				ServletUtility.forward(ORSView.MARKET_PLACE_CTL, request, response);
-				return;
+
 			}
 		}
 

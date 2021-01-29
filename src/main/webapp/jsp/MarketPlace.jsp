@@ -126,7 +126,7 @@
 					<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
 					<div class="srchWrp pull-right">
 						<i class="fa fa-search"></i> <input type="text" name="productName"
-							value="<%=DataUtility.getStringData(ServletUtility.getParameter("name", request))%>"
+							value="<%=DataUtility.getStringData(productBean.getProductName())%>"
 							placeholder="Search" /> <input type="submit"
 							style="display: none" name="operation"
 							value="<%=BaseCtl.OP_SEARCH%>" id="triggerSrch" />

@@ -113,6 +113,7 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				if (list == null || list.size() == 0) {
 					ServletUtility.setErrorMessage("No record found ", request);
 				}
+				ServletUtility.setBeanP(bean, request);
 				ServletUtility.setList(list, request);
 			} catch (ApplicationException e) {
 				log.error(e);
@@ -158,6 +159,7 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
+			ServletUtility.setBeanP(bean, request);
 			ServletUtility.setList(list, request);
 		}
 		ServletUtility.forward(getView(), request, response);

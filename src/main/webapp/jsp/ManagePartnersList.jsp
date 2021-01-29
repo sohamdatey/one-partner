@@ -51,8 +51,7 @@
 					<div class="col-sm-6">
 						<div class="clearfix">
 							<div class="srchWrp pull-right mrR1">
-								<i class="fa fa-search"></i> <input type="text"
-									class="form-control" name="search"
+								<i class="fa fa-search"></i> <input type="text" name="search" placeholder="Search"
 									value="<%=ServletUtility.getParameter("search", request)%>">
 
 								<input type="submit" name="operation" style="display: none"

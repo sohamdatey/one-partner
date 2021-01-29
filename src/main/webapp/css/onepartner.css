@@ -734,6 +734,8 @@ a.profDrop img {
 	word-break: break-all
 }
 
+.partTr i{cursor:pointer}
+
 .table>tbody>tr>td textarea {
 	border: transparent;
 	width: 100%;

@@ -157,8 +157,7 @@ public class AddCategoryCtl extends BaseCtl {
 				log.error(e);
 				e.printStackTrace();
 			}
-
-			ServletUtility.forward(ORSView.MANAGE_CATEGORY_LISTT_CTL, request, response);
+			ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
 			return;
 
 		}

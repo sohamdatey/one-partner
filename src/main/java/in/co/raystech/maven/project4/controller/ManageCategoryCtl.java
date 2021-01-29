@@ -112,7 +112,7 @@ public class ManageCategoryCtl extends BaseCtl {
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 
 			}
-			ServletUtility.forward(ORSView.MANAGE_CATEGORY_LIST_CTL, request, response);
+			ServletUtility.forward(getView(), request, response);
 			return;
 		}
 

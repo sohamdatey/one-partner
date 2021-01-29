@@ -39,7 +39,7 @@ public abstract class BaseCtl extends HttpServlet {
 	public static final String OP_BACK = "Back";
 	public static final String OP_LOG_OUT = "Logout";
 	public static final String OP_RESET = "Reset";
-	public static final String FILE_LOCATION = "E:\\Control Panel.{21EC2020-3AEA-1069-A2DD-08002B30309D}\\add\\AllWorkSpace\\OnePartner\\src\\main\\webapp\\productImages";
+	public static final String FILE_LOCATION = "F:\\java projects\\one partner\\one-partner\\src\\main\\webapp\\productImages";
 
 	/**
 	 * Success message key constant
