@@ -56,13 +56,15 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			}
 			request.setAttribute("buttonNumber", buttonNumber);
 			List categoryList = model.categoryList(0, 0);
+			List highlitedCategories = model.categoryListHighlightOMarketPlace(0, 0);
+			request.setAttribute("highlitedCategories", highlitedCategories);
 			request.setAttribute("categoryList", categoryList);
 		} catch (ApplicationException e) {
 			log.error(e);
 			e.printStackTrace();
 		}
 		log.debug("ManageMarketPlaceCtl Method preload Ended");
-		
+
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

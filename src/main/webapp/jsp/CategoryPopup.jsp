@@ -41,14 +41,30 @@
 					<div class="modal-body" id="formCnt">
 						<div class="form-group">
 
-							<label>Category Name </label> <input type="text"
+							<label>Category Name </label> <input required type="text"
 								name="category" class="form-control"
 								placeholder="Enter Category Name" />
 						</div>
-						<!-- <div class="highCat">
-							<label><input type="checkbox" class="mrR">
-								Highlight on marketplace </label>
-						</div> -->
+
+
+						<div class="highCat">
+							<label><input type="checkbox" onchange="highlight()"
+								id="marketPlaceId" name="highlightchk" class="mrR">
+								Highlight on marketplace </label> <input type="hidden"
+								name="marketPlaceId" id="hltAddHid" value="0">
+						</div>
+
+
+						<script>
+							function highlight() {
+								if ($('#marketPlaceId').is(':checked')) {
+									$('#hltAddHid').val('1')
+								} else {
+									$('#hltAddHid').val('0')
+								}
+							}
+						</script>
+
 						<div class="clearfix">
 							<input type="submit" name="operation" value="<%=BaseCtl.OP_ADD%>"
 								class="btn btn-lg btn-primary mrR1"> <input
@@ -92,7 +108,7 @@
 					<div class="modal-body" id="formCnt">
 						<div class="form-group">
 
-							<label>Category Name </label> <input type="text"
+							<label>Category Name </label> <input required type="text"
 								<%if (bean2 != null) {%>
 								value="<%=DataUtility.getStringData(bean2.getCategory())%>"
 								<%} else {%>
@@ -110,10 +126,42 @@
 						<%
 							}
 						%>
-						<!-- <div class="highCat">
-							<label><input type="checkbox" class="mrR">
-								Highlight on marketplace </label>
-						</div> -->
+						<div class="highCat">
+							<label><input type="checkbox" onchange="edhighlit()"
+								class="mrR" id="checkEditId"> Highlight on marketplace </label>
+							<input type="hidden" name="marketPlaceId" id="hltEditHid">
+
+							<%
+								if (bean2 != null && bean2.getMarketPlaceId() == 1) {
+							%>
+							<script>
+								$('#checkEditId').attr('checked', true)
+							</script>
+
+							<%
+								} else {
+							%>
+							<script>
+								$('#checkEditId').attr('checked', false)
+							</script>
+
+							<%
+								}
+							%>
+
+
+
+						</div>
+
+						<script>
+							function edhighlit() {
+								if ($('#checkEditId').is(':checked')) {
+									$('#hltEditHid').val('1')
+								} else {
+									$('#hltEditHid').val('0')
+								}
+							}
+						</script>
 
 						<input type="submit" name="operation" value="<%=BaseCtl.OP_EDIT%>"
 							class="btn btn-lg btn-primary mrR1"> <input type="button"
@@ -159,11 +207,9 @@
 	</form>
 
 	<script>
-	    
-	    $("#imgInp").change(function(){
-	        readURL(this);
-	    });
-		
+		$("#imgInp").change(function() {
+			readURL(this);
+		});
 	</script>
 
 </body>

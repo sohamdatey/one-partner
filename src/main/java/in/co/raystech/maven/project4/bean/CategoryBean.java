@@ -15,12 +15,22 @@ public class CategoryBean extends BaseBean {
 	public CategoryBean() {
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String category;
 	private int categoryId;
+	private int marketPlaceId;
+
+	public int getMarketPlaceId() {
+		return marketPlaceId;
+	}
+
+	public void setMarketPlaceId(int marketPlaceId) {
+		this.marketPlaceId = marketPlaceId;
+	}
 
 	public String getCategory() {
 		return category;
@@ -83,6 +93,4 @@ public class CategoryBean extends BaseBean {
 		return "CategoryBean [category=" + category + ", categoryId=" + categoryId + "]";
 	}
 
-	
-	
 }

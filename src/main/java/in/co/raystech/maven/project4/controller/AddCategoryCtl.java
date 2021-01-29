@@ -36,12 +36,14 @@ public class AddCategoryCtl extends BaseCtl {
 	protected BaseBean populateBean(HttpServletRequest request) {
 
 		log.debug("AddCategoryCtl Method populateBean Started");
-		
+
 		CategoryBean bean = new CategoryBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 
 		bean.setCategory(DataUtility.getString(request.getParameter("category")));
+
+		bean.setMarketPlaceId(DataUtility.getInt(request.getParameter("marketPlaceId")));
 
 		populateDTO(bean, request);
 
@@ -52,9 +54,9 @@ public class AddCategoryCtl extends BaseCtl {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		log.debug("AddCategoryCtl Method doGet Started");
-		
+
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -78,8 +80,6 @@ public class AddCategoryCtl extends BaseCtl {
 			CategoryBean catBean;
 			try {
 				catBean = model.findByPKCategory(id);
-				System.out.println(catBean.getId());
-				System.out.println(catBean.getCategory());
 				request.setAttribute("catBean", catBean);
 
 			} catch (ApplicationException e) {
@@ -91,28 +91,29 @@ public class AddCategoryCtl extends BaseCtl {
 			ServletUtility.forward(getView(), request, response);
 		}
 		log.debug("AddCategoryCtl Method doGet ended");
-		
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		log.debug("AddCategoryCtl Method doPost Started");
-		
-		CategoryBean bean = (CategoryBean) populateBean(request);
+
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
+		String highlightchk = DataUtility.getString(request.getParameter("highlightchk"));
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
-
+		CategoryBean bean = (CategoryBean) populateBean(request);
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 			System.out.println("in do post Add category/////+ id........" + id);
 
 			try {
 				if (id > 0) {
 					if (OP_EDIT.equalsIgnoreCase(op)) {
-						System.out.println("------------------------Edit-----------------");
 						try {
+
+							System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
 							model = new UserModel();
 							model.updateCategory(bean);
 							ServletUtility.setBean(bean, request);
@@ -179,7 +180,7 @@ public class AddCategoryCtl extends BaseCtl {
 			return;
 		}
 		log.debug("AddCategoryCtl Method doPost Ended");
-		
+
 	}
 
 	@Override

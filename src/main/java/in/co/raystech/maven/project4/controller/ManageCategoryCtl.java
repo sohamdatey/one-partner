@@ -37,6 +37,7 @@ public class ManageCategoryCtl extends BaseCtl {
 		CategoryBean bean = new CategoryBean();
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setCategory(DataUtility.getString(request.getParameter("search")));
+		bean.setMarketPlaceId(DataUtility.getInt(request.getParameter("marketPlaceId")));
 		populateDTO(bean, request);
 		log.debug("ManageCategoryCtl Method populateBean Ended");
 		return bean;
@@ -101,16 +102,13 @@ public class ManageCategoryCtl extends BaseCtl {
 						bean.setId(pk);
 						ServletUtility.setSuccessMessage("Category added successfully", request);
 					}
-
 				}
-
 			} catch (ApplicationException e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
 				log.error(e);
-				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 
 			}
@@ -118,8 +116,9 @@ public class ManageCategoryCtl extends BaseCtl {
 			return;
 		}
 
-		else if (OP_SEARCH.equalsIgnoreCase(op) && search != null) {
+		else if (OP_SEARCH.equalsIgnoreCase(op)) {
 			try {
+				System.out.println("operation....." + op);
 				System.out.println("cat....." + bean.getCategory());
 				List list = null;
 				list = model.searchCategory(bean, 0, 0);
@@ -127,6 +126,7 @@ public class ManageCategoryCtl extends BaseCtl {
 				if (list == null || list.size() == 0) {
 					ServletUtility.setErrorMessage("No record found ", request);
 				}
+				
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setList(list, request);
 

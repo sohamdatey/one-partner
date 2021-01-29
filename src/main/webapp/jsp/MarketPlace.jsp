@@ -61,6 +61,7 @@
 		%>
 		<%
 			List l = (List) request.getAttribute("categoryList");
+			List highlitedCategories = (List) request.getAttribute("highlitedCategories");
 		%>
 
 		<nav class="navbar navbar-blue navbar-white navbar-fixed-top">
@@ -157,7 +158,15 @@
 
 
 		<div class="catTag clearfix">
-			<%=HTMLUtility.abhikimethod("categoryId", String.valueOf(categoryBean.getId()), l)%>
+
+			<%=HTMLUtility.hilighterMethod("categoryId", String.valueOf(categoryBean.getId()),
+					highlitedCategories, l)%>
+
+
+
+			<a class="more"
+				onclick="$('.default').toggle('fast');$('.more span').toggle()"><label><span
+					style="display: block;">more</span><span style="display: none;">less</span></label></a>
 			<button type="submit" class="btn filter">
 				<i class="fa fa-filter mrR"></i> Apply
 			</button>

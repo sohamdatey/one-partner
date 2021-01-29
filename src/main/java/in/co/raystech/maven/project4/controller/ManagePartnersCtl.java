@@ -57,7 +57,7 @@ public class ManagePartnersCtl extends BaseCtl {
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.debug("ManageMarketPartnersCtl Method populateBean Started");
 		UserBean bean = new UserBean();
-		bean.setName(DataUtility.getString(request.getParameter("name")));
+		bean.setName(DataUtility.getString(request.getParameter("search")));
 		populateDTO(bean, request);
 		log.debug("ManageMarketPartnersCtl Method PopulateBean Ended");
 		return bean;
@@ -99,7 +99,6 @@ public class ManagePartnersCtl extends BaseCtl {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setList(list, request);
-
 			ServletUtility.forward(getView(), request, response);
 		}
 		log.debug("ManageMarketPartnersCtl Method doGet Ended");
@@ -117,6 +116,8 @@ public class ManagePartnersCtl extends BaseCtl {
 		String search = DataUtility.getString(request.getParameter("search"));
 		String[] ids = request.getParameterValues("ids");
 		UserModel model = new UserModel();
+		System.out.println("pro.....d....................................." + search);
+		System.out.println("operation is........................................." + op);
 		if (OP_DELETE.equalsIgnoreCase(op)) {
 			if (ids != null && ids.length > 0) {
 				UserBean deletebean = new UserBean();
@@ -136,41 +137,26 @@ public class ManagePartnersCtl extends BaseCtl {
 			ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
 			return;
 		}
-		if (search != null) {
-			try {
-				System.out.println("pro....." + search);
-				List list = null;
-				bean.setName(search);
-				list = model.searchSpecific(bean, 0, 0);
-				ServletUtility.setList(list, request);
-				if (list == null || list.size() == 0) {
-					ServletUtility.setErrorMessage("No record found ", request);
-				}
-				ServletUtility.setBeanP(bean, request);
-				ServletUtility.setList(list, request);
-
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
+		try {
+			System.out.println("operation....." + op);
+			System.out.println("cat....." + bean.getName());
+			List list = null;
+			list = model.searchSpecific(bean, 0, 0);
+			ServletUtility.setList(list, request);
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found ", request);
 			}
+			ServletUtility.setBean(bean, request);
+			ServletUtility.setList(list, request);
 			ServletUtility.forward(getView(), request, response);
 			return;
-		}
-		List list = null;
-		try {
-			list = model.search(bean, 0, 0);
+
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		if (list == null || list.size() == 0) {
-			ServletUtility.setErrorMessage("No record found ", request);
-		}
-		ServletUtility.setList(list, request);
-		ServletUtility.forward(getView(), request, response);
-		log.debug("ManageMarketPartnersCtl Method doPost Ended");
+
 	}
 
 	@Override

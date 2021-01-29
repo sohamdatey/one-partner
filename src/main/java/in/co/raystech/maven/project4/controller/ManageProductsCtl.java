@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.ProductsBean;
-import in.co.raystech.maven.project4.bean.UserBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
 import in.co.raystech.maven.project4.exception.DatabaseException;
 import in.co.raystech.maven.project4.exception.DuplicateRecordException;
@@ -89,12 +88,12 @@ public class ManageProductsCtl extends BaseCtl {
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
-		} catch (ApplicationException e1) {
+		} catch (ApplicationException e) {
 			log.error(e);
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
-		System.out.println("into the get id  list ------"+ id);
-		
+		System.out.println("into the get id  list ------" + id);
+
 		if (id > 0) {
 			ProductsBean productsBean;
 			try {
@@ -146,54 +145,43 @@ public class ManageProductsCtl extends BaseCtl {
 		Part filePart = null;
 		filePart = request.getPart("file");
 		UserModel model = new UserModel();
-
 		if (search == null) {
 			long id = DataUtility.getLong(request.getParameter("id"));
 			System.out.println("manageProductsCtl do post..idddddddddddd   " + id);
-
 			if (OP_DELETE.equalsIgnoreCase(op)) {
 				try {
 					bean.setId(id);
 					model.deleteProduct(bean);
-
 				} catch (ApplicationException e) {
 					log.error(e);
 					e.printStackTrace();
 				}
 				ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
 				return;
-
 			}
 			if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 				try {
 					long pk = 0;
-
 					if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
-
 						String[] ids = request.getParameterValues("categoryId");
-
 						// saveimagehere
 						bean.setImage("..\\productImages\\" + String.valueOf(UserModel.nextProductPK()) + ".jpg");
 						pk = model.addProducts(bean);
-
 						for (String idd : ids) {
 							System.out.println(idd + "ididididid");
 							model.addProductCategory(idd, pk);
-
 						}
 						try {
-
 							DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart, String.valueOf(pk) + ".jpg");
 						} catch (ImageSaveException e) {
 							log.error(e);
-							
+
 							ServletUtility.handleException(e, request, response);
 						}
 						bean.setId(pk);
 						ServletUtility.setSuccessMessage("Category added successfully", request);
 						ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
 						return;
-
 					}
 					if (id > 0) {
 						if (OP_EDIT.equalsIgnoreCase(op)) {
@@ -203,24 +191,19 @@ public class ManageProductsCtl extends BaseCtl {
 								bean.setImage("..\\productImages\\" + String.valueOf(bean.getId()) + ".jpg");
 								model.updateProducts(bean);
 								try {
-
 									DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart,
 											String.valueOf(bean.getId()) + ".jpg");
 								} catch (ImageSaveException e) {
 									log.error(e);
-									
 									ServletUtility.handleException(e, request, response);
 								}
-
 								ServletUtility.setBean(bean, request);
 								ServletUtility.setSuccessMessage("product is  successfully Updated", request);
 							} catch (ApplicationException e) {
 								log.error(e);
-								
 								e.printStackTrace();
 							} catch (DuplicateRecordException e) {
 								log.error(e);
-								
 								e.printStackTrace();
 							}
 						}
@@ -247,38 +230,21 @@ public class ManageProductsCtl extends BaseCtl {
 			}
 		}
 
-		if (bean.getProductName() != null) {
-			try {
-				System.out.println("search op....." + search);
-				System.out.println("name....." + bean.getProductName() + "  ............");
-
-				List list = null;
-				bean.setProductName(bean.getProductName());
-				list = model.searchSpecificProducts(bean, 0, 0);
-				ServletUtility.setList(list, request);
-				if (list == null || list.size() == 0) {
-					ServletUtility.setErrorMessage("No record found ", request);
-				}
-				ServletUtility.setBeanP(bean, request);
-				ServletUtility.setList(list, request);
-
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-
-		}
 		List list = null;
 		try {
-			list = model.searchProducts(bean, 0, 0);
+			list = model.searchSpecificProducts(bean, 0, 0);
 		} catch (ApplicationException e) {
-			log.error(e);
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ServletUtility.setList(list, request);
+		if (list == null || list.size() == 0) {
+			ServletUtility.setErrorMessage("No record found ", request);
+		}
+		ServletUtility.setBeanP(bean, request);
+		ServletUtility.setList(list, request);
+		ServletUtility.setList(list, request);
 		ServletUtility.forward(getView(), request, response);
-
 		log.debug("ManageProductsCtl Method doPost Ended");
 	}
 
