@@ -37,7 +37,7 @@ public class S3Handler {
 	}
 
 	public static String getUrl(String imageName) {
-		return "http://d2jkgyfbwf6l29.cloudfront.net/"+imageName+".jpg"; 
+		return "http://d2jkgyfbwf6l29.cloudfront.net/" + imageName + ".jpg";
 	}
 
 	private static AmazonS3 builder() {

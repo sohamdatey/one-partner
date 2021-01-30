@@ -144,58 +144,63 @@ public class ManageProductsCtl extends BaseCtl {
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("productName"));
+
+		System.out.println("********************************************");
+		System.out.println(op);
+		System.out.println(search);
+		System.out.println("********************************************");
 		Part filePart = null;
 		filePart = request.getPart("file");
 		UserModel model = new UserModel();
-		if (search == null) {
-			long id = DataUtility.getLong(request.getParameter("id"));
-			System.out.println("manageProductsCtl do post..idddddddddddd   " + id);
-			if (OP_DELETE.equalsIgnoreCase(op)) {
-				bean.setId(id);
+		long id = DataUtility.getLong(request.getParameter("id"));
+		System.out.println("manageProductsCtl do post..idddddddddddd   " + id);
+		if (OP_DELETE.equalsIgnoreCase(op)) {
+			bean.setId(id);
+			try {
+				model.deleteProduct(bean);
+				S3Handler.deleteImage(bean.getImageId());
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+			}
+		}
+		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
+			long pk = 0;
+			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
-					model.deleteProduct(bean);
-					S3Handler.deleteImage(bean.getImageId());
-				} catch (ApplicationException e) {
+					String[] ids = request.getParameterValues("categoryId");
+					bean.setImageId(String.valueOf(UserModel.nextProductPK()));
+					bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+					pk = addProducts(request, response, bean, model, pk);
+					addProductCategories(model, pk, ids);
+					saveImage(bean, filePart);
+					updateProduct(bean, model);
+					bean.setId(pk);
+					ServletUtility.setSuccessMessage("Product added successfully", request);
+				} catch (ImageSaveException e) {
+					e.printStackTrace();
+				} catch (DatabaseException e) {
 					e.printStackTrace();
 				}
 			}
-			if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
-				long pk = 0;
-				if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
+			if (id > 0) {
+				if (OP_EDIT.equalsIgnoreCase(op)) {
 					try {
-						String[] ids = request.getParameterValues("categoryId");
-						bean.setImageId(String.valueOf(bean.getId()));
-						pk = addProducts(request, response, bean, model, pk);
-						addProductCategories(model, pk, ids);
+						model = new UserModel();
+						S3Handler.deleteImage(bean.getImageId());
 						saveImage(bean, filePart);
 						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
 						updateProduct(bean, model);
-						bean.setId(pk);
-						ServletUtility.setSuccessMessage("Product added successfully", request);
+
+						ServletUtility.setBean(bean, request);
+						ServletUtility.setSuccessMessage("product is  successfully Updated", request);
 					} catch (ImageSaveException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+
 				}
-				if (id > 0) {
-					if (OP_EDIT.equalsIgnoreCase(op)) {
-						try {
-							model = new UserModel();
-							S3Handler.deleteImage(bean.getImageId());
-							saveImage(bean, filePart);
-							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
-							updateProduct(bean, model);
-
-							ServletUtility.setBean(bean, request);
-							ServletUtility.setSuccessMessage("product is  successfully Updated", request);
-						} catch (ImageSaveException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-				}
-
 			}
+
 		}
 
 		if (op.equalsIgnoreCase(OP_SEARCH)) {

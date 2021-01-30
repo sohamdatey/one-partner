@@ -485,7 +485,7 @@ public class UserModel {
 			pk = nextProductPK();
 			System.out.println(pk + " in Model addProducts");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_TABLE VALUES(?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_TABLE VALUES(?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getProductName());
 			pstmt.setString(3, bean.getDescription());
@@ -503,7 +503,10 @@ public class UserModel {
 				ex.printStackTrace();
 				throw new ApplicationException("Exception : add rollback exception " + ex.getMessage());
 			}
+
+			e.printStackTrace();
 			throw new ApplicationException("Exception : Exception in add products");
+
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
