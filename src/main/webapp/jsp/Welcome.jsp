@@ -18,8 +18,8 @@
 <link rel="stylesheet" href="css/onepartner.css" />
 </head>
 <body class="form-v8">
-	<h1>Ab Tu LOGGED-IN HAI !! 4000 rupe nikaaal bhen ke take 2 module
-		complete ho gye!</h1>
-
+	<H1>niceh image hai</H1>
+	<img
+		src="https://one-partner-product-images.s3.amazonaws.com/harvey+mc+with+args+in+code" />
 </body>
 </html>
