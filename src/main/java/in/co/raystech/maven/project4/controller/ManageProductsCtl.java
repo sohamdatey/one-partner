@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "OnePartner/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/OnePartner/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
