@@ -19,6 +19,13 @@
 </head>
 <body class="form-v8">
 	<H1>niceh image hai</H1>
+	<form method="POST" action="<%=ORSView.WELCOME_CTL%>"
+		enctype="multipart/form-data">
+		File: <input type="file" name="file" id="file" /> <br />
+		Destination: <input type="text" value="/tmp" name="destination" /> </br> <input
+			type="submit" value="Upload" name="upload" id="upload" />
+	</form>
+
 	<img
 		src="https://one-partner-product-images.s3.amazonaws.com/harvey+mc+with+args+in+code" />
 </body>
