@@ -30,7 +30,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/OnePartner/UserRegistrationCtl" })
+@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
 	public static final String OP_SIGN_UP = "SignUp";
