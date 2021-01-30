@@ -18,7 +18,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  */
 
-@WebServlet(name = "ErrorCtl", urlPatterns = { "OnePartner/ErrorCtl" })
+@WebServlet(name = "ErrorCtl", urlPatterns = { "/OnePartner/ErrorCtl" })
 public class ErrorCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 

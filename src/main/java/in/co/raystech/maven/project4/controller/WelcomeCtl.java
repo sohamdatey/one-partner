@@ -48,9 +48,9 @@ public class WelcomeCtl extends BaseCtl {
 		log.debug("WelcomeCtl Method doGet Started");
 		// Create path components to save the file
 		final Part filePart = request.getPart("file");
-		
+
 		try {
-			S3Handler.uploadProductImage(filePart.getInputStream());
+			S3Handler.uploadProductImage(filePart.getInputStream(), null, null);
 
 		} catch (ImageSaveException e) {
 			// TODO Auto-generated catch block

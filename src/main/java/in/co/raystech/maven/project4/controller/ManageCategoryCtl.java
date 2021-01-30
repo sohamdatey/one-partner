@@ -26,7 +26,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "OnePartner/ctl/ManageCategoryCtl" })
+@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/OnePartner/ctl/ManageCategoryCtl" })
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
@@ -141,14 +141,11 @@ public class ManageCategoryCtl extends BaseCtl {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (DuplicateRecordException e) {
-					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage(e.getMessage(), request);
 					e.printStackTrace();
 				}
 				bean.setId(pk);
 				ServletUtility.setSuccessMessage("Category added successfully", request);
-				ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
-				return;
 			}
 
 		}
@@ -163,7 +160,6 @@ public class ManageCategoryCtl extends BaseCtl {
 				e.printStackTrace();
 			}
 			ServletUtility.setSuccessMessage("Category deleted successfully", request);
-
 		}
 
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
@@ -182,14 +178,23 @@ public class ManageCategoryCtl extends BaseCtl {
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
-
 			ServletUtility.setBean(bean, request);
-			ServletUtility.setList(list, request);
-			ServletUtility.forward(getView(), request, response);
-			return;
 
 		}
-
+		List list = null;
+		try {
+			list = model.categoryList();
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ServletUtility.setList(list, request);
+		if (list == null || list.size() == 0) {
+			ServletUtility.setErrorMessage("No record found ", request);
+		}
+		ServletUtility.setBean(bean, request);
+		ServletUtility.forward(getView(), request, response);
+		return;
 	}
 
 	@Override

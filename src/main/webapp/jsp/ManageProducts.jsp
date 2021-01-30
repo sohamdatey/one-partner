@@ -105,7 +105,7 @@
 					<tr class="prdTr">
 						<td><a
 							href="ManageProductsCtl?id=<%=DataUtility.getStringData(beanP.getId())%>"></a>
-							<img src="<%=DataUtility.getStringData(beanP.getImage())%>"></td>
+							<img src="<%=DataUtility.getStringData(beanP.getImageURL())%>"></td>
 						<td><b><%=DataUtility.getStringData(beanP.getProductName())%></b></td>
 						<td><%=DataUtility.getStringData(beanP.getDescription())%></td>
 						<td><i class="fa fa-tag mrR"></i> <%

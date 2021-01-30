@@ -374,7 +374,7 @@ public class UserModel {
 	public long addCategory(CategoryBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 		int pk = 0;
-		
+
 		CategoryBean existbean = findCategoryByName(bean.getCategory());
 
 		if (existbean != null) {
@@ -416,13 +416,14 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE product_table SET PRODUCT_NAME=?,DESCRIPTION=?,PARTNERSHIPOFFER=?,FORMLINK=?, IMAGE=? WHERE ID=?");
+					"UPDATE product_table SET PRODUCT_NAME=?,DESCRIPTION=?,PARTNERSHIPOFFER=?,FORMLINK=?, Image_url=?,imageId=?  WHERE ID=?");
 			pstmt.setString(1, bean.getProductName());
 			pstmt.setString(2, bean.getDescription());
 			pstmt.setString(3, bean.getPartnershipOffer());
 			pstmt.setString(4, bean.getFormLink());
-			pstmt.setString(5, bean.getImage());
-			pstmt.setLong(6, bean.getId());
+			pstmt.setString(5, bean.getImageURL());
+			pstmt.setString(6, bean.getImageId());
+			pstmt.setLong(7, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -490,7 +491,8 @@ public class UserModel {
 			pstmt.setString(3, bean.getDescription());
 			pstmt.setString(4, bean.getPartnershipOffer());
 			pstmt.setString(5, bean.getFormLink());
-			pstmt.setString(6, bean.getImage());
+			pstmt.setString(6, bean.getImageURL());
+			pstmt.setString(7, bean.getImageId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -609,7 +611,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 			}
 			rs.close();
@@ -798,7 +801,7 @@ public class UserModel {
 		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1 ");
 
 		if (bean != null) {
-			
+
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
 				sql.append(" AND id = " + bean.getId());
 			}
@@ -842,7 +845,6 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
 			}
@@ -860,8 +862,6 @@ public class UserModel {
 		return searchCategory(bean, 0, 0);
 	}
 
-	
-	
 	public List searchCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1");
 
@@ -909,7 +909,7 @@ public class UserModel {
 
 		return list;
 	}
-	
+
 	public List searchSpecificCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1 ");
 
@@ -958,8 +958,6 @@ public class UserModel {
 		return list;
 	}
 
-
-
 	public List searchProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1");
 
@@ -1006,7 +1004,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
 
@@ -1189,8 +1188,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
-
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 				list.add(bean);
 			}
 			rs.close();
@@ -1234,10 +1233,10 @@ public class UserModel {
 
 	public List findProductsByCategoryFK(long pk) throws ApplicationException {
 		System.out.println("came here");
-		StringBuffer sql = new StringBuffer(
-				"SELECT DISTINCT  pt.product_name, pt.description, pt.partnershipOffer, pt.formLink, pt.image, pt.id"
-						+ " FROM product_table pt \r\n" + "	JOIN product_category pc ON pt.id=pc.product_id\r\n"
-						+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	WHERE c.id =? \r\n" + "");
+		StringBuffer sql = new StringBuffer("SELECT DISTINCT  pt.product_name, pt.description, pt.partnershipOffer, "
+				+ "pt.formLink, pt.image_url, pt.imageid , pt.id" + " FROM product_table pt \r\n"
+				+ "	JOIN product_category pc ON pt.id=pc.product_id\r\n"
+				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	WHERE c.id =? \r\n" + "");
 		ProductsBean bean = null;
 		Connection conn = null;
 		ArrayList list = new ArrayList();
@@ -1253,8 +1252,9 @@ public class UserModel {
 				bean.setDescription(rs.getString(2));
 				bean.setPartnershipOffer(rs.getString(3));
 				bean.setFormLink(rs.getString(4));
-				bean.setImage(rs.getString(5));
-				bean.setCategories(createCategoryBeans(rs.getInt(6)));
+				bean.setImageURL(rs.getString(5));
+				bean.setImageId(rs.getString(6));
+				bean.setCategories(createCategoryBeans(rs.getInt(7)));
 				list.add(bean);
 
 			}
@@ -1329,8 +1329,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
-
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -1341,7 +1341,7 @@ public class UserModel {
 		}
 		return bean;
 	}
-	
+
 	public CategoryBean findByPKCategory(long pk) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE ID=?");
 		CategoryBean bean = null;
@@ -1387,7 +1387,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImage(rs.getString(6));
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 			}
 			rs.close();
 		} catch (Exception e) {

@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "MyProfileCtl", urlPatterns = { "OnePartner/ctl/MyProfileCtl" })
+@WebServlet(name = "MyProfileCtl", urlPatterns = { "/OnePartner/ctl/MyProfileCtl" })
 public class MyProfileCtl extends BaseCtl {
 
 	/**

@@ -1,6 +1,7 @@
 package in.co.raystech.maven.project4.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,13 +24,14 @@ import in.co.raystech.maven.project4.exception.ImageSaveException;
 import in.co.raystech.maven.project4.model.UserModel;
 import in.co.raystech.maven.project4.util.DataUtility;
 import in.co.raystech.maven.project4.util.PropertyReader;
+import in.co.raystech.maven.project4.util.S3Handler;
 import in.co.raystech.maven.project4.util.ServletUtility;
 
 /**
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "OnePartner/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/OnePartner/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
@@ -141,7 +143,7 @@ public class ManageProductsCtl extends BaseCtl {
 		log.debug("ManageProductsCtl Method dopost Started");
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
-		String search = DataUtility.getString(request.getParameter("search"));
+		String search = DataUtility.getString(request.getParameter("productName"));
 		Part filePart = null;
 		filePart = request.getPart("file");
 		UserModel model = new UserModel();
@@ -152,100 +154,69 @@ public class ManageProductsCtl extends BaseCtl {
 				bean.setId(id);
 				try {
 					model.deleteProduct(bean);
+					S3Handler.deleteImage(bean.getImageId());
 				} catch (ApplicationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-				return;
 			}
 			if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 				long pk = 0;
 				if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
-					String[] ids = request.getParameterValues("categoryId");
-					// saveimagehere
 					try {
-						bean.setImage("..\\productImages\\" + String.valueOf(UserModel.nextProductPK()) + ".jpg");
-					} catch (DatabaseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					try {
-						pk = model.addProducts(bean);
-					} catch (ApplicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (DuplicateRecordException e) {
-						ServletUtility.setBean(bean, request);
-						ServletUtility.setErrorMessage(e.getMessage(), request);
-						ServletUtility.forward(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-						e.printStackTrace();
-					}
-					for (String idd : ids) {
-						System.out.println(idd + "ididididid");
-						try {
-							model.addProductCategory(idd, pk);
-						} catch (ApplicationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (DuplicateRecordException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					try {
-						DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart, String.valueOf(pk) + ".jpg");
+						String[] ids = request.getParameterValues("categoryId");
+						bean.setImageId(String.valueOf(bean.getId()));
+						pk = addProducts(request, response, bean, model, pk);
+						addProductCategories(model, pk, ids);
+						saveImage(bean, filePart);
+						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+						updateProduct(bean, model);
+						bean.setId(pk);
+						ServletUtility.setSuccessMessage("Product added successfully", request);
 					} catch (ImageSaveException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					bean.setId(pk);
-					ServletUtility.setSuccessMessage("Category added successfully", request);
-					ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-					return;
 				}
 				if (id > 0) {
 					if (OP_EDIT.equalsIgnoreCase(op)) {
 						try {
-							pk = UserModel.nextProductPK();
-						} catch (DatabaseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						model = new UserModel();
-						bean.setImage("..\\productImages\\" + String.valueOf(bean.getId()) + ".jpg");
-						try {
-							model.updateProducts(bean);
-						} catch (ApplicationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (DuplicateRecordException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						try {
-							DataUtility.saveImage(BaseCtl.FILE_LOCATION, filePart,
-									String.valueOf(bean.getId()) + ".jpg");
+							model = new UserModel();
+							S3Handler.deleteImage(bean.getImageId());
+							saveImage(bean, filePart);
+							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+							updateProduct(bean, model);
+
+							ServletUtility.setBean(bean, request);
+							ServletUtility.setSuccessMessage("product is  successfully Updated", request);
 						} catch (ImageSaveException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
-						ServletUtility.setBean(bean, request);
-						ServletUtility.setSuccessMessage("product is  successfully Updated", request);
-
 					}
-					ServletUtility.redirect(ORSView.MANAGE_PRODUCTS_CTL, request, response);
-					return;
 				}
 
 			}
 		}
 
+		if (op.equalsIgnoreCase(OP_SEARCH)) {
+			List list = null;
+			try {
+				list = model.searchSpecificProducts(bean, 0, 0);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ServletUtility.setList(list, request);
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found ", request);
+			}
+			ServletUtility.forward(getView(), request, response);
+			return;
+		}
+
 		List list = null;
 		try {
-			list = model.searchSpecificProducts(bean, 0, 0);
+			list = model.productsList(0, 0);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -256,9 +227,54 @@ public class ManageProductsCtl extends BaseCtl {
 		}
 		ServletUtility.setBeanP(bean, request);
 		ServletUtility.setList(list, request);
-		ServletUtility.setList(list, request);
 		ServletUtility.forward(getView(), request, response);
 		log.debug("ManageProductsCtl Method doPost Ended");
+	}
+
+	private long addProducts(HttpServletRequest request, HttpServletResponse response, ProductsBean bean,
+			UserModel model, long pk) throws IOException, ServletException {
+		try {
+			pk = model.addProducts(bean);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateRecordException e) {
+			ServletUtility.setBean(bean, request);
+			ServletUtility.setErrorMessage(e.getMessage(), request);
+			ServletUtility.forward(ORSView.MANAGE_PRODUCTS_CTL, request, response);
+			e.printStackTrace();
+		}
+		return pk;
+	}
+
+	private void addProductCategories(UserModel model, long pk, String[] ids) {
+		for (String idd : ids) {
+			try {
+				model.addProductCategory(idd, pk);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DuplicateRecordException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void saveImage(ProductsBean bean, Part filePart) throws IOException, ImageSaveException {
+		S3Handler.uploadProductImage(filePart.getInputStream(), bean.getImageId(), ".jpg");
+	}
+
+	private void updateProduct(ProductsBean bean, UserModel model) {
+		try {
+			model.updateProducts(bean);
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateRecordException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
