@@ -51,9 +51,10 @@
 						<form action="<%=ORSView.MANAGE_CATEGORY_CTL%>" method="post"
 							id="categoryForm">
 							<div class="srchWrp pull-right mrR1">
-								<i class="fa fa-search"></i> <input type="text" name="search"
-									value="<%=DataUtility.getStringData(bean.getCategory())%>"
-									placeholder="Search" /> <input type="submit" style="display: none" name="operation"
+								<i class="fa fa-search"></i> <input type="text" name="category"
+									value="<%=ServletUtility.getParameter("category", request)%>"
+									placeholder="Search" /> <input type="submit"
+									style="display: none" name="operation"
 									value="<%=ManageCategoryCtl.OP_SEARCH%>" id="triggerSrch">
 
 							</div>
@@ -79,7 +80,7 @@
 				while (it.hasNext()) {
 					bean = it.next();
 			%>
-			<a href="AddCategoryCtl?id=<%=bean.getId()%>"> #<%=bean.getCategory()%>
+			<a href="ManageCategoryCtl?id=<%=bean.getId()%>"> #<%=bean.getCategory()%>
 			</a>
 
 			<%

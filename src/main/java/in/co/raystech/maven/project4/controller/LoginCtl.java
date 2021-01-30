@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
+@WebServlet(name = "LoginCtl", urlPatterns = { "OnePartner/LoginCtl" })
 public class LoginCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;

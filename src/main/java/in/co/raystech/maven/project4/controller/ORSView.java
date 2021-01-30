@@ -52,7 +52,7 @@ public interface ORSView {
 	public String WELCOME_CTL = APPLICATION_CONTEXT + "/WelcomeCtl";
 	public String LOGOUT_CTL = APPLICATION_CONTEXT + "/LoginCtl";
 	public String CHANGE_PASSWORD_CTL = APPLICATION_CONTEXT + "/ctl/ChangePasswordCtl";
-	public String MY_PROFILE_CTL = "/ctl/MyProfileCtl";
+	public String MY_PROFILE_CTL = APPLICATION_CONTEXT + "/ctl/MyProfileCtl";
 	public String FORGET_PASSWORD_CTL = "/ForgetPasswordCtl";
 
 }

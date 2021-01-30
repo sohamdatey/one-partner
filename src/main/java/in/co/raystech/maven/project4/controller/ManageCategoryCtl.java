@@ -26,118 +26,170 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/ctl/ManageCategoryCtl" })
+@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "OnePartner/ctl/ManageCategoryCtl" })
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(ManageCategoryCtl.class);
+
+	private static Logger log = Logger.getLogger(AddCategoryCtl.class);
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
+
 		log.debug("ManageCategoryCtl Method populateBean Started");
+
 		CategoryBean bean = new CategoryBean();
+
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-		bean.setCategory(DataUtility.getString(request.getParameter("search")));
+
+		bean.setCategory(DataUtility.getString(request.getParameter("category")));
+
 		bean.setMarketPlaceId(DataUtility.getInt(request.getParameter("marketPlaceId")));
+
 		populateDTO(bean, request);
+
 		log.debug("ManageCategoryCtl Method populateBean Ended");
+
 		return bean;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		System.out.println("into magecategory catefory do get............");
 		log.debug("ManageCategoryCtl Method doGet Started");
-		System.out.println("manageCategoryCtl do get..........");
-		List list = null;
-		CategoryBean bean = (CategoryBean) populateBean(request);
+
 		UserModel model = new UserModel();
+		long id = DataUtility.getLong(request.getParameter("id"));
+		String op = DataUtility.getString(request.getParameter("operation"));
+
 		try {
+			List list = null;
+			CategoryBean bean = new CategoryBean();
 			list = model.searchCategory(bean, 0, 0);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setList(list, request);
-			ServletUtility.forward(getView(), request, response);
-		} catch (ApplicationException e) {
-			log.error(e);
-			ServletUtility.handleException(e, request, response);
-			return;
+		} catch (ApplicationException e1) {
+			log.error(e1);
+			e1.printStackTrace();
 		}
-		log.debug("ManageCategoryCtl Method doGet Ended");
+
+		if (id > 0) {
+
+			CategoryBean catBean;
+			try {
+				catBean = model.findByPKCategory(id);
+				request.setAttribute("catBean", catBean);
+
+			} catch (ApplicationException e) {
+				log.error(e);
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+
+		}
+
+		ServletUtility.forward(getView(), request, response);
+		log.debug("ManageCategoryCtl Method doGet ended");
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		System.out.println("inside manage cateory ctl do post...............");
 		log.debug("ManageCategoryCtl Method doPost Started");
-		CategoryBean bean = (CategoryBean) populateBean(request);
+
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
-		System.out.println(search + " ..search ");
-		System.out.println(op + ".. this is operation");
+		String highlightchk = DataUtility.getString(request.getParameter("highlightchk"));
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
-		System.out.println("manageCategoryCtl do post..");
-		if (OP_ADD.equalsIgnoreCase(op)) {
-			try {
-				if (id > 0) {
-					if (OP_EDIT.equalsIgnoreCase(op)) {
-						System.out.println(id + " ------------------------Edit-----------------");
-						try {
-							model = new UserModel();
-							model.updateCategory(bean);
-							ServletUtility.setBean(bean, request);
-							ServletUtility.setSuccessMessage("Category is successfully Updated", request);
-						} catch (ApplicationException e) {
-							log.error(e);
-							e.printStackTrace();
-						} catch (DuplicateRecordException e) {
-							log.error(e);
-							e.printStackTrace();
-						}
-					} else {
-						System.out.println("ADDD ho rha........." + bean.getCategory());
-						long pk = 0;
-						pk = model.addCategory(bean);
-						bean.setId(pk);
-						ServletUtility.setSuccessMessage("Category added successfully", request);
-					}
-				}
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			} catch (DuplicateRecordException e) {
-				log.error(e);
-				ServletUtility.setErrorMessage(e.getMessage(), request);
+		CategoryBean bean = (CategoryBean) populateBean(request);
 
+		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
+			System.out.println("in do post Add category/////+ id........" + id);
+
+			if (id > 0) {
+				if (OP_EDIT.equalsIgnoreCase(op)) {
+					System.out.println("operatin.....edit chal rh...." + op);
+					System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
+					model = new UserModel();
+					try {
+						model.updateCategory(bean);
+					} catch (ApplicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (DuplicateRecordException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ServletUtility.setBean(bean, request);
+					ServletUtility.setSuccessMessage("Category is successfully Updated", request);
+				}
 			}
+
+			else if (OP_ADD.equalsIgnoreCase(op)) {
+				System.out.println("operatin.....add chal rh...." + op);
+				System.out.println("ADDD ho rha........." + bean.getCategory());
+				long pk = 0;
+				try {
+					pk = model.addCategory(bean);
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateRecordException e) {
+					ServletUtility.setBean(bean, request);
+					ServletUtility.setErrorMessage(e.getMessage(), request);
+					e.printStackTrace();
+				}
+				bean.setId(pk);
+				ServletUtility.setSuccessMessage("Category added successfully", request);
+				ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
+				return;
+			}
+
+		}
+		if (OP_DELETE.equalsIgnoreCase(op)) {
+			System.out.println("operatin...delete chal rha......" + op);
+			CategoryBean deletebean = new CategoryBean();
+			deletebean.setId(id);
+			try {
+				model.deleteCategory(deletebean);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ServletUtility.setSuccessMessage("Category deleted successfully", request);
+
+		}
+
+		if (OP_SEARCH.equalsIgnoreCase(op)) {
+			System.out.println("operatin........." + op);
+			System.out.println("operatin.....search chal rh...." + op);
+			System.out.println("bean ki value ...." + bean.getCategory());
+
+			List list = null;
+			try {
+				list = model.searchSpecificCategory(bean, 0, 0);
+			} catch (ApplicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ServletUtility.setList(list, request);
+			if (list == null || list.size() == 0) {
+				ServletUtility.setErrorMessage("No record found ", request);
+			}
+
+			ServletUtility.setBean(bean, request);
+			ServletUtility.setList(list, request);
 			ServletUtility.forward(getView(), request, response);
 			return;
+
 		}
 
-		else if (OP_SEARCH.equalsIgnoreCase(op)) {
-			try {
-				System.out.println("operation....." + op);
-				System.out.println("cat....." + bean.getCategory());
-				List list = null;
-				list = model.searchCategory(bean, 0, 0);
-				ServletUtility.setList(list, request);
-				if (list == null || list.size() == 0) {
-					ServletUtility.setErrorMessage("No record found ", request);
-				}
-				
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setList(list, request);
-
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-			ServletUtility.forward(getView(), request, response);
-		}
-		log.debug("ManageCategoryCtl Method doPost Started");
 	}
 
 	@Override

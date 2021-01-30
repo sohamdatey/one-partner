@@ -19,7 +19,7 @@
 		class="in.co.raystech.maven.project4.bean.CategoryBean"
 		scope="request"></jsp:useBean>
 
-	<form action="<%=ORSView.ADD_CATEGORY_CTL%>" method="post">
+	<form action="<%=ORSView.MANAGE_CATEGORY_CTL%>" method="post">
 		<%
 			bean2 = new CategoryBean();
 			bean2 = (CategoryBean) request.getAttribute("catBean");
@@ -79,7 +79,7 @@
 	<!-- //*******Add Category Modal******** -->
 
 
-	<form action="<%=ORSView.ADD_CATEGORY_CTL%>" method="post">
+	<form action="<%=ORSView.MANAGE_CATEGORY_CTL%>" method="post">
 		<%
 			bean2 = new CategoryBean();
 			bean2 = (CategoryBean) request.getAttribute("catBean");

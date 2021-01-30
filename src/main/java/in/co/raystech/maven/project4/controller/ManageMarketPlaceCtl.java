@@ -27,7 +27,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/ctl/ManageMarketPlaceCtl" })
+@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "OnePartner/ctl/ManageMarketPlaceCtl" })
 public class ManageMarketPlaceCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(ManageMarketPlaceCtl.class);
@@ -99,7 +99,6 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
 		ProductsBean bean = (ProductsBean) populateBean(request);
-
 		/*
 		 * searching by category selection
 		 */

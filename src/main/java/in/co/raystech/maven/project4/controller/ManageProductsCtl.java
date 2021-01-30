@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "OnePartner/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
@@ -176,7 +176,9 @@ public class ManageProductsCtl extends BaseCtl {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (DuplicateRecordException e) {
-						// TODO Auto-generated catch block
+						ServletUtility.setBean(bean, request);
+						ServletUtility.setErrorMessage(e.getMessage(), request);
+						ServletUtility.forward(ORSView.MANAGE_PRODUCTS_CTL, request, response);
 						e.printStackTrace();
 					}
 					for (String idd : ids) {

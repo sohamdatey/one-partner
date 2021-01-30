@@ -158,9 +158,6 @@ public class HTMLUtility {
 		}
 		return sb.toString();
 	}
-	
-	
-	
 
 	public static String getCategoryListForProducts(String name, String selectedVal, List list) {
 
@@ -195,12 +192,12 @@ public class HTMLUtility {
 	 * listing all the data
 	 * 
 	 */
-	public static String methodForcheckUncheckAtMarketPlace(String name, String selectedVal, List<CategoryBean> list, List<CategoryBean> list2) {
-
+	public static String methodForcheckUncheckAtMarketPlace(String name, String selectedVal, List<CategoryBean> list,
+			List<CategoryBean> list2) {
 
 		list2.removeAll(list);
 		System.out.println(list2);
-		System.out.println(list	);
+		System.out.println(list);
 
 		StringBuffer sb = new StringBuffer(
 				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
@@ -213,7 +210,7 @@ public class HTMLUtility {
 
 		List newList = new ArrayList();
 		newList.addAll(list);
-	
+
 		for (Object object : list2) {
 			if (newList.contains(object)) {
 			} else {
@@ -225,7 +222,7 @@ public class HTMLUtility {
 		for (DropdownListBean obj : dd3) {
 			key = obj.getKey();
 			val = obj.getValue();
-		
+
 			if (key.trim().equals(selectedVal)) {
 
 				sb.append("<a class='hilit'><label><input type='checkbox' checked id='check" + val + "' value='"
@@ -237,9 +234,9 @@ public class HTMLUtility {
 		}
 		return sb.toString();
 	}
-	
 
-	public static String getCategoryListForProductsSelected(String name, String selectedVal, List<CategoryBean> list, List<CategoryBean> list2) {
+	public static String getCategoryListForProductsSelected(String name, String selectedVal, List<CategoryBean> list,
+			List<CategoryBean> list2) {
 		list2.removeAll(list);
 		StringBuffer sb = new StringBuffer(
 				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
@@ -252,7 +249,7 @@ public class HTMLUtility {
 
 		List newList = new ArrayList();
 		newList.addAll(list);
-	
+
 		for (Object object : list2) {
 			if (newList.contains(object)) {
 			} else {
@@ -277,7 +274,8 @@ public class HTMLUtility {
 		return sb.toString();
 	}
 
-	public static String hilighterMethod(String name, String selectedVal, List<CategoryBean> list, List<CategoryBean> list2) {
+	public static String hilighterMethod(String name, String selectedVal, List<CategoryBean> list,
+			List<CategoryBean> list2) {
 
 		list2.removeAll(list);
 
@@ -303,21 +301,20 @@ public class HTMLUtility {
 			key = obj.getKey();
 			val = obj.getValue();
 
-			sb.append("<a class='hilit'><label><input type='checkbox' value='" + key.trim() + "'><span> " + val
-					+ " </span></label></a>");
+			sb.append("<a class='hilit'><label><input type='checkbox' value='" + DataUtility.getStringData(key.trim())
+					+ "'><span> " + DataUtility.getStringData(val) + " </span></label></a>");
 		}
 		for (DropdownListBean obj2 : dd3) {
 			key2 = obj2.getKey();
 			val2 = obj2.getValue();
-			sb.append("<a class='default'><label><input type='checkbox' value='" + key2.trim() + "'><span> " + val2
-					+ " </span></label></a>");
+			sb.append(
+					"<a class='default'><label><input type='checkbox' value='" + DataUtility.getStringData(key2.trim())
+							+ "'><span> " + DataUtility.getStringData(val2) + " </span></label></a>");
+
 		}
 		return sb.toString();
 	}
 
-	
-	
-	
 	public static String getCategoryListOfCats(String name, String selectedVal, List list) {
 
 		Collections.sort(list);

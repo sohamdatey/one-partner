@@ -26,7 +26,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "AddCategoryCtl", urlPatterns = { "/ctl/AddCategoryCtl" })
+@WebServlet(name = "AddCategoryCtl", urlPatterns = { "OnePartner/ctl/AddCategoryCtl" })
 public class AddCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
@@ -108,77 +108,86 @@ public class AddCategoryCtl extends BaseCtl {
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 			System.out.println("in do post Add category/////+ id........" + id);
 
-			try {
-				if (id > 0) {
-					if (OP_EDIT.equalsIgnoreCase(op)) {
-						try {
+			if (id > 0) {
+				if (OP_EDIT.equalsIgnoreCase(op)) {
 
-							System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
-							model = new UserModel();
-							model.updateCategory(bean);
-							ServletUtility.setBean(bean, request);
-							ServletUtility.setSuccessMessage("Category is successfully Updated", request);
-						} catch (ApplicationException e) {
-							log.error(e);
-							e.printStackTrace();
-						} catch (DuplicateRecordException e) {
-							log.error(e);
-							e.printStackTrace();
-						}
+					System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
+					model = new UserModel();
+					try {
+						model.updateCategory(bean);
+					} catch (ApplicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (DuplicateRecordException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					ServletUtility.setBean(bean, request);
+					ServletUtility.setSuccessMessage("Category is successfully Updated", request);
 				}
+			}
 
-				else if (OP_ADD.equalsIgnoreCase(op)) {
-					System.out.println("ADDD ho rha........." + bean.getCategory());
-					long pk = 0;
+			else if (OP_ADD.equalsIgnoreCase(op)) {
+				System.out.println("ADDD ho rha........." + bean.getCategory());
+				long pk = 0;
+				try {
 					pk = model.addCategory(bean);
-					bean.setId(pk);
-					ServletUtility.setSuccessMessage("Category added successfully", request);
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DuplicateRecordException e) {
+					ServletUtility.setBean(bean, request);
+					ServletUtility.setErrorMessage(e.getMessage(), request);
+					e.printStackTrace();
+				}
+				bean.setId(pk);
+				ServletUtility.setSuccessMessage("Category added successfully", request);
+				ServletUtility.forward(ORSView.MANAGE_CATEGORY_CTL, request, response);
+				return;
+
+			}
+
+			if (OP_DELETE.equalsIgnoreCase(op)) {
+				CategoryBean deletebean = new CategoryBean();
+				deletebean.setId(id);
+				try {
+					model.deleteCategory(deletebean);
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			} catch (DuplicateRecordException e) {
-				log.error(e);
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setErrorMessage(e.getMessage(), request);
 			}
-
-		}
-
-		if (OP_DELETE.equalsIgnoreCase(op)) {
-			CategoryBean deletebean = new CategoryBean();
-			deletebean.setId(id);
-			try {
-				model.deleteCategory(deletebean);
-			} catch (ApplicationException e) {
-				log.error(e);
-				e.printStackTrace();
-			}
-			ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
-			return;
-
-		}
-
-		try {
 			List list = null;
-			list = model.searchCategory(bean, 0, 0);
-			ServletUtility.setList(list, request);
-			if (list == null || list.size() == 0) {
-				ServletUtility.setErrorMessage("No record found ", request);
+			if (bean.getCategory() != null) {
+				
+				try {
+					list = model.searchCategory(bean, 0, 0);
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ServletUtility.setList(list, request);
+				if (list == null || list.size() == 0) {
+					ServletUtility.setErrorMessage("No record found ", request);
+				}
+
+			} else {
+				try {
+					list = model.categoryList();
+				} catch (ApplicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				ServletUtility.setList(list, request);
+				if (list == null || list.size() == 0) {
+					ServletUtility.setErrorMessage("No record found ", request);
+				}
 			}
 			ServletUtility.setBean(bean, request);
 			ServletUtility.setList(list, request);
-			ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
-
-		} catch (ApplicationException e) {
-			log.error(e);
-			ServletUtility.handleException(e, request, response);
-			return;
+			ServletUtility.forward(getView(), request, response);
 		}
-		log.debug("AddCategoryCtl Method doPost Ended");
 
 	}
 

@@ -28,7 +28,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "UserListCtl", urlPatterns = { "/ctl/UserListCtl" })
+@WebServlet(name = "UserListCtl", urlPatterns = { "OnePartner/ctl/UserListCtl" })
 
 public class UserListCtl extends BaseCtl {
 

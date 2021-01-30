@@ -212,7 +212,7 @@ public class ServletUtility {
 	}
 
 	public static void setBeanP(BaseBean bean, HttpServletRequest request) {
-		request.setAttribute("beanP", bean);
+		request.setAttribute("productBean", bean);
 	}
 	
 	public static void setUserModel(UserModel model, HttpServletRequest request) {

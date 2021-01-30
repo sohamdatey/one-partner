@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "MyProfileCtl", urlPatterns = { "/ctl/MyProfileCtl" })
+@WebServlet(name = "MyProfileCtl", urlPatterns = { "OnePartner/ctl/MyProfileCtl" })
 public class MyProfileCtl extends BaseCtl {
 
 	/**
@@ -70,9 +70,6 @@ public class MyProfileCtl extends BaseCtl {
 		UserBean UserBean = (UserBean) session.getAttribute("user");
 		long id = UserBean.getId();
 		String op = DataUtility.getString(request.getParameter("operation"));
-		System.out.println("-----------------------------------------------");
-		System.out.println(op);
-		System.out.println("----------------------------------------------- op");
 		// get model
 		UserModel model = new UserModel();
 		if (id > 0 || op != null) {
@@ -102,8 +99,8 @@ public class MyProfileCtl extends BaseCtl {
 		HttpSession session = request.getSession(true);
 		log.debug("MyprofileCtl Method doPost Started");
 
-		UserBean UserBean = (UserBean) session.getAttribute("user");
-		long id = UserBean.getId();
+		UserBean sessionUserBean = (UserBean) session.getAttribute("user");
+		long id = sessionUserBean.getId();
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		// get model
@@ -111,19 +108,29 @@ public class MyProfileCtl extends BaseCtl {
 
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			UserBean bean = (UserBean) populateBean(request);
+			System.out.println(bean.getLogin() + "  this is blogin..........................");
+			System.out.println(bean.getName() + "  this is blogin..........................");
+			System.out.println(bean.getMobileNo() + "  this is blogin..........................");
+			
 			try {
 				if (id > 0) {
-
 					UserBean bean3 = new UserBean();
 					bean3 = model.findByLogin(bean.getLogin());
-					UserBean.setId(bean.getId());
-					UserBean.setName(bean.getName());
-					UserBean.setMobileNo(bean.getMobileNo());
-					UserBean.setLogin(bean.getLogin());
-					UserBean.setPassword(bean3.getPassword());
-					UserBean.setRoleId(bean.getRoleId());
-					UserBean.setDescription(bean3.getDescription());
-					model.updatePartner(UserBean);
+				
+					sessionUserBean.setName(bean.getName());
+					sessionUserBean.setMobileNo(bean.getMobileNo());
+					sessionUserBean.setLogin(bean.getLogin());
+				
+					sessionUserBean.setId(bean3.getId());
+					sessionUserBean.setPassword(bean3.getPassword());
+					sessionUserBean.setRoleId(bean3.getRoleId());
+					sessionUserBean.setDescription(bean3.getDescription());
+					
+					System.out.println(bean.getLogin() + "  this is login..........................");
+					System.out.println(bean.getLogin() + "  this is login..........................");
+					System.out.println(bean.getLogin() + "  this is login..........................");
+					
+					model.updatePartner(sessionUserBean);
 				}
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("Profile has been updated Successfully. ", request);

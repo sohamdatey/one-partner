@@ -374,6 +374,12 @@ public class UserModel {
 	public long addCategory(CategoryBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 		int pk = 0;
+		
+		CategoryBean existbean = findCategoryByName(bean.getCategory());
+
+		if (existbean != null) {
+			throw new DuplicateRecordException("Category already exists");
+		}
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -467,6 +473,12 @@ public class UserModel {
 		Connection conn = null;
 		int pk = 0;
 
+		ProductsBean existbean = findProductsByName(bean.getProductName());
+
+		if (existbean != null) {
+			throw new DuplicateRecordException("Product already exists");
+		}
+
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextProductPK();
@@ -553,15 +565,15 @@ public class UserModel {
 		return bean;
 	}
 
-	public CategoryBean findByPKCategory(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE ID=?");
+	public CategoryBean findCategoryByName(String catName) throws ApplicationException {
+		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setLong(1, pk);
+			pstmt.setString(1, catName);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				bean = new CategoryBean();
@@ -786,9 +798,13 @@ public class UserModel {
 		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1 ");
 
 		if (bean != null) {
+			
+			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
+				sql.append(" AND id = " + bean.getId());
+			}
 
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" AND product_name like '%" + bean.getProductName() + "%'");
+				sql.append(" OR product_name like '%" + bean.getProductName() + "%'");
 			}
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
 				sql.append(" OR description like '%" + bean.getProductName() + "%'");
@@ -844,6 +860,8 @@ public class UserModel {
 		return searchCategory(bean, 0, 0);
 	}
 
+	
+	
 	public List searchCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1");
 
@@ -891,6 +909,56 @@ public class UserModel {
 
 		return list;
 	}
+	
+	public List searchSpecificCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
+		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1 ");
+
+		if (bean != null) {
+			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
+				sql.append(" AND id = " + bean.getId());
+			}
+			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
+				sql.append(" OR CATEGORY like '" + bean.getCategory() + "%'");
+			}
+			if (bean.getMarketPlaceId() > 0) {
+				sql.append(" OR marketPlaceId = " + bean.getMarketPlaceId());
+			}
+
+		}
+
+		// if page size is greater than zero then apply pagination
+		if (pageSize > 0) {
+			// Calculate start record index
+			pageNo = (pageNo - 1) * pageSize;
+
+			sql.append(" Limit " + pageNo + ", " + pageSize);
+			// sql.append(" limit " + pageNo + "," + pageSize);
+		}
+
+		System.out.println(sql);
+		ArrayList list = new ArrayList();
+		Connection conn = null;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new CategoryBean();
+				bean.setId(rs.getLong(1));
+				bean.setCategory(rs.getString(2));
+				list.add(bean);
+			}
+			rs.close();
+		} catch (Exception e) {
+			throw new ApplicationException("Exception : Exception in search category");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+
+		return list;
+	}
+
+
 
 	public List searchProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1");
@@ -1267,7 +1335,64 @@ public class UserModel {
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in getting findProductsByPK by pk");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		return bean;
+	}
+	
+	public CategoryBean findByPKCategory(long pk) throws ApplicationException {
+		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE ID=?");
+		CategoryBean bean = null;
+		Connection conn = null;
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setLong(1, pk);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new CategoryBean();
+				bean.setId(rs.getLong(1));
+				bean.setCategory(rs.getString(2));
+				bean.setMarketPlaceId(rs.getInt(3));
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ApplicationException("Exception : Exception in getting User by pk");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		return bean;
+	}
+
+	public ProductsBean findProductsByName(String productName) throws ApplicationException {
+		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE product_name=?");
+		ProductsBean bean = null;
+		Connection conn = null;
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+			pstmt.setString(1, productName);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new ProductsBean();
+				bean.setId(rs.getLong(1));
+				bean.setProductName(rs.getString(2));
+				bean.setDescription(rs.getString(3));
+				bean.setPartnershipOffer(rs.getString(4));
+				bean.setFormLink(rs.getString(5));
+				bean.setImage(rs.getString(6));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in getting findProductsByPK by pk");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
