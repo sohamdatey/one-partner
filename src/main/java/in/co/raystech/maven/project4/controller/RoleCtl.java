@@ -40,7 +40,7 @@ public class RoleCtl extends BaseCtl {
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
-		log.debug("RoleCtl Method validate Started");
+		log.info("RoleCtl Method validate Started");
 
 		boolean pass = true;
 
@@ -59,7 +59,7 @@ public class RoleCtl extends BaseCtl {
 			pass = false;
 		}
 
-		log.debug("RoleCtl Method validate Ended");
+		log.info("RoleCtl Method validate Ended");
 
 		return pass;
 	}
@@ -67,7 +67,7 @@ public class RoleCtl extends BaseCtl {
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		log.debug("RoleCtl Method populatebean Started");
+		log.info("RoleCtl Method populatebean Started");
 
 		RoleBean bean = new RoleBean();
 
@@ -78,7 +78,7 @@ public class RoleCtl extends BaseCtl {
 
 		populateDTO(bean, request);
 
-		log.debug("RoleCtl Method populatebean Ended");
+		log.info("RoleCtl Method populatebean Ended");
 
 		return bean;
 	}
@@ -96,9 +96,8 @@ public class RoleCtl extends BaseCtl {
 			return;
 		}
 
-		log.debug("RoleCtl Method doGet Started");
+		log.info("RoleCtl Method doGet Started");
 
-		System.out.println("In do get");
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
@@ -118,7 +117,7 @@ public class RoleCtl extends BaseCtl {
 			}
 		}
 		ServletUtility.forward(getView(), request, response);
-		log.debug("RoleCtl Method doGetEnded");
+		log.info("RoleCtl Method doGetEnded");
 	}
 
 	/**
@@ -126,9 +125,8 @@ public class RoleCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("RoleCtl Method doGet Started");
+		log.info("RoleCtl Method doGet Started");
 
-		System.out.println("In do get");
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
@@ -194,7 +192,7 @@ public class RoleCtl extends BaseCtl {
 		
 		ServletUtility.forward(getView(), request, response);
 
-		log.debug("RoleCtl Method doPOst Ended");
+		log.info("RoleCtl Method doPOst Ended");
 	}
 
 	@Override

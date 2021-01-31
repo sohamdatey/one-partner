@@ -33,7 +33,7 @@ public class ManageCategoryListCtl extends BaseCtl {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageCategoryListCtl Method doGet Started");
+		log.info("ManageCategoryListCtl Method doGet Started");
 		List list = null;
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		UserModel model = new UserModel();
@@ -52,12 +52,12 @@ public class ManageCategoryListCtl extends BaseCtl {
 			ServletUtility.setErrorMessage(e.getMessage(), request);
 		}
 		ServletUtility.forward(getView(), request, response);
-		log.debug("ManageCategoryListCtl Method doGet Ended");
+		log.info("ManageCategoryListCtl Method doGet Ended");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageCategoryListCtl Method doPost Started");
+		log.info("ManageCategoryListCtl Method doPost Started");
 		CategoryBean bean = new CategoryBean();
 		try {
 			List list = null;
@@ -76,7 +76,7 @@ public class ManageCategoryListCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("ManageCategoryListCtl Method doPost Ended");
+		log.info("ManageCategoryListCtl Method doPost Ended");
 	}
 
 	@Override

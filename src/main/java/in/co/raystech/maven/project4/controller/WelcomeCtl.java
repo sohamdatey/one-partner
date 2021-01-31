@@ -26,7 +26,7 @@ import in.co.raystech.maven.project4.util.S3Handler;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "WelcomeCtl", urlPatterns = { "/OnePartner/WelcomeCtl" })
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 @MultipartConfig
 public class WelcomeCtl extends BaseCtl {
 
@@ -45,12 +45,12 @@ public class WelcomeCtl extends BaseCtl {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("WelcomeCtl Method doGet Started");
+		log.info("WelcomeCtl Method doGet Started");
 		// Create path components to save the file
 		final Part filePart = request.getPart("file");
-		
+
 		try {
-			S3Handler.uploadProductImage(filePart.getInputStream());
+			S3Handler.uploadProductImage(filePart.getInputStream(), null, null);
 
 		} catch (ImageSaveException e) {
 			// TODO Auto-generated catch block

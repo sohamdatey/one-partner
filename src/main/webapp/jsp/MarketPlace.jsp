@@ -184,7 +184,7 @@
 							productBean = it.next();
 					%>
 					<div class="prdBox">
-						<img src="<%=productBean.getImage()%>" />
+						<img src="<%=productBean.getImageURL()%>" />
 						<h4><%=productBean.getProductName()%></h4>
 						<p><%=productBean.getDescription()%></p>
 						<small><i class="fa fa-tag mrR"></i> <%

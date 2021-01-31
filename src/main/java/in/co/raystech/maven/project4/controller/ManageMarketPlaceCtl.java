@@ -34,19 +34,19 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("ManageMarketPlaceCtl Method populateBean Started");
+		log.info("ManageMarketPlaceCtl Method populateBean Started");
 		ProductsBean bean = new ProductsBean();
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setProductName(DataUtility.getString(request.getParameter("productName")));
 		populateDTO(bean, request);
-		log.debug("ManageMarketPlaceCtl Method populateBean ended");
+		log.info("ManageMarketPlaceCtl Method populateBean ended");
 		return bean;
 	}
 
 	@Override
 	protected void preload(HttpServletRequest request) {
 		UserModel model = new UserModel();
-		log.debug("ManageMarketPlaceCtl Method preload Started");
+		log.info("ManageMarketPlaceCtl Method preload Started");
 		try {
 			int listSize = model.list().size();
 			int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
@@ -63,14 +63,13 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			log.error(e);
 			e.printStackTrace();
 		}
-		log.debug("ManageMarketPlaceCtl Method preload Ended");
+		log.info("ManageMarketPlaceCtl Method preload Ended");
 
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageMarketPlaceCtl Method doGet Started");
-		System.out.println("manageCategoryCtl do get........++++..");
+		log.info("ManageMarketPlaceCtl Method doGet Started");
 		List list = null;
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		UserModel model = new UserModel();
@@ -87,14 +86,13 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("ManageMarketPlaceCtl Method doGet Ended");
+		log.info("ManageMarketPlaceCtl Method doGet Ended");
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageMarketPlaceCtl Method doPost Started");
-		System.out.println("in post..");
+		log.info("ManageMarketPlaceCtl Method doPost Started");
 		long catID = DataUtility.getLong(request.getParameter("categoryId"));
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
@@ -146,7 +144,6 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 
 		if (op == null && search == null && bean.getProductName() == null && catID == 0) {
 
-			System.out.println("manage partners searcmmmmmmmh....." + search);
 			List list = null;
 			try {
 				list = model.searchProducts(bean, 0, 0);
@@ -162,7 +159,7 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			ServletUtility.setList(list, request);
 		}
 		ServletUtility.forward(getView(), request, response);
-		log.debug("ManageMarketPlaceCtl Method doPost ended");
+		log.info("ManageMarketPlaceCtl Method doPost ended");
 		return;
 	}
 

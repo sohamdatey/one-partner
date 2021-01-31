@@ -152,9 +152,9 @@
 							<div id="ppap">
 
 								<img <%if (bean2 != null) {%>
-									src="<%=DataUtility.getStringData(bean2.getImage())%>"
+									src="<%=DataUtility.getStringData(bean2.getImageURL())%>"
 									<%} else {%>
-									src="<%=DataUtility.getStringData(bean.getImage())%>" <%}%>
+									src="<%=DataUtility.getStringData(bean.getImageURL())%>" <%}%>
 									alt="profile-pic" />
 							</div>
 

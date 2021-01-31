@@ -30,12 +30,12 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(AddCategoryCtl.class);
+	private static Logger log = Logger.getLogger(ManageCategoryCtl.class);
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		log.debug("ManageCategoryCtl Method populateBean Started");
+		log.info("ManageCategoryCtl Method populateBean Started");
 
 		CategoryBean bean = new CategoryBean();
 
@@ -47,7 +47,7 @@ public class ManageCategoryCtl extends BaseCtl {
 
 		populateDTO(bean, request);
 
-		log.debug("ManageCategoryCtl Method populateBean Ended");
+		log.info("ManageCategoryCtl Method populateBean Ended");
 
 		return bean;
 	}
@@ -55,8 +55,7 @@ public class ManageCategoryCtl extends BaseCtl {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("into magecategory catefory do get............");
-		log.debug("ManageCategoryCtl Method doGet Started");
+		log.info("ManageCategoryCtl Method doGet Started");
 
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
@@ -92,15 +91,14 @@ public class ManageCategoryCtl extends BaseCtl {
 		}
 
 		ServletUtility.forward(getView(), request, response);
-		log.debug("ManageCategoryCtl Method doGet ended");
+		log.info("ManageCategoryCtl Method doGet ended");
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("inside manage cateory ctl do post...............");
-		log.debug("ManageCategoryCtl Method doPost Started");
+		log.info("ManageCategoryCtl Method doPost Started");
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
@@ -110,12 +108,9 @@ public class ManageCategoryCtl extends BaseCtl {
 		CategoryBean bean = (CategoryBean) populateBean(request);
 
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
-			System.out.println("in do post Add category/////+ id........" + id);
 
 			if (id > 0) {
 				if (OP_EDIT.equalsIgnoreCase(op)) {
-					System.out.println("operatin.....edit chal rh...." + op);
-					System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
 					model = new UserModel();
 					try {
 						model.updateCategory(bean);
@@ -132,8 +127,6 @@ public class ManageCategoryCtl extends BaseCtl {
 			}
 
 			else if (OP_ADD.equalsIgnoreCase(op)) {
-				System.out.println("operatin.....add chal rh...." + op);
-				System.out.println("ADDD ho rha........." + bean.getCategory());
 				long pk = 0;
 				try {
 					pk = model.addCategory(bean);
@@ -141,19 +134,15 @@ public class ManageCategoryCtl extends BaseCtl {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (DuplicateRecordException e) {
-					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage(e.getMessage(), request);
 					e.printStackTrace();
 				}
 				bean.setId(pk);
 				ServletUtility.setSuccessMessage("Category added successfully", request);
-				ServletUtility.redirect(ORSView.MANAGE_CATEGORY_CTL, request, response);
-				return;
 			}
 
 		}
 		if (OP_DELETE.equalsIgnoreCase(op)) {
-			System.out.println("operatin...delete chal rha......" + op);
 			CategoryBean deletebean = new CategoryBean();
 			deletebean.setId(id);
 			try {
@@ -163,13 +152,9 @@ public class ManageCategoryCtl extends BaseCtl {
 				e.printStackTrace();
 			}
 			ServletUtility.setSuccessMessage("Category deleted successfully", request);
-
 		}
 
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
-			System.out.println("operatin........." + op);
-			System.out.println("operatin.....search chal rh...." + op);
-			System.out.println("bean ki value ...." + bean.getCategory());
 
 			List list = null;
 			try {
@@ -182,14 +167,23 @@ public class ManageCategoryCtl extends BaseCtl {
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
-
 			ServletUtility.setBean(bean, request);
-			ServletUtility.setList(list, request);
-			ServletUtility.forward(getView(), request, response);
-			return;
 
 		}
-
+		List list = null;
+		try {
+			list = model.categoryList();
+		} catch (ApplicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ServletUtility.setList(list, request);
+		if (list == null || list.size() == 0) {
+			ServletUtility.setErrorMessage("No record found ", request);
+		}
+		ServletUtility.setBean(bean, request);
+		ServletUtility.forward(getView(), request, response);
+		return;
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class ManagePartnersCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		log.debug("ManageMarketPartnersCtl Method validate Started");
+		log.info("ManageMarketPartnersCtl Method validate Started");
 		boolean pass = true;
 		String op = DataUtility.getString(request.getParameter("operation"));
 		if (DataValidator.isNull(request.getParameter("collegeId"))) {
@@ -49,17 +49,17 @@ public class ManagePartnersCtl extends BaseCtl {
 			request.setAttribute("userId", PropertyReader.getValue("error.require", "Student Name"));
 			pass = false;
 		}
-		log.debug("ManageMarketPartnersCtl Method validate Ended");
+		log.info("ManageMarketPartnersCtl Method validate Ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("ManageMarketPartnersCtl Method populateBean Started");
+		log.info("ManageMarketPartnersCtl Method populateBean Started");
 		UserBean bean = new UserBean();
 		bean.setName(DataUtility.getString(request.getParameter("search")));
 		populateDTO(bean, request);
-		log.debug("ManageMarketPartnersCtl Method PopulateBean Ended");
+		log.info("ManageMarketPartnersCtl Method PopulateBean Ended");
 		return bean;
 	}
 
@@ -68,7 +68,7 @@ public class ManagePartnersCtl extends BaseCtl {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageMarketPartnersCtl Method doGet Started");
+		log.info("ManageMarketPartnersCtl Method doGet Started");
 		List list = null;
 		UserModel model = new UserModel();
 		UserBean bean = (UserBean) populateBean(request);
@@ -101,7 +101,7 @@ public class ManagePartnersCtl extends BaseCtl {
 			ServletUtility.setList(list, request);
 			ServletUtility.forward(getView(), request, response);
 		}
-		log.debug("ManageMarketPartnersCtl Method doGet Ended");
+		log.info("ManageMarketPartnersCtl Method doGet Ended");
 
 	}
 
@@ -110,14 +110,12 @@ public class ManagePartnersCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageMarketPartnersCtl Method doPost Started");
+		log.info("ManageMarketPartnersCtl Method doPost Started");
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
 		String[] ids = request.getParameterValues("ids");
 		UserModel model = new UserModel();
-		System.out.println("pro.....d....................................." + search);
-		System.out.println("operation is........................................." + op);
 		if (OP_DELETE.equalsIgnoreCase(op)) {
 			if (ids != null && ids.length > 0) {
 				UserBean deletebean = new UserBean();
@@ -138,8 +136,6 @@ public class ManagePartnersCtl extends BaseCtl {
 			return;
 		}
 		try {
-			System.out.println("operation....." + op);
-			System.out.println("cat....." + bean.getName());
 			List list = null;
 			list = model.searchSpecific(bean, 0, 0);
 			ServletUtility.setList(list, request);
@@ -161,7 +157,6 @@ public class ManagePartnersCtl extends BaseCtl {
 
 	@Override
 	protected String getView() {
-		System.out.println("view");
 		return ORSView.MANAGE_PARTNER_LIST_VIEW;
 
 	}

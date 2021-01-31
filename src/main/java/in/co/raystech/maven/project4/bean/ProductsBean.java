@@ -20,6 +20,7 @@ public class ProductsBean extends BaseBean {
 	public ProductsBean() {
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * 
 	 */
@@ -30,7 +31,8 @@ public class ProductsBean extends BaseBean {
 	private String formLink;
 	private List<CategoryBean> categories;
 	private String productName;
-	private String image;
+	private String imageURL;
+	private String imageId;
 
 	private long catId;
 
@@ -50,12 +52,20 @@ public class ProductsBean extends BaseBean {
 		this.categories = categories;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageURL() {
+		return imageURL;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 	public String getProductName() {

@@ -76,7 +76,7 @@ public class UserListCtl extends BaseCtl {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("UserListCtl doGet Start");
+		log.info("UserListCtl doGet Start");
 		List list = null;
 		int pageNo = 1;
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
@@ -97,7 +97,7 @@ public class UserListCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("UserListCtl doPOst End");
+		log.info("UserListCtl doPOst End");
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class UserListCtl extends BaseCtl {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("UserListCtl doPost Start");
+		log.info("UserListCtl doPost Start");
 		List list = null;
 		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
 		int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
@@ -172,7 +172,7 @@ public class UserListCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("UserListCtl doGet End");
+		log.info("UserListCtl doGet End");
 	}
 
 	@Override

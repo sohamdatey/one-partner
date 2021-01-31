@@ -36,7 +36,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	public static final String OP_SIGN_UP = "SignUp";
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		log.debug("UserRegistrationCtl Method validat Started");
+		log.info("UserRegistrationCtl Method validat Started");
 		boolean pass = true;
 		String login = request.getParameter("login");
 		String dob = request.getParameter("dob");
@@ -97,13 +97,13 @@ public class UserRegistrationCtl extends BaseCtl {
 				pass = false;
 			}
 		}
-		log.debug("UserRegistrationCtl Method validat ended");
+		log.info("UserRegistrationCtl Method validat ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("UserRegistrationCtl Method populateBean Started");
+		log.info("UserRegistrationCtl Method populateBean Started");
 		UserBean bean = new UserBean();
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setRoleId(RoleBean.STUDENT);
@@ -113,7 +113,7 @@ public class UserRegistrationCtl extends BaseCtl {
 		bean.setConfirmPassword(DataUtility.getString(request.getParameter("confirmPassword")));
 		bean.setMobileNo(DataUtility.getString(request.getParameter("contactNumber")));
 		populateDTO(bean, request);
-		log.debug("UserRegistrationCtl Method populateBean Ended");
+		log.info("UserRegistrationCtl Method populateBean Ended");
 		return bean;
 	}
 
@@ -131,8 +131,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("UserRegistrationCtl Method doPpost Started");
-		System.out.println("in post method");
+		log.info("UserRegistrationCtl Method doPpost Started");
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		// get model
@@ -169,7 +168,7 @@ public class UserRegistrationCtl extends BaseCtl {
 			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, request, response);
 			return;
 		}
-		log.debug("UserRegistrationCtl Method doPost Ended");
+		log.info("UserRegistrationCtl Method doPost Ended");
 
 	}
 
