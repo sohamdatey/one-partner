@@ -50,94 +50,85 @@
 					</div>
 					<div class="col-sm-6">
 						<div class="clearfix">
-							<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
-							<div class="srchWrp pull-right">
-								<i class="fa fa-search"></i> <input type="text"
-									name="search"
-									value="<%=ServletUtility.getParameter("search", request)%>"
-									placeholder="Search" /> <input type="submit"
-									style="display: none" name="operation"
-									value="<%=ManagePartnersCtl.OP_SEARCH%>" id="triggerSrch">
-							</div>
-							<script type="text/javascript">
-								$('input').keypress(function(e) {
-									if (e.which == 13) {
-										e.preventDefault();
-										$('#partnerForm').submit();
-									}
-								});
-							</script>
+							<div class="srchWrp pull-right mrR1">
+								<i class="fa fa-search"></i> <input type="text" name="search" placeholder="Search"
+									value="<%=ServletUtility.getParameter("search", request)%>">
 
+								<input type="submit" name="operation" style="display: none"
+									class="btn btn-info" value="<%=ManagePartnersCtl.OP_SEARCH%>">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="tableCnt">
-				<table class="table partnerTbl">
-					<thead>
-						<tr>
-							<th width="3%"></th>
-							<th>Name</th>
-							<th>Email ID</th>
-							<th>Mobile Number</th>
-							<th>Password</th>
-							<th>Description</th>
-							<th width="3%"></th>
-						</tr>
-					</thead>
-					<tbody>
+	</form>
+	<form action="<%=ORSView.MANAGE_PARTNERS_CTL%>" method="post"
+		id="partnerForm2">
+		<div class="tableCnt">
+			<table class="table partnerTbl">
+				<thead>
+					<tr>
+						<th width="3%"></th>
+						<th>Name</th>
+						<th>Email ID</th>
+						<th>Mobile Number</th>
+						<th>Password</th>
+						<th>Description</th>
+						<th width="3%"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+						List list = ServletUtility.getList(request);
+						Iterator<UserBean> it = list.iterator();
+						int size = list.size();
+						while (it.hasNext()) {
+							bean = it.next();
+					%>
+					<tr class="partTr">
 						<%
-							List list = ServletUtility.getList(request);
-							Iterator<UserBean> it = list.iterator();
-							int size = list.size();
-							while (it.hasNext()) {
-								bean = it.next();
+							UserBean ubean = (UserBean) session.getAttribute("user");
+
+								if (ubean.getId() == bean.getId()) {
 						%>
-						<tr class="partTr">
-							<%
-								UserBean ubean = (UserBean) session.getAttribute("user");
 
-									if (ubean.getId() == bean.getId()) {
-							%>
+						<%
+							} else {
+						%>
 
-							<%
-								} else {
-							%>
+						<%
+							}
+						%>
+						<td><input type="checkbox" name="ids" class="checkbox1"
+							value="<%=bean.getId()%>"
+							onclick="$(this).closest('.partTr').find('.fa-trash').fadeToggle()">
+						</td>
+						<td><%=bean.getName()%></td>
+						<td><%=bean.getLogin()%></td>
+						<td><%=bean.getMobileNo()%></td>
+						<td><%=bean.getPassword()%></td>
+						<td><textarea name="description"><%=DataUtility.getStringData(bean.getDescription())%></textarea>
+							<a class="fa fa-check" onclick="$(this).prev().val()"
+							href="ManagePartnersCtl?id=<%=bean.getId()%>&description="></a></td>
+						<td><i style="display: none" class="fa fa-trash"
+							onclick="$('#delPart').modal('show');"></i></td>
 
-							<%
-								}
-							%>
-							<td><input type="checkbox" name="ids" class="checkbox1"
-								value="<%=bean.getId()%>"
-								onclick="$(this).closest('.partTr').find('.fa-trash').fadeToggle()">
-							</td>
-							<td><%=bean.getName()%></td>
-							<td><%=bean.getLogin()%></td>
-							<td><%=bean.getMobileNo()%></td>
-							<td><%=bean.getPassword()%></td>
-							<td><textarea name="description"><%=DataUtility.getStringData(bean.getDescription())%></textarea>
-								<a class="fa fa-check" onclick="$(this).prev().val()"
-								href="ManagePartnersCtl?id=<%=bean.getId()%>&description="></a></td>
-							<td><i style="display: none" class="fa fa-trash"
-								onclick="$('#delPart').modal('show');"></i></td>
-
-							<%
-								}
-							%>
+						<%
+							}
+						%>
 
 
-							<script>
-								$('.partTr .fa-check').click(function() {
-									var getVal = $(this).prev().val();
-									var _href = $(this).attr("href");
-									$(this).attr("href", _href + getVal);
-								})
-							</script>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+						<script>
+							$('.partTr .fa-check').click(function() {
+								var getVal = $(this).prev().val();
+								var _href = $(this).attr("href");
+								$(this).attr("href", _href + getVal);
+							})
+						</script>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		</div>
 
 
@@ -167,7 +158,6 @@
 				</div>
 			</div>
 		</div>
-
 	</form>
 	<script>
 		$('.nav>li:nth-child(1)').addClass('active');

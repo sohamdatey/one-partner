@@ -18,8 +18,15 @@
 <link rel="stylesheet" href="css/onepartner.css" />
 </head>
 <body class="form-v8">
-	<h1>Ab Tu LOGGED-IN HAI !! 4000 rupe nikaaal bhen ke take 2 module
-		complete ho gye!</h1>
+	<H1>niceh image hai</H1>
+	<form method="POST" action="<%=ORSView.WELCOME_CTL%>"
+		enctype="multipart/form-data">
+		File: <input type="file" name="file" id="file" /> <br />
+		Destination: <input type="text" value="/tmp" name="destination" /> </br> <input
+			type="submit" value="Upload" name="upload" id="upload" />
+	</form>
 
+	<img
+		src="https://one-partner-product-images.s3.amazonaws.com/harvey+mc+with+args+in+code" />
 </body>
 </html>

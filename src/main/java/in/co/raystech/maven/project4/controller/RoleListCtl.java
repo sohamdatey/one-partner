@@ -80,7 +80,7 @@ public class RoleListCtl extends BaseCtl {
 			return;
 		}
 
-		log.debug("RoleListCtl doGet Start");
+		log.info("RoleListCtl doGet Start");
 		List list = null;
 		int pageNo = 1;
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size")) + 1;
@@ -102,7 +102,7 @@ public class RoleListCtl extends BaseCtl {
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("RoleListCtl doGet End");
+		log.info("RoleListCtl doGet End");
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class RoleListCtl extends BaseCtl {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		log.debug("RoleListCtl doPost Start");
+		log.info("RoleListCtl doPost Start");
 
 		List list = null;
 
@@ -185,7 +185,7 @@ public class RoleListCtl extends BaseCtl {
 			return;
 		}
 
-		log.debug("MarksheetListCtl doPost End");
+		log.info("MarksheetListCtl doPost End");
 	}
 
 	@Override

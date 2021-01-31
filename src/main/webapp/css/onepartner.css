@@ -734,6 +734,8 @@ a.profDrop img {
 	word-break: break-all
 }
 
+.partTr i{cursor:pointer}
+
 .table>tbody>tr>td textarea {
 	border: transparent;
 	width: 100%;
@@ -812,6 +814,7 @@ a {
 	top: 0;
 	bottom: 0;
 	margin: auto;
+	overflow:auto;
 }
 
 .login-html .sign-in, .login-html .sign-up, .login-form .group .check {

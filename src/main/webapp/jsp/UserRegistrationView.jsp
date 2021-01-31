@@ -1,6 +1,5 @@
 <%@page import="in.co.raystech.maven.project4.controller.*"%>
 <%@page import="in.co.raystech.maven.project4.bean.*"%>
-<%@page import="in.co.raystech.maven.project4.bundle.*"%>
 <%@page import="in.co.raystech.maven.project4.exception.*"%>
 <%@page import="in.co.raystech.maven.project4.model.*"%>
 <%@page import="in.co.raystech.maven.project4.util.*"%>
@@ -98,6 +97,10 @@
 							<input type="submit" name="operation"
 								value="<%=UserRegistrationCtl.OP_SIGN_UP%>" class="button"
 								value="Sign Up">
+						</div>
+						<br>
+						<div class="foot-lnk"><small>
+							<a href="<%=ORSView.LOGIN_CTL%>">Already have an account? Login here</a></small>
 						</div>
 					</div>
 				</div>

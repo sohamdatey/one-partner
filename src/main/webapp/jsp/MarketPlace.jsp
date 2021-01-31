@@ -61,6 +61,7 @@
 		%>
 		<%
 			List l = (List) request.getAttribute("categoryList");
+			List highlitedCategories = (List) request.getAttribute("highlitedCategories");
 		%>
 
 		<nav class="navbar navbar-blue navbar-white navbar-fixed-top">
@@ -125,7 +126,7 @@
 					<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
 					<div class="srchWrp pull-right">
 						<i class="fa fa-search"></i> <input type="text" name="productName"
-							value="<%=DataUtility.getStringData(ServletUtility.getParameter("name", request))%>"
+							value="<%=DataUtility.getStringData(productBean.getProductName())%>"
 							placeholder="Search" /> <input type="submit"
 							style="display: none" name="operation"
 							value="<%=BaseCtl.OP_SEARCH%>" id="triggerSrch" />
@@ -157,7 +158,15 @@
 
 
 		<div class="catTag clearfix">
-			<%=HTMLUtility.abhikimethod("categoryId", String.valueOf(categoryBean.getId()), l)%>
+
+			<%=HTMLUtility.hilighterMethod("categoryId", String.valueOf(categoryBean.getId()),
+					highlitedCategories, l)%>
+
+
+
+			<a class="more"
+				onclick="$('.default').toggle('fast');$('.more span').toggle()"><label><span
+					style="display: block;">more</span><span style="display: none;">less</span></label></a>
 			<button type="submit" class="btn filter">
 				<i class="fa fa-filter mrR"></i> Apply
 			</button>
@@ -175,7 +184,7 @@
 							productBean = it.next();
 					%>
 					<div class="prdBox">
-						<img src="<%=productBean.getImage()%>" />
+						<img src="<%=productBean.getImageURL()%>" />
 						<h4><%=productBean.getProductName()%></h4>
 						<p><%=productBean.getDescription()%></p>
 						<small><i class="fa fa-tag mrR"></i> <%

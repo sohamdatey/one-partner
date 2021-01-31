@@ -43,7 +43,7 @@ public class MyProfileCtl extends BaseCtl {
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("MyProfileCtl Method populatebean Started");
+		log.info("MyProfileCtl Method populatebean Started");
 
 		UserBean bean = new UserBean();
 
@@ -66,22 +66,17 @@ public class MyProfileCtl extends BaseCtl {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		log.debug("MyprofileCtl Method doGet Started");
+		log.info("MyprofileCtl Method doGet Started");
 		UserBean UserBean = (UserBean) session.getAttribute("user");
 		long id = UserBean.getId();
 		String op = DataUtility.getString(request.getParameter("operation"));
-		System.out.println("-----------------------------------------------");
-		System.out.println(op);
-		System.out.println("----------------------------------------------- op");
 		// get model
 		UserModel model = new UserModel();
 		if (id > 0 || op != null) {
-			System.out.println("in id > 0  condition");
 			UserBean bean;
 			try {
 				bean = model.findByPK(id);
 
-				System.out.println("passsssssssss---" + bean.getPassword());
 				ServletUtility.setBean(bean, request);
 			} catch (ApplicationException e) {
 				log.error(e);
@@ -91,7 +86,7 @@ public class MyProfileCtl extends BaseCtl {
 		}
 		ServletUtility.forward(getView(), request, response);
 
-		log.debug("MyProfileCtl Method doGet Ended");
+		log.info("MyProfileCtl Method doGet Ended");
 	}
 
 	/**
@@ -100,10 +95,10 @@ public class MyProfileCtl extends BaseCtl {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		log.debug("MyprofileCtl Method doPost Started");
+		log.info("MyprofileCtl Method doPost Started");
 
-		UserBean UserBean = (UserBean) session.getAttribute("user");
-		long id = UserBean.getId();
+		UserBean sessionUserBean = (UserBean) session.getAttribute("user");
+		long id = sessionUserBean.getId();
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		// get model
@@ -113,17 +108,18 @@ public class MyProfileCtl extends BaseCtl {
 			UserBean bean = (UserBean) populateBean(request);
 			try {
 				if (id > 0) {
-
 					UserBean bean3 = new UserBean();
 					bean3 = model.findByLogin(bean.getLogin());
-					UserBean.setId(bean.getId());
-					UserBean.setName(bean.getName());
-					UserBean.setMobileNo(bean.getMobileNo());
-					UserBean.setLogin(bean.getLogin());
-					UserBean.setPassword(bean3.getPassword());
-					UserBean.setRoleId(bean.getRoleId());
-					UserBean.setDescription(bean3.getDescription());
-					model.updatePartner(UserBean);
+				
+					sessionUserBean.setName(bean.getName());
+					sessionUserBean.setMobileNo(bean.getMobileNo());
+					sessionUserBean.setLogin(bean.getLogin());
+				
+					sessionUserBean.setId(bean3.getId());
+					sessionUserBean.setPassword(bean3.getPassword());
+					sessionUserBean.setRoleId(bean3.getRoleId());
+					sessionUserBean.setDescription(bean3.getDescription());
+					model.updatePartner(sessionUserBean);
 				}
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("Profile has been updated Successfully. ", request);
@@ -144,7 +140,7 @@ public class MyProfileCtl extends BaseCtl {
 
 		ServletUtility.forward(getView(), request, response);
 
-		log.debug("MyProfileCtl Method doPost Ended");
+		log.info("MyProfileCtl Method doPost Ended");
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class UserCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(UserCtl.class);
-
+	
 	@Override
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
@@ -54,7 +54,7 @@ public class UserCtl extends BaseCtl {
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
-		log.debug("UserCtl Method validate Started");
+		log.info("UserCtl Method validate Started");
 
 		boolean pass = true;
 
@@ -161,7 +161,7 @@ public class UserCtl extends BaseCtl {
 			}
 		}
 
-		log.debug("UserCtl Method validate Ended");
+		log.info("UserCtl Method validate Ended");
 
 		return pass;
 
@@ -170,7 +170,7 @@ public class UserCtl extends BaseCtl {
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		log.debug("UserCtl Method populatebean Started");
+		log.info("UserCtl Method populatebean Started");
 
 		UserBean bean = new UserBean();
 
@@ -194,7 +194,7 @@ public class UserCtl extends BaseCtl {
 
 		populateDTO(bean, request);
 
-		log.debug("UserCtl Method populatebean Ended");
+		log.info("UserCtl Method populatebean Ended");
 
 		return bean;
 	}
@@ -212,7 +212,7 @@ public class UserCtl extends BaseCtl {
 			return;
 		}
 
-		log.debug("UserCtl Method doGet Started");
+		log.info("UserCtl Method doGet Started");
 		String op = DataUtility.getString(request.getParameter("operation"));
 		// get model
 		UserModel model = new UserModel();
@@ -235,7 +235,7 @@ public class UserCtl extends BaseCtl {
 		}
 
 		ServletUtility.forward(getView(), request, response);
-		log.debug("UserCtl Method doGet Ended");
+		log.info("UserCtl Method doGet Ended");
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class UserCtl extends BaseCtl {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("UserCtl Method doPost Started");
+		log.info("UserCtl Method doPost Started");
 		String op = DataUtility.getString(request.getParameter("operation"));
 		// get model
 		UserModel model = new UserModel();
@@ -274,6 +274,7 @@ public class UserCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
+				log.error(e);
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 			}
@@ -302,7 +303,7 @@ public class UserCtl extends BaseCtl {
 		}
 		ServletUtility.forward(getView(), request, response);
 
-		log.debug("UserCtl Method doPostEnded");
+		log.info("UserCtl Method doPostEnded");
 
 	}
 

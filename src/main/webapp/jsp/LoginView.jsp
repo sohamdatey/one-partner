@@ -74,7 +74,8 @@
 							<a href="<%=ORSView.FORGET_PASSWORD_CTL%>">Forgot Password?</a>
 						</div>
 						<div class="foot-lnk mrT2">
-							<a href="<%=ORSView.USER_REGISTRATION_CTL%>">Don't have an account? Register now. </a>
+							<a href="<%=ORSView.USER_REGISTRATION_CTL%>">Don't have an
+								account? Register now. </a>
 						</div>
 					</div>
 				</div>

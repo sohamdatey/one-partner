@@ -126,14 +126,6 @@
 				</div>
 
 				<div class="form-group">
-					<label>Login*</label> <input type="text" name="login" size="30"
-						class="form-control"
-						value="<%=DataUtility.getStringData(bean.getLogin())%>"> <font
-						color="red"><%=ServletUtility.getErrorMessage("login", request)%></font>
-				</div>
-
-
-				<div class="form-group">
 					<label>Mobile No*</label> <input type="text" name="mobileNo"
 						size="30" class="form-control"
 						value="<%=DataUtility.getStringData(bean.getMobileNo())%>">

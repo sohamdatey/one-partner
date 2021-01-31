@@ -46,9 +46,8 @@
 
 						<form action="<%=ORSView.MANAGE_PRODUCTS_CTL%>" method="post"
 							id="productsForm" enctype="multipart/form-data">
-							<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
 							<div class="srchWrp pull-right mrR1">
-								<i class="fa fa-search"></i> <input type="text" required
+								<i class="fa fa-search"></i> <input type="text"
 									name="productName"
 									value="<%=DataUtility.getStringData(ServletUtility.getParameter("name", request))%>"
 									placeholder="Search" /> <input type="submit"
@@ -106,7 +105,7 @@
 					<tr class="prdTr">
 						<td><a
 							href="ManageProductsCtl?id=<%=DataUtility.getStringData(beanP.getId())%>"></a>
-							<img src="<%=DataUtility.getStringData(beanP.getImage())%>"></td>
+							<img src="<%=DataUtility.getStringData(beanP.getImageURL())%>"></td>
 						<td><b><%=DataUtility.getStringData(beanP.getProductName())%></b></td>
 						<td><%=DataUtility.getStringData(beanP.getDescription())%></td>
 						<td><i class="fa fa-tag mrR"></i> <%

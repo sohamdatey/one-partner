@@ -14,6 +14,9 @@ import java.util.Date;
 
 public class UserBean extends BaseBean {
 
+	public UserBean() {
+	}
+
 	/**
 	 * Lock Active constant for User
 	 */

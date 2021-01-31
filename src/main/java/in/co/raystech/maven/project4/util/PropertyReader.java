@@ -16,6 +16,8 @@ public class PropertyReader {
 
 	private static ResourceBundle rb = ResourceBundle.getBundle("in.co.raystech.maven.project4.bundle.system");
 
+	private static ResourceBundle aws_credentials = ResourceBundle.getBundle("in.co.raystech.maven.project4.bundle.awscredentials");
+
 	/**
 	 * Return value of key
 	 * 
