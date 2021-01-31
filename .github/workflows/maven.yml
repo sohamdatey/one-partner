@@ -29,6 +29,6 @@ jobs:
         aws_secret_key: jRomnyNLFHcRwF/SvgpRhdv72ceDM/p/4J06BQ2r
         application_name: one-partner-prod
         environment_name: OnePartnerProd-env
-        version_label: test
+        version_label: "test-${{ steps.format-time.outputs.replaced }}"
         region: us-east-1
         deployment_package: target/OnePartner.war
