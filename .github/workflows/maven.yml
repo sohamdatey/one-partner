@@ -25,7 +25,7 @@ jobs:
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v13
       with:
-        aws_access_key: AKIAUGU4WNIJDORR4TIJ
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: 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
         application_name: one-partner-prod
         environment_name: OnePartnerProd-env
