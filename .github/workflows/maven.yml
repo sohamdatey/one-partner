@@ -23,7 +23,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: echoing
-      run: echo  ${{secrets.AWS_ACCESS_KEY_ID}}
+      run: echo  $secrets.AWS_ACCESS_KEY_ID
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v13
       with:
