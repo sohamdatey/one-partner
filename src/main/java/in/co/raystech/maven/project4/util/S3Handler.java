@@ -17,7 +17,7 @@ public class S3Handler {
 	private static Logger log = Logger.getLogger(S3Handler.class);
 
 	public static void main(String[] args) {
-		deleteImage("3jpg.jpg");
+		deleteImage("2.jpg");
 	}
 
 	public static void uploadProductImage(InputStream file, String imageId, String extention)

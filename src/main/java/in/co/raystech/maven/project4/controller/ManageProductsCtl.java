@@ -158,7 +158,7 @@ public class ManageProductsCtl extends BaseCtl {
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
 					String[] ids = request.getParameterValues("categoryId");
-					bean.setImageId(String.valueOf(UserModel.nextProductPK())+ "jpg");
+					bean.setImageId(String.valueOf(UserModel.nextProductPK()));
 					bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
 					pk = addProducts(request, response, bean, model, pk);
 					addProductCategories(model, pk, ids);
