@@ -19,7 +19,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean install package --file pom.xml
     - name: echoing
       run: echo  $secrets.AWS_ACCESS_KEY_ID
     - name: Deploy to EB
