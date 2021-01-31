@@ -180,7 +180,6 @@ public class UserModel {
 		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE MOBILE_NO=?");
 		UserBean bean = null;
 		Connection conn = null;
-		System.out.println("sql" + sql);
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -200,8 +199,6 @@ public class UserModel {
 				bean.setCreatedDatetime(rs.getTimestamp(9));
 				bean.setModifiedDatetime(rs.getTimestamp(10));
 				bean.setDescription(rs.getString(11));
-				System.out.println("sql  " + rs.toString());
-				System.out.println("findByMobile model method............" + bean.getMobileNo());
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -230,7 +227,6 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
-			System.out.println(pk + " in ModelJDBC");
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ST_USER VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
@@ -281,7 +277,6 @@ public class UserModel {
 		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
-		System.out.println("sql  " + sql);
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -316,7 +311,6 @@ public class UserModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
-			System.out.println(pstmt.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
@@ -384,7 +378,6 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextCategoryPK();
-			System.out.println(pk + " in Model addCategory");
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO CATEGORY VALUES(?,?,?)");
 			pstmt.setInt(1, pk);
@@ -427,7 +420,6 @@ public class UserModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
-			System.out.println("sql --" + pstmt);
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
@@ -483,7 +475,6 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextProductPK();
-			System.out.println(pk + " in Model addProducts");
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_TABLE VALUES(?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
@@ -511,7 +502,6 @@ public class UserModel {
 			JDBCDataSource.closeConnection(conn);
 		}
 
-		System.out.println("this is adddd pkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" + pk);
 		return pk;
 	}
 
@@ -630,7 +620,6 @@ public class UserModel {
 
 	public UserBean authenticate(String login, String password) throws ApplicationException {
 
-		System.out.println("IN MODEL AUTHENTICATE");
 		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE LOGIN = ? AND PASSWORD = ?");
 		UserBean bean = null;
 		Connection conn = null;
@@ -768,7 +757,6 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -834,7 +822,6 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -890,7 +877,6 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -938,7 +924,6 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -993,7 +978,6 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -1208,7 +1192,6 @@ public class UserModel {
 
 	public ProductsBean findParentCategory(long pk) throws ApplicationException {
 
-		System.out.println("inside findParentCategory model=-=-=-=-=-=-=-=-=-=" + pk);
 		StringBuffer sql = new StringBuffer("SELECT parent_category_id FROM category WHERE id=?");
 
 		ProductsBean bean = null;
@@ -1222,7 +1205,6 @@ public class UserModel {
 			while (rs.next()) {
 				bean = new ProductsBean();
 				bean.setId(rs.getLong(1));
-				System.out.println("///////////////////////////////////[][][][][][][][]][][]" + bean.getId());
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -1235,7 +1217,6 @@ public class UserModel {
 	}
 
 	public List findProductsByCategoryFK(long pk) throws ApplicationException {
-		System.out.println("came here");
 		StringBuffer sql = new StringBuffer("SELECT DISTINCT  pt.product_name, pt.description, pt.partnershipOffer, "
 				+ "pt.formLink, pt.image_url, pt.imageid , pt.id" + " FROM product_table pt \r\n"
 				+ "	JOIN product_category pc ON pt.id=pc.product_id\r\n"
@@ -1522,14 +1503,10 @@ public class UserModel {
 				bean.setModifiedDatetime(rs.getTimestamp(10));
 				bean.setDescription(rs.getString(11));
 
-				System.out.println("sql  " + rs.toString());
-				System.out.println("findByLogin model method............" + bean.getLogin());
 			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("forget password user model method............");
-			System.out.println(e.getMessage());
 			throw new ApplicationException("Exception : Exception in getting User by login user model");
 		} finally {
 			JDBCDataSource.closeConnection(conn);

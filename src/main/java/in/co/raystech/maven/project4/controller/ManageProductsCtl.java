@@ -1,7 +1,7 @@
 package in.co.raystech.maven.project4.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class ManageProductsCtl extends BaseCtl {
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("ManageProductsCtl Method populateBean Started");
+		log.info("ManageProductsCtl Method populateBean Started");
 		ProductsBean bean = new ProductsBean();
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setProductName(DataUtility.getString(request.getParameter("productName")));
@@ -48,14 +48,14 @@ public class ManageProductsCtl extends BaseCtl {
 		bean.setPartnershipOffer(DataUtility.getString(request.getParameter("partnershipOffer")));
 		bean.setFormLink(DataUtility.getString(request.getParameter("formLink")));
 		populateDTO(bean, request);
-		log.debug("ManageProductsCtl Method populateBean ended");
+		log.info("ManageProductsCtl Method populateBean ended");
 		return bean;
 	}
 
 	@Override
 	protected void preload(HttpServletRequest request) {
 
-		log.debug("ManageProductsCtl Method preload Started");
+		log.info("ManageProductsCtl Method preload Started");
 		UserModel model = new UserModel();
 
 		try {
@@ -73,12 +73,12 @@ public class ManageProductsCtl extends BaseCtl {
 			log.error(e);
 			e.printStackTrace();
 		}
-		log.debug("ManageProductsCtl Method populateBean ended");
+		log.info("ManageProductsCtl Method populateBean ended");
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("ManageProductsCtl Method doget Started");
+		log.info("ManageProductsCtl Method doget Started");
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -94,14 +94,11 @@ public class ManageProductsCtl extends BaseCtl {
 			log.error(e);
 			e.printStackTrace();
 		}
-		System.out.println("into the get id  list ------" + id);
 
 		if (id > 0) {
 			ProductsBean productsBean;
 			try {
 				productsBean = model.findByPKProducts(id);
-				System.out.println(productsBean.getId());
-				System.out.println(productsBean.getProductName());
 				List<CategoryBean> list = model.createCategoryBeans(productsBean.getId());
 				List<CategoryBean> list2 = model.categoryList();
 				request.setAttribute("listOfCats", list);
@@ -111,14 +108,11 @@ public class ManageProductsCtl extends BaseCtl {
 				int size = list.size();
 				while (it.hasNext()) {
 					catBean = it.next();
-					System.out.println(catBean.getCategory());
 				}
-				System.out.println("-------------------------------");
 				Iterator<CategoryBean> it2 = list2.iterator();
 				int size2 = list2.size();
 				while (it.hasNext()) {
 					catBean = it.next();
-					System.out.println(catBean.getCategory());
 
 				}
 
@@ -134,31 +128,27 @@ public class ManageProductsCtl extends BaseCtl {
 
 		ServletUtility.forward(getView(), request, response);
 
-		log.debug("ManageProductsCtl Method doGet Ended");
+		log.info("ManageProductsCtl Method doGet Ended");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		log.debug("ManageProductsCtl Method dopost Started");
+		log.info("ManageProductsCtl Method dopost Started");
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("productName"));
-
-		System.out.println("********************************************");
-		System.out.println(op);
-		System.out.println(search);
-		System.out.println("********************************************");
 		Part filePart = null;
 		filePart = request.getPart("file");
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
-		System.out.println("manageProductsCtl do post..idddddddddddd   " + id);
+
 		if (OP_DELETE.equalsIgnoreCase(op)) {
 			bean.setId(id);
 			try {
-				model.deleteProduct(bean);
+				bean = model.findByPKProducts(bean.getId());
 				S3Handler.deleteImage(bean.getImageId());
+				model.deleteProduct(bean);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 			}
@@ -168,7 +158,7 @@ public class ManageProductsCtl extends BaseCtl {
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
 					String[] ids = request.getParameterValues("categoryId");
-					bean.setImageId(String.valueOf(UserModel.nextProductPK()));
+					bean.setImageId(String.valueOf(UserModel.nextProductPK())+ "jpg");
 					bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
 					pk = addProducts(request, response, bean, model, pk);
 					addProductCategories(model, pk, ids);
@@ -233,7 +223,7 @@ public class ManageProductsCtl extends BaseCtl {
 		ServletUtility.setBeanP(bean, request);
 		ServletUtility.setList(list, request);
 		ServletUtility.forward(getView(), request, response);
-		log.debug("ManageProductsCtl Method doPost Ended");
+		log.info("ManageProductsCtl Method doPost Ended");
 	}
 
 	private long addProducts(HttpServletRequest request, HttpServletResponse response, ProductsBean bean,

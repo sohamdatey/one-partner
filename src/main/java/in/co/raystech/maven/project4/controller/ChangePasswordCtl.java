@@ -38,7 +38,7 @@ public class ChangePasswordCtl extends BaseCtl {
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
-		log.debug("ChangePasswordCtl Method validate Started");
+		log.info("ChangePasswordCtl Method validate Started");
 		boolean pass = true;
 		String op = request.getParameter("operation");
 		String oldPassword = request.getParameter("oldPassword");
@@ -82,19 +82,19 @@ public class ChangePasswordCtl extends BaseCtl {
 				pass = false;
 			}
 		}
-		log.debug("ChangePasswordCtl Method validate Ended");
+		log.info("ChangePasswordCtl Method validate Ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("ChangePasswordCtl Method populatebean Started");
+		log.info("ChangePasswordCtl Method populatebean Started");
 		UserBean bean = new UserBean();
 		bean.setPassword(DataUtility.getString(request.getParameter("oldPassword")));
 		bean.setConfirmPassword(DataUtility.getString(request.getParameter("confirmPassword")));
 		bean.setNewPassword(request.getParameter("newPassword"));
 		populateDTO(bean, request);
-		log.debug("ChangePasswordCtl Method populatebean Ended");
+		log.info("ChangePasswordCtl Method populatebean Ended");
 		return bean;
 	}
 
@@ -112,7 +112,7 @@ public class ChangePasswordCtl extends BaseCtl {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		log.debug("ChangePasswordCtl Method doGet Started");
+		log.info("ChangePasswordCtl Method doGet Started");
 		String op = DataUtility.getString(request.getParameter("operation"));
 		// get model
 		UserModel model = new UserModel();
@@ -143,7 +143,7 @@ public class ChangePasswordCtl extends BaseCtl {
 			return;
 		}
 		ServletUtility.forward(ORSView.CHANGE_PASSWORD_VIEW, request, response);
-		log.debug("ChangePasswordCtl Method doGet Ended");
+		log.info("ChangePasswordCtl Method doGet Ended");
 	}
 
 	@Override

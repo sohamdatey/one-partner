@@ -106,12 +106,10 @@ public class AddCategoryCtl extends BaseCtl {
 		long id = DataUtility.getLong(request.getParameter("id"));
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
-			System.out.println("in do post Add category/////+ id........" + id);
 
 			if (id > 0) {
 				if (OP_EDIT.equalsIgnoreCase(op)) {
 
-					System.out.println("thiss isss market place id ----" + bean.getMarketPlaceId());
 					model = new UserModel();
 					try {
 						model.updateCategory(bean);
@@ -128,7 +126,6 @@ public class AddCategoryCtl extends BaseCtl {
 			}
 
 			else if (OP_ADD.equalsIgnoreCase(op)) {
-				System.out.println("ADDD ho rha........." + bean.getCategory());
 				long pk = 0;
 				try {
 					pk = model.addCategory(bean);

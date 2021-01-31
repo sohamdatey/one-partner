@@ -41,7 +41,7 @@ public class LoginCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		log.debug("LoginCtl Method validate Started");
+		log.info("LoginCtl Method validate Started");
 		boolean pass = true;
 		String op = request.getParameter("operation");
 		if (OP_SIGN_UP.equals(op) || OP_LOG_OUT.equals(op)) {
@@ -60,18 +60,18 @@ public class LoginCtl extends BaseCtl {
 			request.setAttribute("password", PropertyReader.getValue("error.require", "Password"));
 			pass = false;
 		}
-		log.debug("LoginCtl Method validate Ended");
+		log.info("LoginCtl Method validate Ended");
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
-		log.debug("LoginCtl Method populatebean Started");
+		log.info("LoginCtl Method populatebean Started");
 		UserBean bean = new UserBean();
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
-		log.debug("LoginCtl Method populatebean Ended");
+		log.info("LoginCtl Method populatebean Ended");
 		return bean;
 	}
 
@@ -81,8 +81,7 @@ public class LoginCtl extends BaseCtl {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("LoginCtl Method doGet Started");
-		System.out.println("in LoginCtl do get method");
+		log.info("LoginCtl Method doGet Started");
 		String op = DataUtility.getString(request.getParameter("operation"));
 		long id = DataUtility.getLong(request.getParameter("id"));
 		// get model
@@ -106,7 +105,7 @@ public class LoginCtl extends BaseCtl {
 			}
 		}
 		ServletUtility.forward(getView(), request, response);
-		log.debug("UserCtl Method doGet Ended");
+		log.info("UserCtl Method doGet Ended");
 	}
 
 	/**
@@ -115,11 +114,9 @@ public class LoginCtl extends BaseCtl {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		log.debug("LoginCtl Method doPost Started");
+		log.info("LoginCtl Method doPost Started");
 		HttpSession session = request.getSession(true);
-		System.out.println("in LoginCtl do post method");
 		String op = DataUtility.getString(request.getParameter("operation"));
-		System.out.println(op);
 		// get model
 		UserModel model = new UserModel();
 		RoleModel role = new RoleModel();
@@ -138,7 +135,6 @@ public class LoginCtl extends BaseCtl {
 					if (bean.getLogin().equals("admin@onepartner.in")) {
 						ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
 					} else {
-						System.out.println("'''''''''''''''");
 						ServletUtility.redirect(ORSView.MARKET_PLACE_CTL, request, response);
 					}
 					return;
@@ -157,7 +153,7 @@ public class LoginCtl extends BaseCtl {
 			return;
 		}
 		ServletUtility.forward(getView(), request, response);
-		log.debug("LoginCtl Method doPost Ended");
+		log.info("LoginCtl Method doPost Ended");
 
 	}
 
