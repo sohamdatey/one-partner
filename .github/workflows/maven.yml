@@ -33,4 +33,4 @@ jobs:
         environment_name: OnePartnerProd-env
         version_label: test
         region: us-east-1
-        deployment_package: target/OneParter-0.0.1-SNAPSHOT.war
+        deployment_package: target/OnePartner.war
