@@ -4,14 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.Part;
-
-import org.omg.PortableInterceptor.INACTIVE;
 
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.ProductsBean;
@@ -20,12 +17,10 @@ import in.co.raystech.maven.project4.exception.ApplicationException;
 import in.co.raystech.maven.project4.exception.DatabaseException;
 import in.co.raystech.maven.project4.exception.DuplicateRecordException;
 import in.co.raystech.maven.project4.exception.RecordNotFoundException;
-import in.co.raystech.maven.project4.util.DataUtility;
 import in.co.raystech.maven.project4.util.EmailBuilder;
 import in.co.raystech.maven.project4.util.EmailMessage;
 import in.co.raystech.maven.project4.util.EmailUtility;
 import in.co.raystech.maven.project4.util.JDBCDataSource;
-import in.co.raystech.maven.project4.util.ServletUtility;
 
 public class UserModel {
 
@@ -1216,11 +1211,13 @@ public class UserModel {
 		return bean;
 	}
 
-	public List findProductsByCategoryFK(long pk) throws ApplicationException {
+	public static List<ProductsBean> findProductsByCategoryFK(String[] ids) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("SELECT DISTINCT  pt.product_name, pt.description, pt.partnershipOffer, "
 				+ "pt.formLink, pt.image_url, pt.imageid , pt.id" + " FROM product_table pt \r\n"
 				+ "	JOIN product_category pc ON pt.id=pc.product_id\r\n"
-				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	WHERE c.id =? \r\n" + "");
+				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	WHERE c.id IN ("
+				+ UserModel.createInClauseWithCounts(ids) + ")");
+
 		ProductsBean bean = null;
 		Connection conn = null;
 		ArrayList list = new ArrayList();
@@ -1228,7 +1225,11 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setLong(1, pk);
+			int count = 1;
+			for (String str : ids) {
+				pstmt.setString(count, str);
+				count++;
+			}
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				bean = new ProductsBean();
@@ -1240,26 +1241,27 @@ public class UserModel {
 				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(rs.getInt(7)));
 				list.add(bean);
-
 			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ApplicationException("Exception : Exception in getting Products by pk");
+			throw new ApplicationException("Exception : Exception in getting findProductsByCategoryFK by ids");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return list;
 	}
 
-	public List<CategoryBean> createCategoryBeans(long productId) throws ApplicationException {
+	public static List<CategoryBean> createCategoryBeans(long productId) throws ApplicationException {
 
 //		List<Long> productIds = products.stream().
 //				map((product)-> product.getId()).
 //				collect(Collectors.toList());
 
-		StringBuffer sql = new StringBuffer("select id, category FROM \r\n" + "	product_category pc \r\n"
+		StringBuffer sql = new StringBuffer("select DISTINCT id, category FROM \r\n" + "	product_category pc \r\n"
 				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	where  pc.product_id IN ( ? )");
+
+		// '" + bean.getDescription() + "%'"
 
 		CategoryBean bean = null;
 		Connection conn = null;
@@ -1268,6 +1270,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
 			int count = 1;
 			pstmt.setLong(count, productId);
 			ResultSet rs = pstmt.executeQuery();
@@ -1290,6 +1293,15 @@ public class UserModel {
 	private static String createInClauseWithCount(List<Long> productIds) {
 		List<String> strings = new ArrayList();
 		for (Long long1 : productIds) {
+			strings.add("?");
+		}
+		return String.join(",", strings);
+
+	}
+
+	private static String createInClauseWithCounts(String[] ids) {
+		List<String> strings = new ArrayList();
+		for (String long1 : ids) {
 			strings.add("?");
 		}
 		return String.join(",", strings);

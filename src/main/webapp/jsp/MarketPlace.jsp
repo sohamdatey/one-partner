@@ -159,8 +159,7 @@
 
 		<div class="catTag clearfix">
 
-			<%=HTMLUtility.hilighterMethod("categoryId", String.valueOf(categoryBean.getId()),
-					highlitedCategories, l)%>
+			<%=HTMLUtility.hilighterMethod("ids", String.valueOf(categoryBean.getId()), highlitedCategories, l)%>
 
 
 

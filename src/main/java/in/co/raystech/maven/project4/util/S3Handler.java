@@ -20,15 +20,14 @@ public class S3Handler {
 		deleteImage("2.jpg");
 	}
 
-	public static void uploadProductImage(InputStream file, String imageId, String extention)
-			throws ImageSaveException {
+	public static void uploadProductImage(InputStream file, String imageId) throws ImageSaveException {
 		log.debug("uploadProductImage Method Started");
 		final AmazonS3 s3 = builder();
 		try {
 			setCreds();
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentType("image/jpeg");
-			s3.putObject(getBucketName(), imageId + extention, file, objectMetadata);
+			s3.putObject(getBucketName(), imageId, file, objectMetadata);
 		} catch (AmazonServiceException e) {
 			log.error(e);
 			throw e;
@@ -51,7 +50,7 @@ public class S3Handler {
 
 	public static String getUrl(String imageName) {
 		log.debug("getUrl Method Started");
-		return "http://d2jkgyfbwf6l29.cloudfront.net/" + imageName + ".jpg";
+		return "http://d2jkgyfbwf6l29.cloudfront.net/" + imageName;
 	}
 
 	private static AmazonS3 builder() {

@@ -91,7 +91,7 @@
 						List categoryList = (List) request.getAttribute("categoryList");
 					%>
 
-					<!-- 				<%=HTMLUtility.getList("categoryId", String.valueOf(bean.getId()), categoryList)%>
+					<!-- 				<%=HTMLUtility.getList("categoryId", String.valueOf(beanP.getId()), categoryList)%>
  -->
 
 					<%

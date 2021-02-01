@@ -50,7 +50,7 @@ public class WelcomeCtl extends BaseCtl {
 		final Part filePart = request.getPart("file");
 
 		try {
-			S3Handler.uploadProductImage(filePart.getInputStream(), null, null);
+			S3Handler.uploadProductImage(filePart.getInputStream(), null);
 
 		} catch (ImageSaveException e) {
 			// TODO Auto-generated catch block
