@@ -39,7 +39,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/OnePartner/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
@@ -146,10 +146,6 @@ public class ManageProductsCtl extends BaseCtl {
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("productName"));
-		Part filePart = null;
-		filePart = request.getPart("file");
-		String extension = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePart));
-		System.out.println("File Extension " + extension);
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 
@@ -165,6 +161,11 @@ public class ManageProductsCtl extends BaseCtl {
 			}
 		}
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
+			Part filePart = null;
+			filePart = request.getPart("file");
+			String extension = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePart));
+			System.out.println("File Extension " + extension);
+			
 			long pk = 0;
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
@@ -191,14 +192,23 @@ public class ManageProductsCtl extends BaseCtl {
 						prodBean = model.findByPKProducts(bean.getId());
 						S3Handler.deleteImage(prodBean.getImageId());
 						String[] ids = request.getParameterValues("categoryId");
-						bean.setImageId(String.valueOf(prodBean.getId() + "." + extension));
-						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+						if (filePart != null) {
+							bean.setImageId(String.valueOf(prodBean.getId() + "." + extension));
+							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+						} else {
+							bean.setImageId(prodBean.getImageId());
+							bean.setImageURL(prodBean.getImageURL());
+						}
+
+						/*
+						 * System.out.println("-------------------------------------------");
+						 * System.out.println(bean.getImageId());
+						 * System.out.println(bean.getImageURL()); System.out.println(bean.getId());
+						 * System.out.println(prodBean.getId());
+						 * System.out.println(ManageProductsCtl.getFileName(filePart));
+						 * System.out.println("-------------------------------------------");
+						 */
 						addProductCategories(model, pk, ids);
-						System.out.println("-------------------------------------------");
-						System.out.println(bean.getImageId());
-						System.out.println(bean.getImageURL());
-						System.out.println(ManageProductsCtl.getFileName(filePart));
-						System.out.println("-------------------------------------------");
 						saveImage(bean, filePart);
 						updateProduct(bean, model);
 						ServletUtility.setBean(bean, request);
@@ -215,6 +225,11 @@ public class ManageProductsCtl extends BaseCtl {
 
 		}
 
+		System.out.println("this is operation..............");
+		System.out.println(op);
+		System.out.println("this is operation..............");
+		
+		
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
 
 			List list = null;
@@ -225,6 +240,16 @@ public class ManageProductsCtl extends BaseCtl {
 				e.printStackTrace();
 			}
 			ServletUtility.setList(list, request);
+			Iterator<ProductsBean> it = list.iterator();
+			int size = list.size();
+			while (it.hasNext()) {
+				bean = it.next();
+				System.out.println("------------------");
+				System.out.println(bean.getProductName());
+				System.out.println(bean.getImageURL());
+				System.out.println("------------------");
+
+			}
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
@@ -234,16 +259,30 @@ public class ManageProductsCtl extends BaseCtl {
 
 		List list = null;
 		try {
-			list = model.productsList();
+			list = model.searchProducts(bean, 0, 0);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ServletUtility.setList(list, request);
 		if (list == null || list.size() == 0) {
 			ServletUtility.setErrorMessage("No record found ", request);
 		}
+
+		ServletUtility.setList(list, request);
+
+		Iterator<ProductsBean> it = list.iterator();
+		int size = list.size();
+		while (it.hasNext()) {
+			bean = it.next();
+			System.out.println("------------------");
+			System.out.println(bean.getProductName());
+			System.out.println(bean.getImageURL());
+			System.out.println("------------------");
+
+		}
+
 		ServletUtility.setBean(bean, request);
+		ServletUtility.setBeanP(bean, request);
 		ServletUtility.forward(getView(), request, response);
 		return;
 

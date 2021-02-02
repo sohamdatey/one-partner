@@ -27,7 +27,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/ctl/ManageMarketPlaceCtl" })
+@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/OnePartner/ctl/ManageMarketPlaceCtl" })
 public class ManageMarketPlaceCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(ManageMarketPlaceCtl.class);
@@ -96,21 +96,10 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
 		ProductsBean bean = (ProductsBean) populateBean(request);
-		
 		String[] ids = request.getParameterValues("ids");
-		
-		System.out.println("idsidsidsidsidsidsidsidsidsidsidsidsidsids");
-
-		for (String string : ids) {
-			System.out.println(string);
-		}
-		System.out.println("idsidsidsidsidsidsidsidsidsidsidsidsidsids");
-
-		/*
-		 * searching by category selection
-		 */
 
 		UserModel model = new UserModel();
+
 		if (ids != null && ids.length > 0) {
 			try {
 				List<ProductsBean> list = null;
@@ -137,13 +126,13 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 
 			ServletUtility.forward(getView(), request, response);
 			return;
-			
+
 		}
 
 		/*
 		 * searching by input
 		 */
-		if (bean.getProductName() != null) {
+		if (bean.getProductName() != null && ids == null) {
 			try {
 				List list = null;
 				bean.setProductName(bean.getProductName());
@@ -160,7 +149,8 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
+			ServletUtility.forward(getView(), request, response);
+			return;
 		}
 
 		if (op == null && search == null && bean.getProductName() == null) {

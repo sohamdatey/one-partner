@@ -27,7 +27,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/ctl/ManagePartnersCtl" })
+@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/OnePartner/ctl/ManagePartnersCtl" })
 public class ManagePartnersCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManagePartnersCtl.class);
 

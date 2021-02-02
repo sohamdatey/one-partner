@@ -164,14 +164,20 @@
 
 
 			<a class="more"
-				onclick="$('.default').toggle('fast');$('.more span').toggle()"><label><span
-					style="display: block;">more</span><span style="display: none;">less</span></label></a>
+				onclick="moreFunc()"><label><span
+					style="display: block;">Show all</span><span style="display: none;">Show Less</span></label></a>
 			<button type="submit" class="btn filter">
 				<i class="fa fa-filter mrR"></i> Apply
 			</button>
 		</div>
 
-
+		<script>
+			function moreFunc(){
+				$('.default, .hilit').toggle('fast');
+				$('.more span').toggle();
+				$('.catTag a input').attr('checked',false);
+				}
+		</script>
 
 		<div class="pd2 prodCnt">
 			<div class="clearfix">

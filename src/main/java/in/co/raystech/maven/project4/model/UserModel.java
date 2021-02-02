@@ -805,6 +805,12 @@ public class UserModel {
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
 				sql.append(" OR formlink like '%" + bean.getProductName() + "%'");
 			}
+			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
+				sql.append(" OR IMAGE_URL LIKE '" + bean.getImageURL() + "%'");
+			}
+			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
+				sql.append(" OR IMAGEID LIKE '" + bean.getImageId() + "%'");
+			}
 
 		}
 
@@ -817,6 +823,7 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
+		System.out.println(sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -830,6 +837,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
 			}
@@ -961,6 +970,14 @@ public class UserModel {
 			if (bean.getFormLink() != null && bean.getFormLink().length() > 0) {
 				sql.append(" AND FORMLINK LIKE '" + bean.getFormLink() + "%'");
 			}
+			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
+				sql.append(" AND IMAGE_URL LIKE '" + bean.getImageURL() + "%'");
+			}
+			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
+				sql.append(" AND IMAGEID LIKE '" + bean.getImageId() + "%'");
+			}
+
+			System.out.println(sql);
 
 		}
 
@@ -1030,8 +1047,8 @@ public class UserModel {
 		return categoryList(0, 0);
 	}
 
-	public List productsList() throws ApplicationException {
-		return list(0, 0);
+	public List<ProductsBean> productsList() throws ApplicationException {
+		return productsList(0, 0);
 	}
 
 	/**
@@ -1147,8 +1164,8 @@ public class UserModel {
 
 	}
 
-	public List productsList(int pageNo, int pageSize) throws ApplicationException {
-		ArrayList list = new ArrayList();
+	public List<ProductsBean> productsList(int pageNo, int pageSize) throws ApplicationException {
+		ArrayList<ProductsBean> list = new ArrayList<ProductsBean>();
 		StringBuffer sql = new StringBuffer("SELECT * FROM PRODUCT_TABLE");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
