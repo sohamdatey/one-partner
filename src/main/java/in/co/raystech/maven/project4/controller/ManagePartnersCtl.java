@@ -32,7 +32,7 @@ public class ManagePartnersCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManagePartnersCtl.class);
 
 	/**
-	 * 
+	 * rebuild
 	 */
 	private static final long serialVersionUID = 1L;
 
