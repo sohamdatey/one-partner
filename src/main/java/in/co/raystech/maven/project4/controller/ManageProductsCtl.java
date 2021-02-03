@@ -165,7 +165,7 @@ public class ManageProductsCtl extends BaseCtl {
 			filePart = request.getPart("file");
 			String extension = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePart));
 			System.out.println("File Extension " + extension);
-			
+
 			long pk = 0;
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
@@ -192,22 +192,14 @@ public class ManageProductsCtl extends BaseCtl {
 						prodBean = model.findByPKProducts(bean.getId());
 						S3Handler.deleteImage(prodBean.getImageId());
 						String[] ids = request.getParameterValues("categoryId");
-						if (filePart != null) {
-							bean.setImageId(String.valueOf(prodBean.getId() + "." + extension));
+						if (extension.length() > 2) {
+							bean.setImageId(String.valueOf(bean.getId() + "." + extension));
 							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
-						} else {
+						}
+						else if (extension.length() < 2) {
 							bean.setImageId(prodBean.getImageId());
 							bean.setImageURL(prodBean.getImageURL());
 						}
-
-						/*
-						 * System.out.println("-------------------------------------------");
-						 * System.out.println(bean.getImageId());
-						 * System.out.println(bean.getImageURL()); System.out.println(bean.getId());
-						 * System.out.println(prodBean.getId());
-						 * System.out.println(ManageProductsCtl.getFileName(filePart));
-						 * System.out.println("-------------------------------------------");
-						 */
 						addProductCategories(model, pk, ids);
 						saveImage(bean, filePart);
 						updateProduct(bean, model);
@@ -225,11 +217,6 @@ public class ManageProductsCtl extends BaseCtl {
 
 		}
 
-		System.out.println("this is operation..............");
-		System.out.println(op);
-		System.out.println("this is operation..............");
-		
-		
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
 
 			List list = null;
@@ -240,16 +227,6 @@ public class ManageProductsCtl extends BaseCtl {
 				e.printStackTrace();
 			}
 			ServletUtility.setList(list, request);
-			Iterator<ProductsBean> it = list.iterator();
-			int size = list.size();
-			while (it.hasNext()) {
-				bean = it.next();
-				System.out.println("------------------");
-				System.out.println(bean.getProductName());
-				System.out.println(bean.getImageURL());
-				System.out.println("------------------");
-
-			}
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}

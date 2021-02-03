@@ -103,9 +103,9 @@
 					<tr class="prdTr">
 						<td><a
 							href="ManageProductsCtl?id=<%=DataUtility.getStringData(bean.getId())%>"></a>
-						
+
 							<img src="<%=DataUtility.getStringData(bean.getImageURL())%>"></td>
-						
+
 						<td><b><%=DataUtility.getStringData(bean.getProductName())%></b></td>
 						<td><%=DataUtility.getStringData(bean.getDescription())%></td>
 						<td><i class="fa fa-tag mrR"></i> <%
