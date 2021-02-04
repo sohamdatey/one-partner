@@ -5,21 +5,17 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
-import in.co.raystech.maven.project4.bean.UserBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
 import in.co.raystech.maven.project4.exception.DuplicateRecordException;
 import in.co.raystech.maven.project4.model.UserModel;
 import in.co.raystech.maven.project4.util.DataUtility;
-import in.co.raystech.maven.project4.util.PropertyReader;
 import in.co.raystech.maven.project4.util.ServletUtility;
 
 /**
@@ -107,6 +103,7 @@ public class AddCategoryCtl extends BaseCtl {
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 
+
 			if (id > 0) {
 				if (OP_EDIT.equalsIgnoreCase(op)) {
 
@@ -157,7 +154,7 @@ public class AddCategoryCtl extends BaseCtl {
 			}
 			List list = null;
 			if (bean.getCategory() != null) {
-				
+
 				try {
 					list = model.searchCategory(bean, 0, 0);
 				} catch (ApplicationException e) {

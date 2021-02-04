@@ -55,7 +55,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM ST_USER");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_user");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -76,7 +76,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM CATEGORY");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from category");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -97,7 +97,7 @@ public class UserModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM PRODUCT_TABLE");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from product_table");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -172,7 +172,7 @@ public class UserModel {
 	 */
 
 	public UserBean findByMobileNumber(String mobileNumber) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE MOBILE_NO=?");
+		StringBuffer sql = new StringBuffer("select * from st_user where mobile_no=?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -223,7 +223,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ST_USER VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into st_user values(?,?,?,?,?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getName());
 			pstmt.setString(3, bean.getLogin());
@@ -269,7 +269,7 @@ public class UserModel {
 
 	public CategoryBean findByCategory(String cat) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE category=?");
+		StringBuffer sql = new StringBuffer("select * from st_user where category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 
@@ -299,7 +299,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE category SET category=?, marketPlaceId=? WHERE ID=?");
+					.prepareStatement("update category set category=?, marketplaceid=? where id=?");
 			pstmt.setString(1, bean.getCategory());
 			pstmt.setInt(2, bean.getMarketPlaceId());
 			pstmt.setLong(3, bean.getId());
@@ -329,7 +329,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE ST_USER SET `name`=?,LOGIN=?,PASSWORD=?,MOBILE_NO=?,ROLE_ID=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=?, description=? WHERE ID=?");
+					"update st_user set `name`=?, login=?, password=?, mobile_id=?, role_id=?, created_by=?, modified_by=?, created_datetime=?, modified_datetime=?, description=? where id=?");
 			pstmt.setString(1, bean.getName());
 			pstmt.setString(2, bean.getLogin());
 			pstmt.setString(3, bean.getPassword());
@@ -374,7 +374,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			pk = nextCategoryPK();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO CATEGORY VALUES(?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into category values(?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getCategory());
 			pstmt.setInt(3, bean.getMarketPlaceId());
@@ -404,7 +404,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE product_table SET PRODUCT_NAME=?,DESCRIPTION=?,PARTNERSHIPOFFER=?,FORMLINK=?, Image_url=?,imageId=?  WHERE ID=?");
+					"update product_table set product_name=?, description=?, partnershipoffer=?, formlink=?, image_url=?, imageId=?  where id=?");
 			pstmt.setString(1, bean.getProductName());
 			pstmt.setString(2, bean.getDescription());
 			pstmt.setString(3, bean.getPartnershipOffer());
@@ -437,7 +437,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_CATEGORY VALUES(?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into product_category values(?,?)");
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, idd);
 			pstmt.executeUpdate();
@@ -471,7 +471,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			pk = nextProductPK();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PRODUCT_TABLE VALUES(?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into product_table values(?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getProductName());
 			pstmt.setString(3, bean.getDescription());
@@ -521,7 +521,7 @@ public class UserModel {
 	}
 
 	public UserBean findByPK(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE ID=?");
+		StringBuffer sql = new StringBuffer("select * from st_user where id=?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -556,7 +556,7 @@ public class UserModel {
 	}
 
 	public CategoryBean findCategoryByName(String catName) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE category=?");
+		StringBuffer sql = new StringBuffer("select * from category where category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 
@@ -583,7 +583,7 @@ public class UserModel {
 	}
 
 	public ProductsBean findByPKProducts(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE ID=?");
+		StringBuffer sql = new StringBuffer("select * from product_table where id=?");
 		ProductsBean bean = null;
 		Connection conn = null;
 
@@ -615,7 +615,7 @@ public class UserModel {
 
 	public UserBean authenticate(String login, String password) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE LOGIN = ? AND PASSWORD = ?");
+		StringBuffer sql = new StringBuffer("select * from st_user where login = ? and password= ?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -655,30 +655,30 @@ public class UserModel {
 	}
 
 	public List search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE 1=1");
+		StringBuffer sql = new StringBuffer("select * from st_user where 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" AND `NAME` like '" + bean.getName() + "%'");
+				sql.append(" and `name` like '" + bean.getName() + "%'");
 			}
 			if (bean.getLogin() != null && bean.getLogin().length() > 0) {
-				sql.append(" AND LOGIN like '" + bean.getLogin() + "%'");
+				sql.append(" and login like '" + bean.getLogin() + "%'");
 			}
 			if (bean.getPassword() != null && bean.getPassword().length() > 0) {
-				sql.append(" AND PASSWORD like '" + bean.getPassword() + "%'");
+				sql.append(" and password like '" + bean.getPassword() + "%'");
 			}
 
 			if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
-				sql.append(" AND MOBILE_NO = " + bean.getMobileNo());
+				sql.append(" and mobile_no = " + bean.getMobileNo());
 			}
 			if (bean.getRoleId() > 0) {
-				sql.append(" AND ROLE_ID = " + bean.getRoleId());
+				sql.append(" and role_id= " + bean.getRoleId());
 			}
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" AND description like '" + bean.getDescription() + "%'");
+				sql.append(" and description like '" + bean.getDescription() + "%'");
 			}
 		}
 
@@ -724,21 +724,21 @@ public class UserModel {
 	}
 
 	public List searchSpecific(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE 1=1 ");
+		StringBuffer sql = new StringBuffer("select * from st_user where 1=1 ");
 
 		if (bean != null) {
 
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" AND `NAME` like '%" + bean.getName() + "%'");
+				sql.append(" and `name` like '%" + bean.getName() + "%'");
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" OR LOGIN like '%" + bean.getName() + "%'");
+				sql.append(" or login like '%" + bean.getName() + "%'");
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" OR MOBILE_NO like '%" + bean.getName() + "%'");
+				sql.append(" or mobile_no like '%" + bean.getName() + "%'");
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" OR PASSWORD like '%" + bean.getName() + "%'");
+				sql.append(" or password like '%" + bean.getName() + "%'");
 			}
 
 		}
@@ -784,32 +784,32 @@ public class UserModel {
 	}
 
 	public List searchSpecificProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1 ");
+		StringBuffer sql = new StringBuffer("select * from product_table where 1=1 ");
 
 		if (bean != null) {
 
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" OR product_name like '%" + bean.getProductName() + "%'");
+				sql.append(" or product_name like '%" + bean.getProductName() + "%'");
 			}
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" OR description like '%" + bean.getProductName() + "%'");
+				sql.append(" or description like '%" + bean.getProductName() + "%'");
 			}
 
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" OR partnershipoffer like '%" + bean.getProductName() + "%'");
+				sql.append(" or partnershipoffer like '%" + bean.getProductName() + "%'");
 			}
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" OR formlink like '%" + bean.getProductName() + "%'");
+				sql.append(" or formlink like '%" + bean.getProductName() + "%'");
 			}
 			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
-				sql.append(" OR IMAGE_URL LIKE '" + bean.getImageURL() + "%'");
+				sql.append(" or image_url like'" + bean.getImageURL() + "%'");
 			}
 			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
-				sql.append(" OR IMAGEID LIKE '" + bean.getImageId() + "%'");
+				sql.append(" or imageid like '" + bean.getImageId() + "%'");
 			}
 
 		}
@@ -857,17 +857,17 @@ public class UserModel {
 	}
 
 	public List searchCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1");
+		StringBuffer sql = new StringBuffer("select * from category where 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
-				sql.append(" AND CATEGORY like '" + bean.getCategory() + "%'");
+				sql.append(" and category like '" + bean.getCategory() + "%'");
 			}
 			if (bean.getMarketPlaceId() > 0) {
-				sql.append(" AND marketPlaceId = " + bean.getMarketPlaceId());
+				sql.append(" and marketplaceid = " + bean.getMarketPlaceId());
 			}
 
 		}
@@ -903,18 +903,19 @@ public class UserModel {
 		return list;
 	}
 
-	public List searchSpecificCategory(CategoryBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY WHERE 1=1 ");
+	public List<CategoryBean> searchSpecificCategory(CategoryBean bean, int pageNo, int pageSize)
+			throws ApplicationException {
+		StringBuffer sql = new StringBuffer("select * from category where 1=1 ");
 
 		if (bean != null) {
 			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
-				sql.append(" OR CATEGORY like '" + bean.getCategory() + "%'");
+				sql.append(" or category like '" + bean.getCategory() + "%'");
 			}
-			if (bean.getMarketPlaceId() > 0) {
-				sql.append(" OR marketPlaceId = " + bean.getMarketPlaceId());
+			if (bean.getCategory() != null && bean.getCategory().length() > 0) {
+				sql.append(" or marketplaceid like '" + bean.getCategory() + "%'");
 			}
 
 		}
@@ -928,7 +929,7 @@ public class UserModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
-		ArrayList list = new ArrayList();
+		ArrayList<CategoryBean> list = new ArrayList<CategoryBean>();
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -940,6 +941,7 @@ public class UserModel {
 				bean.setCategory(rs.getString(2));
 				list.add(bean);
 			}
+			System.out.println(sql);
 			rs.close();
 		} catch (Exception e) {
 			throw new ApplicationException("Exception : Exception in search category");
@@ -951,30 +953,30 @@ public class UserModel {
 	}
 
 	public List searchProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE 1=1");
+		StringBuffer sql = new StringBuffer("select * from product_table where 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" AND PRODUCT_NAME LIKE '" + bean.getProductName() + "%'");
+				sql.append(" and product_name like '" + bean.getProductName() + "%'");
 			}
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" AND DESCRIPTION LIKE '" + bean.getDescription() + "%'");
+				sql.append(" and description like '" + bean.getDescription() + "%'");
 			}
 
 			if (bean.getPartnershipOffer() != null && bean.getPartnershipOffer().length() > 0) {
-				sql.append(" AND PARTNERSHIPOFFER LIKE '" + bean.getPartnershipOffer() + "%'");
+				sql.append(" and partnershipoffer like '" + bean.getPartnershipOffer() + "%'");
 			}
 			if (bean.getFormLink() != null && bean.getFormLink().length() > 0) {
-				sql.append(" AND FORMLINK LIKE '" + bean.getFormLink() + "%'");
+				sql.append(" and formlink like '" + bean.getFormLink() + "%'");
 			}
 			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
-				sql.append(" AND IMAGE_URL LIKE '" + bean.getImageURL() + "%'");
+				sql.append(" and image_url like '" + bean.getImageURL() + "%'");
 			}
 			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
-				sql.append(" AND IMAGEID LIKE '" + bean.getImageId() + "%'");
+				sql.append(" and imageid like '" + bean.getImageId() + "%'");
 			}
 
 			System.out.println(sql);
@@ -986,7 +988,7 @@ public class UserModel {
 			// Calculate start record index
 			pageNo = (pageNo - 1) * pageSize;
 
-			sql.append(" Limit " + pageNo + ", " + pageSize);
+			sql.append(" limit " + pageNo + ", " + pageSize);
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
@@ -1062,7 +1064,7 @@ public class UserModel {
 
 	public List<CategoryBean> categoryList(int pageNo, int pageSize) throws ApplicationException {
 		List<CategoryBean> list = new ArrayList<CategoryBean>();
-		StringBuffer sql = new StringBuffer("SELECT * FROM CATEGORY");
+		StringBuffer sql = new StringBuffer("select * from category");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1098,7 +1100,7 @@ public class UserModel {
 
 	public List<CategoryBean> categoryListHighlightOMarketPlace(int pageNo, int pageSize) throws ApplicationException {
 		List<CategoryBean> list = new ArrayList<CategoryBean>();
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE 1=1 AND marketPlaceId='1'");
+		StringBuffer sql = new StringBuffer("select * from category where 1=1 and marketplaceid='1'");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1132,7 +1134,7 @@ public class UserModel {
 
 	public List<CategoryBean> highlightOnMarketPlaceCategoryList(int pageNo, int pageSize) throws ApplicationException {
 		List<CategoryBean> list = new ArrayList<CategoryBean>();
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE 1=1 AND marketPlaceId='1'");
+		StringBuffer sql = new StringBuffer("select * from category where 1=1 and marketplaceid='1'");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1166,7 +1168,7 @@ public class UserModel {
 
 	public List<ProductsBean> productsList(int pageNo, int pageSize) throws ApplicationException {
 		ArrayList<ProductsBean> list = new ArrayList<ProductsBean>();
-		StringBuffer sql = new StringBuffer("SELECT * FROM PRODUCT_TABLE");
+		StringBuffer sql = new StringBuffer("select * from product_table");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1204,7 +1206,7 @@ public class UserModel {
 
 	public ProductsBean findParentCategory(long pk) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT parent_category_id FROM category WHERE id=?");
+		StringBuffer sql = new StringBuffer("select parent_category_id from category where id=?");
 
 		ProductsBean bean = null;
 		Connection conn = null;
@@ -1229,16 +1231,17 @@ public class UserModel {
 	}
 
 	public static List<ProductsBean> findProductsByCategoryFK(String[] ids) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT DISTINCT  pt.product_name, pt.description, pt.partnershipOffer, "
-				+ "pt.formLink, pt.image_url, pt.imageid , pt.id" + " FROM product_table pt \r\n"
-				+ "	JOIN product_category pc ON pt.id=pc.product_id\r\n"
-				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	WHERE c.id IN ("
+		StringBuffer sql = new StringBuffer("select distinct pt.product_name, pt.description, pt.partnershipOffer, "
+				+ "pt.formLink, pt.image_url, pt.imageid , pt.id" + " from product_table pt \r\n"
+				+ "	join product_category pc on pt.id=pc.product_id\r\n"
+				+ "	join category c on c.id = pc.category_id\r\n" + "	where c.id in ("
 				+ UserModel.createInClauseWithCounts(ids) + ")");
 
 		ProductsBean bean = null;
 		Connection conn = null;
 		ArrayList list = new ArrayList();
 
+		System.out.println(sql);
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
@@ -1275,8 +1278,8 @@ public class UserModel {
 //				map((product)-> product.getId()).
 //				collect(Collectors.toList());
 
-		StringBuffer sql = new StringBuffer("select DISTINCT id, category FROM \r\n" + "	product_category pc \r\n"
-				+ "	JOIN category c ON c.id = pc.category_id\r\n" + "	where  pc.product_id IN ( ? )");
+		StringBuffer sql = new StringBuffer("select distinct id, category from \r\n" + "	product_category pc \r\n"
+				+ "	join category c on c.id = pc.category_id\r\n" + "	where  pc.product_id in ( ? )");
 
 		// '" + bean.getDescription() + "%'"
 
@@ -1326,7 +1329,7 @@ public class UserModel {
 	}
 
 	public ProductsBean findProductsByPK(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE ID=?");
+		StringBuffer sql = new StringBuffer("select * from product_table where id=?");
 		ProductsBean bean = null;
 		Connection conn = null;
 
@@ -1356,7 +1359,7 @@ public class UserModel {
 	}
 
 	public CategoryBean findByPKCategory(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE ID=?");
+		StringBuffer sql = new StringBuffer("select * from category where id=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 
@@ -1383,7 +1386,7 @@ public class UserModel {
 	}
 
 	public ProductsBean findProductsByName(String productName) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM product_table WHERE product_name=?");
+		StringBuffer sql = new StringBuffer("select * from product_table where product_name=?");
 		ProductsBean bean = null;
 		Connection conn = null;
 
@@ -1414,7 +1417,7 @@ public class UserModel {
 	}
 
 	public List findCommonCategory(long pk) throws ApplicationException {
-		StringBuffer sql = new StringBuffer("SELECT * FROM category WHERE common_category=?");
+		StringBuffer sql = new StringBuffer("select * from category where common_category=?");
 		CategoryBean bean = null;
 		Connection conn = null;
 		ArrayList list = new ArrayList();
@@ -1443,7 +1446,7 @@ public class UserModel {
 
 	public List list(int pageNo, int pageSize) throws ApplicationException {
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_USER");
+		StringBuffer sql = new StringBuffer("select * from st_user");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -1509,7 +1512,7 @@ public class UserModel {
 
 	public UserBean findByLogin(String login) throws ApplicationException {
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_USER WHERE LOGIN=?");
+		StringBuffer sql = new StringBuffer("select * from st_user where login=?");
 		UserBean bean = null;
 		Connection conn = null;
 
@@ -1548,7 +1551,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ST_USER WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("delete from st_user where id=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -1571,7 +1574,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM CATEGORY WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("delete from category where id=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -1594,7 +1597,7 @@ public class UserModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM PRODUCT_TABLE WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("delete from product_table where id=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
