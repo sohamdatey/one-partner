@@ -4,7 +4,6 @@
 <%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
 <%@page import="in.co.raystech.maven.project4.controller.LoginCtl"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.controller.UserListCtl"%>
 <%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -45,6 +44,8 @@
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
 		<ul class="nav navbar-nav navbar-right">
+
+			<li><a href="<%=ORSView.CHANGESENDER_EMAIL_USER_CTL%>"><span>Change Email</span></a></li>
 
 			<li><a href="<%=ORSView.MANAGE_PARTNERS_CTL%>"><span>Partners</span></a></li>
 			<li><a href="<%=ORSView.MANAGE_CATEGORY_CTL%>"><span>Categories</span></a></li>

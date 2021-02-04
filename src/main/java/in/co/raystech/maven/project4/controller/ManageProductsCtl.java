@@ -1,7 +1,12 @@
 package in.co.raystech.maven.project4.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,7 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+
+import com.google.j2objc.annotations.ReflectionSupport.Level;
 
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
@@ -138,8 +146,6 @@ public class ManageProductsCtl extends BaseCtl {
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("productName"));
-		Part filePart = null;
-		filePart = request.getPart("file");
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 
@@ -149,16 +155,22 @@ public class ManageProductsCtl extends BaseCtl {
 				bean = model.findByPKProducts(bean.getId());
 				S3Handler.deleteImage(bean.getImageId());
 				model.deleteProduct(bean);
+				ServletUtility.setSuccessMessage("product deleted successfully", request);
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 			}
 		}
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
+			Part filePart = null;
+			filePart = request.getPart("file");
+			String extension = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePart));
+			System.out.println("File Extension " + extension);
+
 			long pk = 0;
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
 				try {
 					String[] ids = request.getParameterValues("categoryId");
-					bean.setImageId(String.valueOf(UserModel.nextProductPK()));
+					bean.setImageId(String.valueOf(UserModel.nextProductPK()) + "." + extension);
 					bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
 					pk = addProducts(request, response, bean, model, pk);
 					addProductCategories(model, pk, ids);
@@ -175,25 +187,39 @@ public class ManageProductsCtl extends BaseCtl {
 			if (id > 0) {
 				if (OP_EDIT.equalsIgnoreCase(op)) {
 					try {
+						ProductsBean prodBean = (ProductsBean) populateBean(request);
 						model = new UserModel();
-						S3Handler.deleteImage(bean.getImageId());
+						prodBean = model.findByPKProducts(bean.getId());
+						S3Handler.deleteImage(prodBean.getImageId());
+						String[] ids = request.getParameterValues("categoryId");
+						if (extension.length() > 2) {
+							bean.setImageId(String.valueOf(bean.getId() + "." + extension));
+							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+						}
+						else if (extension.length() < 2) {
+							bean.setImageId(prodBean.getImageId());
+							bean.setImageURL(prodBean.getImageURL());
+						}
+						addProductCategories(model, pk, ids);
 						saveImage(bean, filePart);
-						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
 						updateProduct(bean, model);
-
 						ServletUtility.setBean(bean, request);
-						ServletUtility.setSuccessMessage("product is  successfully Updated", request);
+						ServletUtility.setSuccessMessage("product is successfully Updated", request);
 					} catch (ImageSaveException e) {
-						// TODO Auto-generated catch block
+						log.error(e);
+						e.printStackTrace();
+					} catch (ApplicationException e) {
+						log.error(e);
 						e.printStackTrace();
 					}
-
 				}
 			}
-
+			ServletUtility.forward(getView(), request, response);
+			return;
 		}
 
-		if (op.equalsIgnoreCase(OP_SEARCH)) {
+		if (OP_SEARCH.equalsIgnoreCase(op)) {
+
 			List list = null;
 			try {
 				list = model.searchSpecificProducts(bean, 0, 0);
@@ -211,19 +237,33 @@ public class ManageProductsCtl extends BaseCtl {
 
 		List list = null;
 		try {
-			list = model.productsList(0, 0);
+			list = model.searchProducts(bean, 0, 0);
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ServletUtility.setList(list, request);
 		if (list == null || list.size() == 0) {
 			ServletUtility.setErrorMessage("No record found ", request);
 		}
-		ServletUtility.setBeanP(bean, request);
+
 		ServletUtility.setList(list, request);
+
+		Iterator<ProductsBean> it = list.iterator();
+		int size = list.size();
+		while (it.hasNext()) {
+			bean = it.next();
+			System.out.println("------------------");
+			System.out.println(bean.getProductName());
+			System.out.println(bean.getImageURL());
+			System.out.println("------------------");
+
+		}
+
+		ServletUtility.setBean(bean, request);
+		ServletUtility.setBeanP(bean, request);
 		ServletUtility.forward(getView(), request, response);
-		log.info("ManageProductsCtl Method doPost Ended");
+		return;
+
 	}
 
 	private long addProducts(HttpServletRequest request, HttpServletResponse response, ProductsBean bean,
@@ -250,14 +290,14 @@ public class ManageProductsCtl extends BaseCtl {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DuplicateRecordException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
 			}
 		}
 	}
 
 	private void saveImage(ProductsBean bean, Part filePart) throws IOException, ImageSaveException {
-		S3Handler.uploadProductImage(filePart.getInputStream(), bean.getImageId(), ".jpg");
+		S3Handler.uploadProductImage(filePart.getInputStream(), bean.getImageId());
 	}
 
 	private void updateProduct(ProductsBean bean, UserModel model) {
@@ -270,6 +310,62 @@ public class ManageProductsCtl extends BaseCtl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
+
+		// Create path components to save the file
+		final String path = request.getParameter("destination");
+		final Part filePart = request.getPart("file");
+		final String fileName = getFileName(filePart);
+
+		OutputStream out = null;
+		InputStream filecontent = null;
+		final PrintWriter writer = response.getWriter();
+
+		try {
+			out = new FileOutputStream(new File(path + File.separator + fileName));
+			filecontent = filePart.getInputStream();
+
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+
+			while ((read = filecontent.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			writer.println("New file " + fileName + " created at " + path);
+
+		} catch (FileNotFoundException fne) {
+			writer.println("You either did not specify a file to upload or are "
+					+ "trying to upload a file to a protected or nonexistent " + "location.");
+			writer.println("<br/> ERROR: " + fne.getMessage());
+
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+			if (filecontent != null) {
+				filecontent.close();
+			}
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
+
+	private static String getFileName(final Part part) {
+		final String partHeader = part.getHeader("content-disposition");
+		for (String content : part.getHeader("content-disposition").split(";")) {
+
+			if (content.trim().startsWith("filename")) {
+				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+
+			}
+		}
+		return partHeader;
+
 	}
 
 	@Override

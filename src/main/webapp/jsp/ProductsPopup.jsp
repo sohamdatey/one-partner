@@ -5,7 +5,6 @@
 <%@page import="in.co.raystech.maven.project4.util.DataValidator"%>
 <%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.controller.UserListCtl"%>
 <%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -25,13 +24,13 @@
 		scope="request"></jsp:useBean>
 
 
+
 	<form id="addProductForm" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>"
 		method="post" enctype="multipart/form-data">
+		
 		<%
 			List<CategoryBean> l = (List) request.getAttribute("categoryList");
 		%>
-
-
 
 		<!-- /****Add Product Modal*****/ -->
 		<div id="addProduct" class="mSlide right modal fade" role="dialog">
@@ -151,7 +150,7 @@
 
 							<div id="ppap">
 
-								<img <%if (bean2 != null) {%>
+								<img name="imageEdit" <%if (bean2 != null) {%>
 									src="<%=DataUtility.getStringData(bean2.getImageURL())%>"
 									<%} else {%>
 									src="<%=DataUtility.getStringData(bean.getImageURL())%>" <%}%>

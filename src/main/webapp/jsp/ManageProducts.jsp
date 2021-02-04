@@ -19,8 +19,6 @@
 
 	<%@include file="Header.jsp"%>
 	<%@include file="ProductsPopup.jsp"%>
-	<jsp:useBean id="beanP" scope="request"
-		class="in.co.raystech.maven.project4.bean.ProductsBean"></jsp:useBean>
 	<div class="pd2 hdpad">
 		<div class="clearfix tabTop">
 			<div class="row">
@@ -99,22 +97,24 @@
 						Iterator<ProductsBean> it = list.iterator();
 						int size = list.size();
 						while (it.hasNext()) {
-							beanP = it.next();
+							bean = it.next();
 					%>
 
 					<tr class="prdTr">
 						<td><a
-							href="ManageProductsCtl?id=<%=DataUtility.getStringData(beanP.getId())%>"></a>
-							<img src="<%=DataUtility.getStringData(beanP.getImageURL())%>"></td>
-						<td><b><%=DataUtility.getStringData(beanP.getProductName())%></b></td>
-						<td><%=DataUtility.getStringData(beanP.getDescription())%></td>
+							href="ManageProductsCtl?id=<%=DataUtility.getStringData(bean.getId())%>"></a>
+
+							<img src="<%=DataUtility.getStringData(bean.getImageURL())%>"></td>
+
+						<td><b><%=DataUtility.getStringData(bean.getProductName())%></b></td>
+						<td><%=DataUtility.getStringData(bean.getDescription())%></td>
 						<td><i class="fa fa-tag mrR"></i> <%
- 	for (CategoryBean category : beanP.getCategories()) {
+ 	for (CategoryBean category : bean.getCategories()) {
  %> <%=category.getCategory()%>, <%
  	}
  %></td>
 
-						<td><%=DataUtility.getStringData(beanP.getPartnershipOffer())%></td>
+						<td><%=DataUtility.getStringData(bean.getPartnershipOffer())%></td>
 					</tr>
 					<%
 						}

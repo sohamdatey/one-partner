@@ -32,7 +32,13 @@ public interface ORSView {
 	public String MANAGE_CATEGORY_VIEW = PAGE_FOLDER + "/ManageCategory.jsp";
 	public String CATEGORYPOPUP_VIEW = PAGE_FOLDER + "/CategoryPopup.jsp";
 	public String PRODUCTSPOPUP_VIEW = PAGE_FOLDER + "/ProductsPopup.jsp";
+	public String CHANGE_EMAIL_SENDERUSER_VIEW = PAGE_FOLDER + "/ChangeEmailSenderUser.jsp";
+			
+	
 	public String ERROR_CTL = "/ErrorCtl";
+	
+	
+	public String CHANGESENDER_EMAIL_USER_CTL= APPLICATION_CONTEXT + "/ctl/ChangeSenderEmailUserCtl";
 	public String MARKET_PLACE_CTL = APPLICATION_CONTEXT + "/ctl/ManageMarketPlaceCtl";
 	public String MARKET_PLACESS_CTL = APPLICATION_CONTEXT + "/ctl/ManageMarketPlaceCtl";
 	public String MANAGE_PARTNERS_CTL = APPLICATION_CONTEXT + "/ctl/ManagePartnersCtl";

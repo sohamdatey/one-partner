@@ -301,14 +301,14 @@ public class HTMLUtility {
 			key = obj.getKey();
 			val = obj.getValue();
 
-			sb.append("<a class='hilit'><label><input type='checkbox' value='" + DataUtility.getStringData(key.trim())
+			sb.append("<a class='hilit'><label><input name='ids' type='checkbox' value='" + DataUtility.getStringData(key.trim())
 					+ "'><span> " + DataUtility.getStringData(val) + " </span></label></a>");
 		}
 		for (DropdownListBean obj2 : dd3) {
 			key2 = obj2.getKey();
 			val2 = obj2.getValue();
 			sb.append(
-					"<a class='default'><label><input type='checkbox' value='" + DataUtility.getStringData(key2.trim())
+					"<a class='default'><label><input name='ids' type='checkbox' value='" + DataUtility.getStringData(key2.trim())
 							+ "'><span> " + DataUtility.getStringData(val2) + " </span></label></a>");
 
 		}

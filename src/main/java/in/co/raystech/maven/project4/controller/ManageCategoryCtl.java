@@ -101,12 +101,12 @@ public class ManageCategoryCtl extends BaseCtl {
 		log.info("ManageCategoryCtl Method doPost Started");
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-		String search = DataUtility.getString(request.getParameter("search"));
-		String highlightchk = DataUtility.getString(request.getParameter("highlightchk"));
+		String category= DataUtility.getString(request.getParameter("category"));
 		UserModel model = new UserModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
 		CategoryBean bean = (CategoryBean) populateBean(request);
-
+		
+	
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 
 			if (id > 0) {
@@ -125,6 +125,7 @@ public class ManageCategoryCtl extends BaseCtl {
 					ServletUtility.setSuccessMessage("Category is successfully Updated", request);
 				}
 			}
+			
 
 			else if (OP_ADD.equalsIgnoreCase(op)) {
 				long pk = 0;
@@ -155,19 +156,20 @@ public class ManageCategoryCtl extends BaseCtl {
 		}
 
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
-
-			List list = null;
+			List<CategoryBean> list = null;
 			try {
+				bean.setCategory(category);
 				list = model.searchSpecificCategory(bean, 0, 0);
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info(e);
 			}
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setBean(bean, request);
+			ServletUtility.forward(getView(), request, response);
+			return;
 
 		}
 		List list = null;

@@ -1,9 +1,6 @@
 package in.co.raystech.maven.project4.controller;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,7 +23,7 @@ import in.co.raystech.maven.project4.util.S3Handler;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/OnePartner/WelcomeCtl" })
 @MultipartConfig
 public class WelcomeCtl extends BaseCtl {
 
@@ -50,7 +47,7 @@ public class WelcomeCtl extends BaseCtl {
 		final Part filePart = request.getPart("file");
 
 		try {
-			S3Handler.uploadProductImage(filePart.getInputStream(), null, null);
+			S3Handler.uploadProductImage(filePart.getInputStream(), null);
 
 		} catch (ImageSaveException e) {
 			// TODO Auto-generated catch block

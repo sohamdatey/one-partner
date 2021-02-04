@@ -37,23 +37,6 @@ public class ManagePartnersCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected boolean validate(HttpServletRequest request) {
-		log.info("ManageMarketPartnersCtl Method validate Started");
-		boolean pass = true;
-		String op = DataUtility.getString(request.getParameter("operation"));
-		if (DataValidator.isNull(request.getParameter("collegeId"))) {
-			request.setAttribute("collegeId", PropertyReader.getValue("error.require", "College Name"));
-			pass = false;
-		}
-		if (DataValidator.isNull(request.getParameter("userId"))) {
-			request.setAttribute("userId", PropertyReader.getValue("error.require", "Student Name"));
-			pass = false;
-		}
-		log.info("ManageMarketPartnersCtl Method validate Ended");
-		return pass;
-	}
-
-	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.info("ManageMarketPartnersCtl Method populateBean Started");
 		UserBean bean = new UserBean();

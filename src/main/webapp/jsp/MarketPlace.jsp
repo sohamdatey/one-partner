@@ -10,7 +10,6 @@
 <%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
 <%@page import="in.co.raystech.maven.project4.controller.LoginCtl"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.controller.UserListCtl"%>
 <%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -159,20 +158,25 @@
 
 		<div class="catTag clearfix">
 
-			<%=HTMLUtility.hilighterMethod("categoryId", String.valueOf(categoryBean.getId()),
-					highlitedCategories, l)%>
+			<%=HTMLUtility.hilighterMethod("ids", String.valueOf(categoryBean.getId()), highlitedCategories, l)%>
 
 
 
 			<a class="more"
-				onclick="$('.default').toggle('fast');$('.more span').toggle()"><label><span
-					style="display: block;">more</span><span style="display: none;">less</span></label></a>
+				onclick="moreFunc()"><label><span
+					style="display: block;">Show all</span><span style="display: none;">Show Less</span></label></a>
 			<button type="submit" class="btn filter">
 				<i class="fa fa-filter mrR"></i> Apply
 			</button>
 		</div>
 
-
+		<script>
+			function moreFunc(){
+				$('.default, .hilit').toggle('fast');
+				$('.more span').toggle();
+				$('.catTag a input').attr('checked',false);
+				}
+		</script>
 
 		<div class="pd2 prodCnt">
 			<div class="clearfix">

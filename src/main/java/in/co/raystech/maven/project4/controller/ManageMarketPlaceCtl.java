@@ -93,36 +93,46 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		log.info("ManageMarketPlaceCtl Method doPost Started");
-		long catID = DataUtility.getLong(request.getParameter("categoryId"));
 		String op = DataUtility.getString(request.getParameter("operation"));
 		String search = DataUtility.getString(request.getParameter("search"));
 		ProductsBean bean = (ProductsBean) populateBean(request);
-		/*
-		 * searching by category selection
-		 */
+		String[] ids = request.getParameterValues("ids");
 
 		UserModel model = new UserModel();
-		if (catID != 0) {
+
+		if (ids != null && ids.length > 0) {
 			try {
-				List list = null;
-				list = model.findProductsByCategoryFK(catID);
+				List<ProductsBean> list = null;
+				list = UserModel.findProductsByCategoryFK(ids);
 				ServletUtility.setList(list, request);
 				if (list == null || list.size() == 0) {
 					ServletUtility.setErrorMessage("No record found ", request);
 				}
 				ServletUtility.setBeanP(bean, request);
 				ServletUtility.setList(list, request);
+
+				System.out.println("prodnameprodnameprodnameprodnameprodname");
+				Iterator<ProductsBean> it = list.iterator();
+				while (it.hasNext()) {
+					bean = it.next();
+					System.out.println(bean.getProductName());
+				}
+				System.out.println("prodnameprodnameprodnameprodnameprodname");
 			} catch (ApplicationException e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
+
+			ServletUtility.forward(getView(), request, response);
+			return;
+
 		}
 
 		/*
 		 * searching by input
 		 */
-		if (bean.getProductName() != null && catID == 0) {
+		if (bean.getProductName() != null && ids == null) {
 			try {
 				List list = null;
 				bean.setProductName(bean.getProductName());
@@ -139,10 +149,11 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
+			ServletUtility.forward(getView(), request, response);
+			return;
 		}
 
-		if (op == null && search == null && bean.getProductName() == null && catID == 0) {
+		if (op == null && search == null && bean.getProductName() == null) {
 
 			List list = null;
 			try {
