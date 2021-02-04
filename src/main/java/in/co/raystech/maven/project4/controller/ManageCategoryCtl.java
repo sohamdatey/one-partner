@@ -156,13 +156,6 @@ public class ManageCategoryCtl extends BaseCtl {
 		}
 
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
-			log.info("-----------------------------------------");
-			log.info("-----------------------------------------");
-			log.info(category);
-			log.info(op);
-			log.info(category);
-			log.info("-----------------------------------------");
-			log.info("-----------------------------------------");
 			List<CategoryBean> list = null;
 			try {
 				bean.setCategory(category);

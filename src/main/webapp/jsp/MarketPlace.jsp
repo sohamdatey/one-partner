@@ -10,7 +10,6 @@
 <%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
 <%@page import="in.co.raystech.maven.project4.controller.LoginCtl"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.controller.UserListCtl"%>
 <%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>

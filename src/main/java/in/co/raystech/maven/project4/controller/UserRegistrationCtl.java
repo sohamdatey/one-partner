@@ -32,6 +32,10 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  */
 @WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/OnePartner/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
 	public static final String OP_SIGN_UP = "SignUp";
 	@Override

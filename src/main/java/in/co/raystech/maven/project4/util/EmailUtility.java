@@ -10,7 +10,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import in.co.raystech.maven.project4.bean.UserBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
+import in.co.raystech.maven.project4.model.UserModel;
 
 /**
  * Email Utility provides Email Services
@@ -38,6 +40,13 @@ public class EmailUtility {
 	 */
 	private static final String SMTP_PORT = rb.getString("smtp.port");
 
+	private static final String emailFromAddress = null;
+
+	/**
+	 * Administrator email's password
+	 */
+	private static final String emailPassword = null;
+
 	/**
 	 * SSL is an industry standard and is used by millions of web sites in the
 	 * protection of their online transactions with their customers.
@@ -48,12 +57,19 @@ public class EmailUtility {
 	/**
 	 * Administrator's email id by which all messages are sent
 	 */
-	private static final String emailFromAddress = rb.getString("email.login");
 
-	/**
-	 * Administrator email's password
-	 */
-	private static final String emailPassword = rb.getString("email.pwd");
+	public static UserBean findEmailSenderUser() {
+		UserBean bean = new UserBean();
+		UserModel model = new UserModel();
+		try {
+			bean = model.findLoginSenderUser();
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+		}
+
+		return bean;
+
+	}
 
 	/**
 	 * Email server properties
@@ -95,12 +111,14 @@ public class EmailUtility {
 
 	public static void sendMail(EmailMessage emailMessageDTO) throws ApplicationException {
 
+		final UserBean bean = EmailUtility.findEmailSenderUser();
+
 		try {
 
 			// Connection to Mail Server
 			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(emailFromAddress, emailPassword);
+					return new PasswordAuthentication(bean.getLogin(), bean.getPassword());
 				}
 			});
 
@@ -109,7 +127,7 @@ public class EmailUtility {
 
 			// Create a message
 			Message msg = new MimeMessage(session);
-			InternetAddress addressFrom = new InternetAddress(emailFromAddress);
+			InternetAddress addressFrom = new InternetAddress(bean.getLogin());
 			msg.setFrom(addressFrom);
 
 			// Set TO addresses

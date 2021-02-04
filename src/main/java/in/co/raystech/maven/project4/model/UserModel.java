@@ -322,6 +322,36 @@ public class UserModel {
 
 	}
 
+	public void updateEmailSenderUser(UserBean bean) throws ApplicationException, DuplicateRecordException {
+		Connection conn = null;
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			conn.setAutoCommit(false); // Begin transaction
+			PreparedStatement pstmt = conn.prepareStatement("update emailsenderuser set login=?, password=?");
+			pstmt.setString(1, bean.getLogin());
+			pstmt.setString(2, bean.getPassword());
+			pstmt.executeUpdate();
+			conn.commit(); // End transaction
+			pstmt.close();
+			System.out.println("------------------------------------------------");
+			System.out.println(pstmt.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+
+				throw new ApplicationException("Exception : Update rollback exception " + ex.getMessage());
+			}
+			throw new ApplicationException("Exception in update UserModel ");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+
+	}
+
 	public void updatePartner(UserBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
 
@@ -329,7 +359,7 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update st_user set `name`=?, login=?, password=?, mobile_id=?, role_id=?, created_by=?, modified_by=?, created_datetime=?, modified_datetime=?, description=? where id=?");
+					"update st_user set `name`=?, login=?, password=?, mobile_no=?, role_id=?, created_by=?, modified_by=?, created_datetime=?, modified_datetime=?, description=? where id=?");
 			pstmt.setString(1, bean.getName());
 			pstmt.setString(2, bean.getLogin());
 			pstmt.setString(3, bean.getPassword());
@@ -1540,6 +1570,31 @@ public class UserModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ApplicationException("Exception : Exception in getting User by login user model");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		return bean;
+	}
+
+	public UserBean findLoginSenderUser() throws ApplicationException {
+
+		StringBuffer sql = new StringBuffer("select * from emailsenderuser");
+		UserBean bean = null;
+		Connection conn = null;
+
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new UserBean();
+				bean.setLogin(rs.getString(1));
+				bean.setPassword(rs.getString(2));
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in getting EmailSenderUser");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}

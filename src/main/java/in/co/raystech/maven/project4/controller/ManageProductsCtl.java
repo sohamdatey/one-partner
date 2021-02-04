@@ -214,7 +214,8 @@ public class ManageProductsCtl extends BaseCtl {
 					}
 				}
 			}
-
+			ServletUtility.forward(getView(), request, response);
+			return;
 		}
 
 		if (OP_SEARCH.equalsIgnoreCase(op)) {
@@ -289,8 +290,8 @@ public class ManageProductsCtl extends BaseCtl {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DuplicateRecordException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
 			}
 		}
 	}
