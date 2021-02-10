@@ -36,7 +36,7 @@ public class RoleModel {
 		int pk = 0;
 		try {
 			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT MAX(ID) FROM ST_ROLE");
+			PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_role");
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -77,7 +77,7 @@ public class RoleModel {
 			// Get auto-generated next primary key
 			System.out.println(pk + " in ModelJDBC");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO ST_ROLE VALUES(?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into st_role values(?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getName());
 			pstmt.setString(3, bean.getDescription());
@@ -116,7 +116,7 @@ public class RoleModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ST_ROLE WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("delete from st_role where id=?");
 			pstmt.setLong(1, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -147,7 +147,7 @@ public class RoleModel {
 
 	public RoleBean findByName(String name) throws ApplicationException {
 		log.debug("Model findBy EmailId Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ROLE WHERE NAME=?");
+		StringBuffer sql = new StringBuffer("select * from st_role where name=?");
 		RoleBean bean = null;
 		Connection conn = null;
 		try {
@@ -188,7 +188,7 @@ public class RoleModel {
 
 	public RoleBean findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ROLE WHERE ID=?");
+		StringBuffer sql = new StringBuffer("select * from st_role where id=?");
 		RoleBean bean = null;
 		Connection conn = null;
 		try {
@@ -238,7 +238,7 @@ public class RoleModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE ST_ROLE SET NAME=?,DESCRIPTION=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? WHERE ID=?");
+					"update st_role set name=?,DESCRIPTION=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? where ID=?");
 			pstmt.setString(1, bean.getName());
 			pstmt.setString(2, bean.getDescription());
 			pstmt.setString(3, bean.getCreatedBy());
@@ -291,17 +291,17 @@ public class RoleModel {
 
 	public List search(RoleBean bean, int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model search Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ROLE WHERE 1=1");
+		StringBuffer sql = new StringBuffer("select * FROM st_role WHERE 1=1");
 
 		if (bean != null) {
 			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
+				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" AND NAME like '" + bean.getName() + "%'");
+				sql.append(" and NAME like '" + bean.getName() + "%'");
 			}
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" AND DESCRIPTION like '" + bean.getDescription() + "%'");
+				sql.append(" and DESCRIPTION like '" + bean.getDescription() + "%'");
 			}
 
 		}
@@ -369,7 +369,7 @@ public class RoleModel {
 	public List list(int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model list Started");
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_ROLE");
+		StringBuffer sql = new StringBuffer("select * from st_role");
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index

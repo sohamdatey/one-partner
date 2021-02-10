@@ -28,7 +28,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ChangeSenderEmailUserCtl", urlPatterns = { "/OnePartner/ctl/ChangeSenderEmailUserCtl" })
+@WebServlet(name = "ChangeSenderEmailUserCtl", urlPatterns = { "/ctl/ChangeSenderEmailUserCtl" })
 public class ChangeSenderEmailUserCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ChangeSenderEmailUserCtl.class);
 
@@ -56,9 +56,9 @@ public class ChangeSenderEmailUserCtl extends BaseCtl {
 
 		log.info("ManageMarketPartnersCtl doGet Started");
 		UserBean bean = (UserBean) populateBean(request);
-		UserModel model = new UserModel();
+
 		try {
-			bean = model.findLoginSenderUser();
+			bean = UserModel.getEmailSenderUser();
 			bean.setLogin(bean.getLogin());
 			bean.setPassword(bean.getPassword());
 		} catch (ApplicationException e) {

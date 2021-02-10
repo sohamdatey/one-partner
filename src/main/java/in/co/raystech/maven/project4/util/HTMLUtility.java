@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.plaf.ListUI;
 
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.DropdownListBean;
-import in.co.raystech.maven.project4.bean.ProductsBean;
 import in.co.raystech.maven.project4.model.BaseModel;
 
 /**
@@ -38,7 +35,7 @@ public class HTMLUtility {
 
 	public static String getList(String name, String selectedVal, HashMap<String, String> map) {
 
-		StringBuffer sb = new StringBuffer("<select class='form-control' name='" + name + "'>");
+		StringBuffer sb = new StringBuffer("<select required class='form-control' name='" + name + "'>");
 
 		sb.append("<option disabled selected value=''>------select------</option>");
 
@@ -73,7 +70,7 @@ public class HTMLUtility {
 		List<DropdownListBean> dd = (List<DropdownListBean>) list;
 
 		StringBuffer sb = new StringBuffer(
-				"<select class='form-control'  onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
+				"<select class='form-control' required onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
 						+ name + "'>");
 
 		sb.append("<option selected value=''>------select------</option>");
@@ -166,7 +163,7 @@ public class HTMLUtility {
 		List<DropdownListBean> dd = (List<DropdownListBean>) list;
 
 		StringBuffer sb = new StringBuffer(
-				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
+				"<select id='select1' class='form-control' required multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
 						+ name + "'>");
 
 		String key = null;
@@ -200,7 +197,7 @@ public class HTMLUtility {
 		System.out.println(list);
 
 		StringBuffer sb = new StringBuffer(
-				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
+				"<select id='select1' class='form-control' required multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
 						+ name + "'>");
 
 		String key = null;
@@ -239,7 +236,7 @@ public class HTMLUtility {
 			List<CategoryBean> list2) {
 		list2.removeAll(list);
 		StringBuffer sb = new StringBuffer(
-				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
+				"<select id='select1' required class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
 						+ name + "'>");
 
 		String key = null;
@@ -256,7 +253,6 @@ public class HTMLUtility {
 				newList.add(object);
 			}
 		}
-		List<DropdownListBean> dd3 = (List<DropdownListBean>) newList;
 
 		for (DropdownListBean obj : list) {
 			key = obj.getKey();
@@ -264,11 +260,12 @@ public class HTMLUtility {
 
 			sb.append("<option selected value='" + key.trim() + "'>" + val + "</option>");
 		}
-		for (DropdownListBean obj2 : dd3) {
+		for (DropdownListBean obj2 : list2) {
 			key2 = obj2.getKey();
 			val2 = obj2.getValue();
 			sb.append("<option value='" + key2.trim() + "'>" + val2 + "</option>");
 		}
+
 		sb.append("</select>");
 		sb.append("     ");
 		return sb.toString();
@@ -295,21 +292,21 @@ public class HTMLUtility {
 				newList.add(object);
 			}
 		}
-		List<DropdownListBean> dd3 = (List<DropdownListBean>) newList;
 
 		for (DropdownListBean obj : list) {
 			key = obj.getKey();
 			val = obj.getValue();
 
-			sb.append("<a class='hilit'><label><input name='ids' type='checkbox' value='" + DataUtility.getStringData(key.trim())
-					+ "'><span> " + DataUtility.getStringData(val) + " </span></label></a>");
+			sb.append("<a class='hilit'><label><input name='ids' type='checkbox' value='"
+					+ DataUtility.getStringData(key.trim()) + "'><span> " + DataUtility.getStringData(val)
+					+ " </span></label></a>");
 		}
-		for (DropdownListBean obj2 : dd3) {
+		for (DropdownListBean obj2 : list2) {
 			key2 = obj2.getKey();
 			val2 = obj2.getValue();
-			sb.append(
-					"<a class='default'><label><input name='ids' type='checkbox' value='" + DataUtility.getStringData(key2.trim())
-							+ "'><span> " + DataUtility.getStringData(val2) + " </span></label></a>");
+			sb.append("<a class='default'><label><input name='ids' type='checkbox' value='"
+					+ DataUtility.getStringData(key2.trim()) + "'><span> " + DataUtility.getStringData(val2)
+					+ " </span></label></a>");
 
 		}
 		return sb.toString();
@@ -322,7 +319,7 @@ public class HTMLUtility {
 		List<DropdownListBean> dd = (List<DropdownListBean>) list;
 
 		StringBuffer sb = new StringBuffer(
-				"<select id='select1' class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
+				"<select id='select1' required class='form-control' multiple onchange=\"if (this.value=='1'){this.form['admin'].style.visibility='visible'}else {this.form['admin'].style.visibility='hidden'};\"    name='"
 						+ name + "'>");
 
 		String key = null;
@@ -370,7 +367,7 @@ public class HTMLUtility {
 		List<DropdownListBean> dd = (List<DropdownListBean>) list;
 
 		StringBuffer sb = new StringBuffer(
-				"<select onchange='this.form.submit()' class='form-control' name='" + name + "'>");
+				"<select required onchange='this.form.submit()' class='form-control' name='" + name + "'>");
 
 		sb.append("<option selected value=''>------select------</option>");
 		String key = null;
@@ -401,7 +398,7 @@ public class HTMLUtility {
 
 	public static String getList(String name, String selectedVal, HashMap<String, String> map, boolean select) {
 
-		StringBuffer sb = new StringBuffer("<select class='form-control' name='" + name + "'>");
+		StringBuffer sb = new StringBuffer("<select required class='form-control' name='" + name + "'>");
 
 		Set<String> keys = map.keySet();
 		String val = null;

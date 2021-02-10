@@ -265,7 +265,7 @@ a, input[type=checkbox] {
 	background-color: #1161ee;
 	border: 0 none;
 	box-shadow: 0 0 8px rgba(0, 0, 0, .08);
-	z-index: 2;
+	z-index: 5;
 }
 
 .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse
@@ -1261,6 +1261,7 @@ span.select2-selection.select2-selection--multiple {
 	width: 100px;
 	height: 100px;
 	object-fit: contain;
+	background:#fff
 }
 
 .prdBox .offer {
@@ -1323,6 +1324,13 @@ span.select2-selection.select2-selection--multiple {
 }
 
 /* Responsive */
+
+
+@media (max-device-width: 480px) and (orientation: landscape){
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
+    max-height: 230px;
+}
+
 @media screen and (max-width: 768px) {
 	.table {
 		box-shadow: none
@@ -1382,7 +1390,7 @@ span.select2-selection.select2-selection--multiple {
 	}
 	.weltxt {
 		padding: 12px;
-		font-size: 14px;
+		font-size: 12px;
 	}
 	.navbar.navbar-white .navbar-nav>li>a {
 		width: 100%;
@@ -1408,4 +1416,23 @@ span.select2-selection.select2-selection--multiple {
 	.navbar.navbar-white .srchWrp .fa {
 		left: 14px
 	}
+	.srchWrp input{max-width:100%; padding-left:9px}
+	.navbar-blue .navbar-nav>li>a.profDrop {
+	    width: 100%;
+	}
+	.srchWrp .fa{display:none}
+	.srchWrp input[type="submit"]{    
+	display: block !important;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 2px 6px 1px;
+    font-size: 12px;}
+    .back2m{position: absolute;
+    top: 0;
+    right: 50px;}
+    .prodCnt{padding-top: 158px;}
+    .catTag{top:110px}
+    .catTag a label span{padding:2px 6px; font-size: 10px;}
+    .prdBox{margin-bottom:0}
 }

@@ -27,7 +27,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebFilter(filterName = "FrontController", urlPatterns = { "/OnePartner/ctl/*" })
+@WebFilter(filterName = "FrontController", urlPatterns = { "/ctl/*" })
 public class FrontController implements Filter {
 
 	public void destroy() {

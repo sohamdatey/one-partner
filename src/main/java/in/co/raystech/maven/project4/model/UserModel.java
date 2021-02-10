@@ -228,14 +228,6 @@ public class UserModel {
 			pstmt.setString(2, bean.getName());
 			pstmt.setString(3, bean.getLogin());
 			pstmt.setString(4, bean.getPassword());
-			if (bean.getPassword() == null) {
-
-				pstmt.setNull(4, java.sql.Types.BIGINT);
-			} else {
-				pstmt.setString(4, bean.getPassword());
-
-			}
-
 			pstmt.setString(5, bean.getMobileNo());
 			pstmt.setLong(6, bean.getRoleId());
 			pstmt.setString(7, bean.getCreatedBy());
@@ -334,8 +326,7 @@ public class UserModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
-			System.out.println("------------------------------------------------");
-			System.out.println(pstmt.toString());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
@@ -684,7 +675,7 @@ public class UserModel {
 		return search(bean, 0, 0);
 	}
 
-	public List search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
+	public List<UserBean> search(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from st_user where 1=1");
 
 		if (bean != null) {
@@ -753,7 +744,7 @@ public class UserModel {
 		return list;
 	}
 
-	public List searchSpecific(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
+	public List<UserBean> searchSpecificUser(UserBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from st_user where 1=1 ");
 
 		if (bean != null) {
@@ -813,7 +804,8 @@ public class UserModel {
 		return list;
 	}
 
-	public List searchSpecificProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
+	public List<ProductsBean> searchSpecificProducts(ProductsBean bean, int pageNo, int pageSize)
+			throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from product_table where 1=1 ");
 
 		if (bean != null) {
@@ -982,7 +974,7 @@ public class UserModel {
 		return list;
 	}
 
-	public List searchProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
+	public List<ProductsBean> searchProducts(ProductsBean bean, int pageNo, int pageSize) throws ApplicationException {
 		StringBuffer sql = new StringBuffer("select * from product_table where 1=1");
 
 		if (bean != null) {
@@ -1023,6 +1015,50 @@ public class UserModel {
 		}
 
 		ArrayList list = new ArrayList();
+		Connection conn = null;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new ProductsBean();
+				bean.setId(rs.getLong(1));
+				bean.setProductName(rs.getString(2));
+				bean.setDescription(rs.getString(3));
+				bean.setPartnershipOffer(rs.getString(4));
+				bean.setFormLink(rs.getString(5));
+				bean.setImageURL(rs.getString(6));
+				bean.setImageId(rs.getString(7));
+				bean.setCategories(createCategoryBeans(bean.getId()));
+				list.add(bean);
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			throw new ApplicationException("Exception : Exception in search Products");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+
+		return list;
+	}
+
+	public List<ProductsBean> searchAllProducts(ProductsBean bean, int pageNo, int pageSize)
+			throws ApplicationException {
+		StringBuffer sql = new StringBuffer("select * from product_table where 1=1");
+
+		// if page size is greater than zero then apply pagination
+		if (pageSize > 0) {
+			// Calculate start record index
+			pageNo = (pageNo - 1) * pageSize;
+
+			sql.append(" limit " + pageNo + ", " + pageSize);
+			// sql.append(" limit " + pageNo + "," + pageSize);
+		}
+
+		ArrayList<ProductsBean> list = new ArrayList<ProductsBean>();
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -1576,7 +1612,7 @@ public class UserModel {
 		return bean;
 	}
 
-	public UserBean findLoginSenderUser() throws ApplicationException {
+	public static UserBean getEmailSenderUser() throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from emailsenderuser");
 		UserBean bean = null;
@@ -1619,6 +1655,28 @@ public class UserModel {
 				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
 			}
 			throw new ApplicationException("Exception : Exception in delete User");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+	}
+
+	public static void deleteAllCategoriesFromProduct_CaterogyTable(long prodId) throws ApplicationException {
+		Connection conn = null;
+		try {
+			conn = JDBCDataSource.getConnection();
+			conn.setAutoCommit(false); // Begin transaction
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM product_category WHERE product_id=?");
+			pstmt.setLong(1, prodId);
+			pstmt.executeUpdate();
+			conn.commit(); // End transaction
+			pstmt.close();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (Exception ex) {
+				throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+			}
+			throw new ApplicationException("Exception : Exception in deleteAllCategoriesFromProduct_CaterogyTable");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}

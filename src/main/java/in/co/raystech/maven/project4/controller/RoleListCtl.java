@@ -31,7 +31,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "RoleListCtl", urlPatterns = { "/OnePartner/ctl/RoleListCtl" })
+@WebServlet(name = "RoleListCtl", urlPatterns = { "/ctl/RoleListCtl" })
 public class RoleListCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(RoleListCtl.class);
 	

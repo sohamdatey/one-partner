@@ -1,7 +1,6 @@
 package in.co.raystech.maven.project4.controller;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,15 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.ProductsBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
-import in.co.raystech.maven.project4.exception.DuplicateRecordException;
 import in.co.raystech.maven.project4.model.UserModel;
 import in.co.raystech.maven.project4.util.DataUtility;
+import in.co.raystech.maven.project4.util.DataValidator;
 import in.co.raystech.maven.project4.util.PropertyReader;
 import in.co.raystech.maven.project4.util.ServletUtility;
 
@@ -27,16 +24,37 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/OnePartner/ctl/ManageMarketPlaceCtl" })
+@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/ctl/ManageMarketPlaceCtl" })
 public class ManageMarketPlaceCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(ManageMarketPlaceCtl.class);
 
 	@Override
+	protected boolean validate(HttpServletRequest request) {
+		log.info("ManageMarketPlaceCtl Method validat Started");
+		boolean pass = true;
+
+		if (DataValidator.isNull(request.getParameterValues("ids"))) {
+			request.setAttribute("ids", PropertyReader.getValue("error.require", "Category"));
+			List<ProductsBean> list = null;
+			ProductsBean bean = (ProductsBean) populateBean(request);
+			UserModel model = new UserModel();
+			try {
+				list = model.searchProducts(bean, 0, 0);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+			}
+			ServletUtility.setList(list, request);
+			pass = false;
+		}
+		log.info("ManageMarketPlaceCtl Method validat ended");
+		return pass;
+	}
+
+	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 		log.info("ManageMarketPlaceCtl Method populateBean Started");
 		ProductsBean bean = new ProductsBean();
-		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setProductName(DataUtility.getString(request.getParameter("productName")));
 		populateDTO(bean, request);
 		log.info("ManageMarketPlaceCtl Method populateBean ended");
@@ -55,8 +73,8 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				buttonNumber++;
 			}
 			request.setAttribute("buttonNumber", buttonNumber);
-			List categoryList = model.categoryList(0, 0);
-			List highlitedCategories = model.categoryListHighlightOMarketPlace(0, 0);
+			List<CategoryBean> categoryList = model.categoryList(0, 0);
+			List<CategoryBean> highlitedCategories = model.categoryListHighlightOMarketPlace(0, 0);
 			request.setAttribute("highlitedCategories", highlitedCategories);
 			request.setAttribute("categoryList", categoryList);
 		} catch (ApplicationException e) {
@@ -70,12 +88,11 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		log.info("ManageMarketPlaceCtl Method doGet Started");
-		List list = null;
+		List<ProductsBean> list = null;
 		ProductsBean bean = (ProductsBean) populateBean(request);
 		UserModel model = new UserModel();
 		try {
 			list = model.searchProducts(bean, 0, 0);
-			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
@@ -92,15 +109,41 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		log.info("ManageMarketPlaceCtl Method doPost Started");
+		System.out.println("inside do post.................................................................");
+		System.out.println("inside do post.................................................................");
+		System.out.println("inside do post.................................................................");
+		System.out.println("inside do post.................................................................");
+		System.out.println("inside do post.................................................................");
+
 		String op = DataUtility.getString(request.getParameter("operation"));
-		String search = DataUtility.getString(request.getParameter("search"));
 		ProductsBean bean = (ProductsBean) populateBean(request);
+
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
 		String[] ids = request.getParameterValues("ids");
+
+		System.out.println(bean.getProductName());
+
+		System.out.println(bean.getProductName());
+		System.out.println(bean.getProductName());
+		System.out.println(bean.getProductName());
+		System.out.println(bean.getProductName());
+		System.out.println(ids.length);
+		System.out.println(ids.length);
+		System.out.println(ids.length);
+		System.out.println(ids.length);
+		System.out.println(ids.length);
 
 		UserModel model = new UserModel();
 
-		if (ids != null && ids.length > 0) {
+		if (ids.length >= 0 && op.equalsIgnoreCase(BaseCtl.OP_APPLY) && bean.getProductName() == null) {
 			try {
 				List<ProductsBean> list = null;
 				list = UserModel.findProductsByCategoryFK(ids);
@@ -110,14 +153,6 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				}
 				ServletUtility.setBeanP(bean, request);
 				ServletUtility.setList(list, request);
-
-				System.out.println("prodnameprodnameprodnameprodnameprodname");
-				Iterator<ProductsBean> it = list.iterator();
-				while (it.hasNext()) {
-					bean = it.next();
-					System.out.println(bean.getProductName());
-				}
-				System.out.println("prodnameprodnameprodnameprodnameprodname");
 			} catch (ApplicationException e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
@@ -132,14 +167,16 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 		/*
 		 * searching by input
 		 */
-		if (bean.getProductName() != null && ids == null) {
+		if (bean.getProductName() != null) {
+
 			try {
-				List list = null;
+				List<ProductsBean> list = null;
 				bean.setProductName(bean.getProductName());
 				list = model.searchSpecificProducts(bean, 0, 0);
 				ServletUtility.setList(list, request);
 				if (list == null || list.size() == 0) {
 					ServletUtility.setErrorMessage("No record found ", request);
+
 				}
 				ServletUtility.setBeanP(bean, request);
 				ServletUtility.setList(list, request);
@@ -149,26 +186,23 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
+			ServletUtility.setBean(bean, request);
 			ServletUtility.forward(getView(), request, response);
 			return;
 		}
-
-		if (op == null && search == null && bean.getProductName() == null) {
-
-			List list = null;
-			try {
-				list = model.searchProducts(bean, 0, 0);
-			} catch (ApplicationException e) {
-				log.error(e);
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-			if (list == null || list.size() == 0) {
-				ServletUtility.setErrorMessage("No record found ", request);
-			}
-			ServletUtility.setBeanP(bean, request);
-			ServletUtility.setList(list, request);
+		List<ProductsBean> list = null;
+		try {
+			list = model.searchProducts(bean, 0, 0);
+		} catch (ApplicationException e) {
+			log.error(e);
+			ServletUtility.handleException(e, request, response);
+			return;
 		}
+		if (list == null || list.size() == 0) {
+			ServletUtility.setErrorMessage("No record found ", request);
+		}
+		ServletUtility.setBeanP(bean, request);
+		ServletUtility.setList(list, request);
 		ServletUtility.forward(getView(), request, response);
 		log.info("ManageMarketPlaceCtl Method doPost ended");
 		return;

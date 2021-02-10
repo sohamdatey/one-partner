@@ -17,7 +17,8 @@ public class S3Handler {
 	private static Logger log = Logger.getLogger(S3Handler.class);
 
 	public static void main(String[] args) {
-		deleteImage("2.jpg");
+
+		System.out.println(getUrl("1.jpg"));
 	}
 
 	public static void uploadProductImage(InputStream file, String imageId) throws ImageSaveException {
@@ -50,7 +51,7 @@ public class S3Handler {
 
 	public static String getUrl(String imageName) {
 		log.debug("getUrl Method Started");
-		return "http://d2jkgyfbwf6l29.cloudfront.net/" + imageName;
+		return rb.getString("aws.cloudfront.imageurl") + imageName;
 	}
 
 	private static AmazonS3 builder() {

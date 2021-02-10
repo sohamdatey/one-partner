@@ -29,8 +29,7 @@
 </head>
 <body>
 
-	<form action="<%=ORSView.MARKET_PLACE_CTL%>" method="post"
-		id="marketPlaceForm">
+	
 
 		<jsp:useBean id="userBean"
 			class="in.co.raystech.maven.project4.bean.UserBean" scope="session"></jsp:useBean>
@@ -79,6 +78,7 @@
 						<span>ONE</span>Partner
 					</h3>
 				</a>
+
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -122,32 +122,33 @@
 				</ul>
 
 				<div class="clearfix">
+				<form action="<%=ORSView.MARKET_PLACE_CTL%>" method="post" id="marketPlaceForm">
 					<!-- <button onclick="$('#editTeam').modal('show');" class="btn btn-inverse dropdown-toggle pull-right" type="button" data-toggle="dropdown"><i class="fa fa-plus-circle mrR"> </i> ADD PEOPLE</button>-->
 					<div class="srchWrp pull-right">
 						<i class="fa fa-search"></i> <input type="text" name="productName"
-							value="<%=DataUtility.getStringData(productBean.getProductName())%>"
+							value="<%=ServletUtility.getParameter("productName", request)%>"
 							placeholder="Search" /> <input type="submit"
 							style="display: none" name="operation"
-							value="<%=BaseCtl.OP_SEARCH%>" id="triggerSrch" />
+							value="<%=BaseCtl.OP_SEARCH%>" id="triggerMkt" />
 					</div>
 					<script type="text/javascript">
-						$('input').keypress(function(e) {
+						$('#triggerMkt').keypress(function(e) {
 							if (e.which == 13) {
 								e.preventDefault();
 								$('#marketPlaceForm').submit();
 							}
 						});
 					</script>
-
+				</form>
 				</div>
-
-
 
 
 			</div>
 		</nav>
 		<!-- / .navbar-->
 
+	<form action="<%=ORSView.MARKET_PLACE_CTL%>" method="post"
+		id="applyForm">
 
 		<div class="weltxt">
 			<b>Welcome <%=welcomeMsg%></b>, Explore our marketplace & choose what
@@ -161,21 +162,53 @@
 			<%=HTMLUtility.hilighterMethod("ids", String.valueOf(categoryBean.getId()), highlitedCategories, l)%>
 
 
-
-			<a class="more"
-				onclick="moreFunc()"><label><span
-					style="display: block;">Show all</span><span style="display: none;">Show Less</span></label></a>
-			<button type="submit" class="btn filter">
-				<i class="fa fa-filter mrR"></i> Apply
-			</button>
+			<a class="more" onclick="moreFunc()"><label><span
+					style="display: block;">Show More</span><span
+					style="display: none;">Show Less</span></label></a> <input type="submit"
+				class="btn filter" name="operation" value="<%=BaseCtl.OP_APPLY%>"
+				style="display: none;" />
 		</div>
 
 		<script>
+
 			function moreFunc(){
-				$('.default, .hilit').toggle('fast');
+				$('.default').toggle('fast');
 				$('.more span').toggle();
-				$('.catTag a input').attr('checked',false);
-				}
+			};
+
+		     
+			$(".catTag input[type=checkbox]").click(function() {
+			    var legchecked = $('.catTag input[type=checkbox]:checked').length;
+			    if (legchecked > 0){$("input.filter").show('fast');}
+			}); 
+
+			 $(function () {
+		            if (localStorage && localStorage["checked"]) {
+		                var localStoredData = JSON.parse(localStorage["checked"]);
+		                var checkboxes = $("input[name='ids']");
+		                for (var i = 0; i < checkboxes.length; i++) {
+		                    for (var j = 0; j < localStoredData.length; j++) {
+		                        if (checkboxes[i].value == localStoredData[j]) {
+		                            checkboxes[i].checked = true;
+		                        }
+		                    }
+		                }
+		                localStorage.removeItem('checked');
+		            }
+		            $("input[type=checkbox]").click(function () {
+		                var data = $("input[name='ids']:checked").map(function () {
+		                    return this.value;
+		                }).get();
+		                localStorage['checked'] = JSON.stringify(data);
+		            });
+
+				    var legchecked = $('.catTag input[type=checkbox]:checked').length;
+				    var leghidchecked = $('.default input[type=checkbox]:checked').length;
+	                if (legchecked > 0){$("input.filter").show();}
+				    else{$("input.filter").hide();}
+	                if (leghidchecked > 0){$(".default").css({'display':'inline-block'});}
+				    else{$(".default").hide();}
+		        }); 
 		</script>
 
 		<div class="pd2 prodCnt">
@@ -226,17 +259,23 @@
 			</div>
 		</div>
 
+		<%
+			if (DataValidator.isNotNull(DataUtility.getString(ServletUtility.getSuccessMessage(request)))) {
+		%>
+		<font color="#369a47"><%=ServletUtility.getSuccessMessage(request)%></font>
+		<%
+			} else if (DataUtility.getString(ServletUtility.getErrorMessage(request)) != null) {
+		%>
+		<font color="#ff3030"><%=ServletUtility.getErrorMessage(request)%></font>
+		<%
+			}
+		%>
+
+
 
 		<script>
 			if ($('.offer p').is(':empty')) {
 				$(this).parent().hide();
-			}
-			$('.hilit input').change(function(){
-				if ($(this).prop('checked')) {
-					$('.filter').show('fast');
-				} else {
-					$('.filter').hide('fast');
-				}
 			}
 		</script>
 		<script src="../js/salvattore.min.js"></script>

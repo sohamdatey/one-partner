@@ -29,7 +29,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "LoginCtl", urlPatterns = { "/OnePartner/LoginCtl" })
+@WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
@@ -133,15 +133,19 @@ public class LoginCtl extends BaseCtl {
 						session.setAttribute("role", rolebean);
 					}
 					if (bean.getLogin().equals("admin@onepartner.in")) {
-						ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
+						ServletUtility.forward(ORSView.MANAGE_PARTNERS_CTL, request, response);
+						return;
 					} else {
-						ServletUtility.redirect(ORSView.MARKET_PLACE_CTL, request, response);
+						ServletUtility.forward(ORSView.MARKET_PLACE_CTL, request, response);
+						return;
 					}
-					return;
 				} else {
 					bean = (UserBean) populateBean(request);
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage("Invalid LoginId / Password", request);
+					ServletUtility.forward(getView(), request, response);
+					log.info("LoginCtl Method doPost Ended");
+					return;
 				}
 			} catch (ApplicationException e) {
 				log.error(e);
@@ -152,9 +156,6 @@ public class LoginCtl extends BaseCtl {
 			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, request, response);
 			return;
 		}
-		ServletUtility.forward(getView(), request, response);
-		log.info("LoginCtl Method doPost Ended");
-
 	}
 
 	@Override

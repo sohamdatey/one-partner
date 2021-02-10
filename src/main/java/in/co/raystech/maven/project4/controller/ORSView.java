@@ -24,6 +24,7 @@ public interface ORSView {
 	public String WELCOME_VIEW = PAGE_FOLDER + "/Welcome.jsp";
 	public String CHANGE_PASSWORD_VIEW = PAGE_FOLDER + "/ChangePasswordView.jsp";
 	public String MY_PROFILE_VIEW = PAGE_FOLDER + "/MyProfileView.jsp";
+	public String ADMIN_PROFILE_VIEW = PAGE_FOLDER + "/AdminProfileView.jsp";
 	public String FORGET_PASSWORD_VIEW = PAGE_FOLDER + "/ForgetPasswordView.jsp";
 	public String MARKET_PLACE_VIEW = PAGE_FOLDER + "/MarketPlace.jsp";
 	public String MANAGE_PARTNER_LIST_VIEW = PAGE_FOLDER + "/ManagePartnersList.jsp";
@@ -33,12 +34,10 @@ public interface ORSView {
 	public String CATEGORYPOPUP_VIEW = PAGE_FOLDER + "/CategoryPopup.jsp";
 	public String PRODUCTSPOPUP_VIEW = PAGE_FOLDER + "/ProductsPopup.jsp";
 	public String CHANGE_EMAIL_SENDERUSER_VIEW = PAGE_FOLDER + "/ChangeEmailSenderUser.jsp";
-			
-	
+
 	public String ERROR_CTL = "/ErrorCtl";
-	
-	
-	public String CHANGESENDER_EMAIL_USER_CTL= APPLICATION_CONTEXT + "/ctl/ChangeSenderEmailUserCtl";
+
+	public String CHANGESENDER_EMAIL_USER_CTL = APPLICATION_CONTEXT + "/ctl/ChangeSenderEmailUserCtl";
 	public String MARKET_PLACE_CTL = APPLICATION_CONTEXT + "/ctl/ManageMarketPlaceCtl";
 	public String MARKET_PLACESS_CTL = APPLICATION_CONTEXT + "/ctl/ManageMarketPlaceCtl";
 	public String MANAGE_PARTNERS_CTL = APPLICATION_CONTEXT + "/ctl/ManagePartnersCtl";
@@ -59,6 +58,7 @@ public interface ORSView {
 	public String LOGOUT_CTL = APPLICATION_CONTEXT + "/LoginCtl";
 	public String CHANGE_PASSWORD_CTL = APPLICATION_CONTEXT + "/ctl/ChangePasswordCtl";
 	public String MY_PROFILE_CTL = APPLICATION_CONTEXT + "/ctl/MyProfileCtl";
-	public String FORGET_PASSWORD_CTL = "/ForgetPasswordCtl";
+	public String FORGET_PASSWORD_CTL = APPLICATION_CONTEXT + "/ForgetPasswordCtl";
+	public String ADMIN_PROFILE_CTL = APPLICATION_CONTEXT + "/ctl/AdminProfileCtl";
 
 }

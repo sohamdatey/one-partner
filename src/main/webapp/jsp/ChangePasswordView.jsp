@@ -17,25 +17,30 @@
 <script src="../js/bootstrap-select.min.js"></script>
 <script src="../js/select2.min.js"></script>
 </head>
-<%@ include file="Header.jsp"%>
+
+<div style="display:none">
+<%@include file="Header.jsp"%>
+</div>
 <body>
 	<form action="<%=ORSView.CHANGE_PASSWORD_CTL%>" method="post">
 
 		<jsp:useBean id="bean"
 			class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
-		
+
 		<nav class="navbar navbar-blue navbar-white navbar-fixed-top">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-2"
 					aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
+				<a href="<%=ORSView.MARKET_PLACE_CTL%>" class="navbar-toggle collapsed"><i class="fa fa-arrow-left pdL pdR"></i>
+				</a>
 				<!-- <a class="navbar-brand" href="#">Brand</a> -->
-				<a href="#" class="navbar-brand">
+				<a href="<%=ORSView.MARKET_PLACE_CTL%>" class="navbar-brand">
 					<h3>
 						<span>ONE</span>Partner
 					</h3>
@@ -44,7 +49,7 @@
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
+				id="bs-example-navbar-collapse-2">
 
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown"><a href="#"
@@ -89,25 +94,27 @@
 		</nav>
 
 
-		
+
 		<div class="container-fluid">
 			<div class="prdBox mrC">
-			
-			<h3 class="mrT mrB3"><i class="fa fa-key mrR"></i> Change Password</h3>
-			
-			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
-				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
-			<input type="hidden" name="modifiedBy"
-				value="<%=bean.getModifiedBy()%>"> <input type="hidden"
-				name="createdDatetime"
-				value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
-			<input type="hidden" name="modifiedDatetime"
-				value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
-				
+
+				<h3 class="mrT mrB3">
+					<i class="fa fa-key mrR"></i> Change Password
+				</h3>
+
+				<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
+					type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
+				<input type="hidden" name="modifiedBy"
+					value="<%=bean.getModifiedBy()%>"> <input type="hidden"
+					name="createdDatetime"
+					value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
+				<input type="hidden" name="modifiedDatetime"
+					value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
+
 				<font color="red"><%=ServletUtility.getErrorMessage(request)%></font>
 				<font color="green"> <%=ServletUtility.getSuccessMessage(request)%>
 				</font>
-				
+
 				<div class="form-group">
 					<label>Old Password*</label> <input type="password"
 						name="oldPassword" size="30" class="form-control"
@@ -126,14 +133,14 @@
 					<label>Confirm Password*</label> <input type="password"
 						name="confirmPassword" size="30" class="form-control"
 						value=<%=DataUtility.getString(request.getParameter("confirmPassword") == null ? ""
-						: DataUtility.getString(request.getParameter("confirmPassword")))%>>
+					: DataUtility.getString(request.getParameter("confirmPassword")))%>>
 					<font color="red"><%=ServletUtility.getErrorMessage("confirmPassword", request)%></font>
 				</div>
 
 
-<input type="submit" name="operation"
-				class="btn btn-primary" value="<%=ChangePasswordCtl.OP_SAVE%>">
-				</div>
+				<input type="submit" name="operation" class="btn btn-primary"
+					value="<%=ChangePasswordCtl.OP_SAVE%>">
+			</div>
 		</div>
 	</form>
 

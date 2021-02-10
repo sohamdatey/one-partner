@@ -29,8 +29,8 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "MyProfileCtl", urlPatterns = { "/ctl/MyProfileCtl" })
-public class MyProfileCtl extends BaseCtl {
+@WebServlet(name = "AdminProfileCtl", urlPatterns = { "/ctl/AdminProfileCtl" })
+public class AdminProfileCtl extends BaseCtl {
 
 	/**
 	 * 
@@ -39,7 +39,7 @@ public class MyProfileCtl extends BaseCtl {
 
 	public static final String OP_CHANGE_MY_PASSWORD = "ChangePassword";
 
-	private static Logger log = Logger.getLogger(MyProfileCtl.class);
+	private static Logger log = Logger.getLogger(AdminProfileCtl.class);
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
@@ -145,7 +145,7 @@ public class MyProfileCtl extends BaseCtl {
 
 	@Override
 	protected String getView() {
-		return ORSView.MY_PROFILE_VIEW;
+		return ORSView.ADMIN_PROFILE_VIEW ;
 	}
 
 }

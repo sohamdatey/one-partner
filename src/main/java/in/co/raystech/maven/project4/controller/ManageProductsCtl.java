@@ -20,8 +20,6 @@ import javax.servlet.http.Part;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import com.google.j2objc.annotations.ReflectionSupport.Level;
-
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
 import in.co.raystech.maven.project4.bean.ProductsBean;
@@ -39,7 +37,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/OnePartner/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
@@ -100,30 +98,17 @@ public class ManageProductsCtl extends BaseCtl {
 			}
 		} catch (ApplicationException e) {
 			log.error(e);
-			e.printStackTrace();
 		}
 
 		if (id > 0) {
 			ProductsBean productsBean;
 			try {
 				productsBean = model.findByPKProducts(id);
-				List<CategoryBean> list = model.createCategoryBeans(productsBean.getId());
+				List<CategoryBean> list = UserModel.createCategoryBeans(productsBean.getId());
 				List<CategoryBean> list2 = model.categoryList();
+
 				request.setAttribute("listOfCats", list);
 				request.setAttribute("allCategoriesList", list2);
-				CategoryBean catBean = new CategoryBean();
-				Iterator<CategoryBean> it = list.iterator();
-				int size = list.size();
-				while (it.hasNext()) {
-					catBean = it.next();
-				}
-				Iterator<CategoryBean> it2 = list2.iterator();
-				int size2 = list2.size();
-				while (it.hasNext()) {
-					catBean = it.next();
-
-				}
-
 				ServletUtility.setBean(productsBean, request);
 				request.setAttribute("productBeanAttr", productsBean);
 			} catch (ApplicationException e) {
@@ -157,17 +142,19 @@ public class ManageProductsCtl extends BaseCtl {
 				model.deleteProduct(bean);
 				ServletUtility.setSuccessMessage("product deleted successfully", request);
 			} catch (ApplicationException e) {
-				e.printStackTrace();
+				log.error(e);
 			}
 		}
-		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
+		if (OP_ADD.equalsIgnoreCase(op)) {
+
+			long pk = 0;
 			Part filePart = null;
-			filePart = request.getPart("file");
+			filePart = request.getPart("fileAdd");
 			String extension = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePart));
 			System.out.println("File Extension " + extension);
 
-			long pk = 0;
 			if (filePart != null && OP_ADD.equalsIgnoreCase(op)) {
+
 				try {
 					String[] ids = request.getParameterValues("categoryId");
 					bean.setImageId(String.valueOf(UserModel.nextProductPK()) + "." + extension);
@@ -179,86 +166,78 @@ public class ManageProductsCtl extends BaseCtl {
 					bean.setId(pk);
 					ServletUtility.setSuccessMessage("Product added successfully", request);
 				} catch (ImageSaveException e) {
-					e.printStackTrace();
+					log.error(e);
 				} catch (DatabaseException e) {
-					e.printStackTrace();
+					log.error(e);
 				}
 			}
-			if (id > 0) {
-				if (OP_EDIT.equalsIgnoreCase(op)) {
-					try {
-						ProductsBean prodBean = (ProductsBean) populateBean(request);
-						model = new UserModel();
-						prodBean = model.findByPKProducts(bean.getId());
-						S3Handler.deleteImage(prodBean.getImageId());
-						String[] ids = request.getParameterValues("categoryId");
-						if (extension.length() > 2) {
-							bean.setImageId(String.valueOf(bean.getId() + "." + extension));
-							bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
-						}
-						else if (extension.length() < 2) {
-							bean.setImageId(prodBean.getImageId());
-							bean.setImageURL(prodBean.getImageURL());
-						}
-						addProductCategories(model, pk, ids);
-						saveImage(bean, filePart);
-						updateProduct(bean, model);
-						ServletUtility.setBean(bean, request);
-						ServletUtility.setSuccessMessage("product is successfully Updated", request);
-					} catch (ImageSaveException e) {
-						log.error(e);
-						e.printStackTrace();
-					} catch (ApplicationException e) {
-						log.error(e);
-						e.printStackTrace();
-					}
-				}
-			}
-			ServletUtility.forward(getView(), request, response);
-			return;
 		}
 
-		if (OP_SEARCH.equalsIgnoreCase(op)) {
+		if (id > 0) {
+			if (OP_EDIT.equalsIgnoreCase(op)) {
+				try {
+					Part filePartEdit = null;
+					filePartEdit = request.getPart("fileEdit");
+					String extensionEdit = FilenameUtils.getExtension(ManageProductsCtl.getFileName(filePartEdit));
+					System.out.println("File Extension " + extensionEdit);
 
-			List list = null;
+					ProductsBean prodBean = (ProductsBean) populateBean(request);
+					model = new UserModel();
+					prodBean = model.findByPKProducts(bean.getId());
+					S3Handler.deleteImage(prodBean.getImageId());
+					String[] ids = request.getParameterValues("categoryId");
+					if (extensionEdit.length() > 2) {
+						bean.setImageId(String.valueOf(bean.getId() + "." + extensionEdit));
+						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));
+					} else if (extensionEdit.length() < 2) {
+						bean.setImageId(prodBean.getImageId());
+						bean.setImageURL(prodBean.getImageURL());
+					}
+					UserModel.deleteAllCategoriesFromProduct_CaterogyTable(bean.getId());
+					addProductCategories(model, bean.getId(), ids);
+					saveImage(bean, filePartEdit);
+					updateProduct(bean, model);
+					ServletUtility.setSuccessMessage("product is successfully Updated", request);
+				} catch (ImageSaveException e) {
+					log.error(e);
+					e.printStackTrace();
+				} catch (ApplicationException e) {
+					log.error(e);
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (OP_SEARCH.equalsIgnoreCase(op))
+
+		{
+
+			List<ProductsBean> list = null;
 			try {
 				list = model.searchSpecificProducts(bean, 0, 0);
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e);
 			}
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
+			ServletUtility.setBean(bean, request);
 			ServletUtility.forward(getView(), request, response);
 			return;
 		}
 
-		List list = null;
+		List<ProductsBean> list = null;
 		try {
-			list = model.searchProducts(bean, 0, 0);
+			list = model.searchAllProducts(bean, 0, 0);
 		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 		if (list == null || list.size() == 0) {
 			ServletUtility.setErrorMessage("No record found ", request);
 		}
 
 		ServletUtility.setList(list, request);
-
-		Iterator<ProductsBean> it = list.iterator();
-		int size = list.size();
-		while (it.hasNext()) {
-			bean = it.next();
-			System.out.println("------------------");
-			System.out.println(bean.getProductName());
-			System.out.println(bean.getImageURL());
-			System.out.println("------------------");
-
-		}
-
 		ServletUtility.setBean(bean, request);
 		ServletUtility.setBeanP(bean, request);
 		ServletUtility.forward(getView(), request, response);
@@ -271,8 +250,7 @@ public class ManageProductsCtl extends BaseCtl {
 		try {
 			pk = model.addProducts(bean);
 		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		} catch (DuplicateRecordException e) {
 			ServletUtility.setBean(bean, request);
 			ServletUtility.setErrorMessage(e.getMessage(), request);
@@ -287,11 +265,10 @@ public class ManageProductsCtl extends BaseCtl {
 			try {
 				model.addProductCategory(idd, pk);
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e);
 			} catch (DuplicateRecordException e) {
-				e.printStackTrace();
-				
+				log.error(e);
+
 			}
 		}
 	}
@@ -304,11 +281,9 @@ public class ManageProductsCtl extends BaseCtl {
 		try {
 			model.updateProducts(bean);
 		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		} catch (DuplicateRecordException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 

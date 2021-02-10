@@ -1,4 +1,4 @@
-<%@page
+	<%@page
 	import="in.co.raystech.maven.project4.controller.ManagePartnersCtl"%>
 <%@page import="in.co.raystech.maven.project4.controller.BaseCtl"%>
 <%@page import="in.co.raystech.maven.project4.bean.UserBean"%>

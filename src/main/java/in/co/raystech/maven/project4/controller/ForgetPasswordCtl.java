@@ -29,9 +29,13 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/OnePartner/ForgetPasswordCtl" })
+@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/ForgetPasswordCtl" })
 public class ForgetPasswordCtl extends BaseCtl {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(ForgetPasswordCtl.class);
 	@Override
 	protected boolean validate(HttpServletRequest request) {

@@ -47,7 +47,7 @@
 							<div class="srchWrp pull-right mrR1">
 								<i class="fa fa-search"></i> <input type="text"
 									name="productName"
-									value="<%=DataUtility.getStringData(ServletUtility.getParameter("name", request))%>"
+									value="<%=ServletUtility.getParameter("productName", request)%>"
 									placeholder="Search" /> <input type="submit"
 									style="display: none" name="operation"
 									value="<%=ManageProductsCtl.OP_SEARCH%>" id="triggerSrch">

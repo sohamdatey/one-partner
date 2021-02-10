@@ -45,19 +45,11 @@
 
 		<ul class="nav navbar-nav navbar-right">
 
-			<li><a href="<%=ORSView.CHANGESENDER_EMAIL_USER_CTL%>"><span>Change Email</span></a></li>
-
+			<%-- 			<li><a href="<%=ORSView.CHANGESENDER_EMAIL_USER_CTL%>"><span>Change Email</span></a></li>
+ --%>
 			<li><a href="<%=ORSView.MANAGE_PARTNERS_CTL%>"><span>Partners</span></a></li>
 			<li><a href="<%=ORSView.MANAGE_CATEGORY_CTL%>"><span>Categories</span></a></li>
 			<li><a href="<%=ORSView.MANAGE_PRODUCTS_CTL%>"><span>Products</span></a></li>
-
-			<li class="visible-xs" style="clear: both"><a href="#"
-				class="profDrop"><img class="mrR1" src="../images/profile.png" />
-					ADMIN</a></li>
-			<li class="visible-xs"><a href="<%=ORSView.MARKET_PLACE_CTL%>" target="_blank"><i
-					class="fa fa-shopping-basket mrR"></i> View Marketplace</a></li>
-			<li class="visible-xs"><button
-					class="btn btn-sm btn-inverse mrB mrL1 mrT1">LOGOUT</button></li>
 
 			<li class="dropdown hidden-xs"><a href="#"
 				class="profDrop dropdown-toggle" data-toggle="dropdown"><img
@@ -66,8 +58,9 @@
 				<ul class="dropdown-menu">
 
 					<li><a href="<%=ORSView.MARKET_PLACE_CTL%>" target="_blank"><i
-					class="fa fa-shopping-basket mrR"></i> View Marketplace</a></li>
-
+							class="fa fa-shopping-basket mrR"></i> View Marketplace</a></li>
+					<li><a href="<%=ORSView.ADMIN_PROFILE_CTL%>"><i
+							class="fa fa-user-secret mrR"></i> Admin Profile </a></li>
 
 					<%
 						userBean = (UserBean) session.getAttribute("user");
@@ -89,16 +82,32 @@
 					<li>
 						<%
 							if (userLoggedIn) {
-						%> <div><a
-						href="<%=ORSView.LOGIN_CTL%>?operation=<%=LoginCtl.OP_LOG_OUT%>" class="btn btn-sm btn-inverse mrB mrL1"><i class="fa fa-power-off mrR"></i> LOGOUT</a></div>
-						<%
-							} else {
-						%> <a class="btn btn-info" href="<%=ORSView.LOGIN_CTL%>">Login</a>
+						%>
+						<div>
+							<a
+								href="<%=ORSView.LOGIN_CTL%>?operation=<%=LoginCtl.OP_LOG_OUT%>"
+								class="btn btn-sm btn-inverse mrB mrL1"><i
+								class="fa fa-power-off mrR"></i> LOGOUT</a>
+						</div> <%
+ 	} else {
+ %> <a class="btn btn-info" href="<%=ORSView.LOGIN_CTL%>">Login</a>
 						<%
 							}
 						%>
 					</li>
 				</ul></li>
+
+			<li class="visible-xs" style="clear: both"><a href="#"
+				class="profDrop"><img class="mrR1" src="../images/profile.png" />
+					ADMIN</a></li>
+			<li class="visible-xs"><a href="<%=ORSView.MARKET_PLACE_CTL%>"
+				target="_blank"><i class="fa fa-shopping-basket mrR"></i> View
+					Marketplace</a></li>
+			<li class="visible-xs"><a href="<%=ORSView.ADMIN_PROFILE_CTL%>"><i
+					class="fa fa-user-secret mrR"></i> Admin Profile </a></li>
+			<div class="visible-xs">
+				<button class="btn btn-sm btn-inverse mrB mrL1 mrT1">LOGOUT</button>
+			</div>
 		</ul>
 	</div>
 

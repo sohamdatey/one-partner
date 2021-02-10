@@ -5,28 +5,24 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import in.co.raystech.maven.project4.bean.BaseBean;
 import in.co.raystech.maven.project4.bean.CategoryBean;
-import in.co.raystech.maven.project4.bean.UserBean;
 import in.co.raystech.maven.project4.exception.ApplicationException;
 import in.co.raystech.maven.project4.exception.DuplicateRecordException;
 import in.co.raystech.maven.project4.model.UserModel;
 import in.co.raystech.maven.project4.util.DataUtility;
-import in.co.raystech.maven.project4.util.PropertyReader;
 import in.co.raystech.maven.project4.util.ServletUtility;
 
 /**
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/OnePartner/ctl/ManageCategoryCtl" })
+@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/ctl/ManageCategoryCtl" })
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
@@ -106,7 +102,17 @@ public class ManageCategoryCtl extends BaseCtl {
 		long id = DataUtility.getLong(request.getParameter("id"));
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		
-	
+
+		System.out.println("cat operation.........................00");
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println(op);
+		System.out.println("operation.........................00");
+
+		
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
 
 			if (id > 0) {
@@ -115,11 +121,9 @@ public class ManageCategoryCtl extends BaseCtl {
 					try {
 						model.updateCategory(bean);
 					} catch (ApplicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e);
 					} catch (DuplicateRecordException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e);
 					}
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setSuccessMessage("Category is successfully Updated", request);
@@ -132,11 +136,10 @@ public class ManageCategoryCtl extends BaseCtl {
 				try {
 					pk = model.addCategory(bean);
 				} catch (ApplicationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (DuplicateRecordException e) {
+					log.error(e);
+			} catch (DuplicateRecordException e) {
 					ServletUtility.setErrorMessage(e.getMessage(), request);
-					e.printStackTrace();
+					log.error(e);
 				}
 				bean.setId(pk);
 				ServletUtility.setSuccessMessage("Category added successfully", request);
@@ -149,8 +152,7 @@ public class ManageCategoryCtl extends BaseCtl {
 			try {
 				model.deleteCategory(deletebean);
 			} catch (ApplicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e);
 			}
 			ServletUtility.setSuccessMessage("Category deleted successfully", request);
 		}

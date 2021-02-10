@@ -22,7 +22,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "AddCategoryCtl", urlPatterns = { "/OnePartner/ctl/AddCategoryCtl" })
+@WebServlet(name = "AddCategoryCtl", urlPatterns = { "/ctl/AddCategoryCtl" })
 public class AddCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 
@@ -102,7 +102,6 @@ public class AddCategoryCtl extends BaseCtl {
 		long id = DataUtility.getLong(request.getParameter("id"));
 		CategoryBean bean = (CategoryBean) populateBean(request);
 		if (OP_ADD.equalsIgnoreCase(op) || OP_EDIT.equalsIgnoreCase(op)) {
-
 
 			if (id > 0) {
 				if (OP_EDIT.equalsIgnoreCase(op)) {

@@ -40,13 +40,6 @@ public class EmailUtility {
 	 */
 	private static final String SMTP_PORT = rb.getString("smtp.port");
 
-	private static final String emailFromAddress = null;
-
-	/**
-	 * Administrator email's password
-	 */
-	private static final String emailPassword = null;
-
 	/**
 	 * SSL is an industry standard and is used by millions of web sites in the
 	 * protection of their online transactions with their customers.
@@ -58,18 +51,26 @@ public class EmailUtility {
 	 * Administrator's email id by which all messages are sent
 	 */
 
-	public static UserBean findEmailSenderUser() {
-		UserBean bean = new UserBean();
-		UserModel model = new UserModel();
+	public static UserBean getSenderEmail() {
+		UserBean bean = null;
 		try {
-			bean = model.findLoginSenderUser();
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-		}
+			bean = UserModel.getEmailSenderUser();
 
+		} catch (ApplicationException e) {
+
+		}
 		return bean;
 
 	}
+	
+
+
+	private static final String emailFromAddress = EmailUtility.getSenderEmail().getLogin();
+
+	/**
+	 * Administrator email's password
+	 */
+	private static final String emailPassword = EmailUtility.getSenderEmail().getPassword();
 
 	/**
 	 * Email server properties
@@ -111,14 +112,17 @@ public class EmailUtility {
 
 	public static void sendMail(EmailMessage emailMessageDTO) throws ApplicationException {
 
-		final UserBean bean = EmailUtility.findEmailSenderUser();
-
+		System.out.println("888888888888888888888888888888888888888888");
+		System.out.println(emailFromAddress);
+		System.out.println(emailPassword);
+		System.out.println("888888888888888888888888888888888888888888");
+		
 		try {
 
 			// Connection to Mail Server
 			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(bean.getLogin(), bean.getPassword());
+					return new PasswordAuthentication(emailFromAddress, emailPassword);
 				}
 			});
 
@@ -127,7 +131,7 @@ public class EmailUtility {
 
 			// Create a message
 			Message msg = new MimeMessage(session);
-			InternetAddress addressFrom = new InternetAddress(bean.getLogin());
+			InternetAddress addressFrom = new InternetAddress(emailFromAddress);
 			msg.setFrom(addressFrom);
 
 			// Set TO addresses

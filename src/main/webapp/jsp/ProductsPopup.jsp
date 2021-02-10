@@ -59,7 +59,7 @@
 							<div class="img-upload">
 								<label for="file" class="img-upload__label">Upload Image</label>
 								<input class="img-upload__input" required type="file"
-									name="file" id="file">
+									name="fileAdd" id="file">
 							</div>
 
 						</div>
@@ -173,7 +173,7 @@
 
 							<div class="img-upload">
 								<label for="imgInp" class="img-upload__label">Change
-									Image</label> <input class="img-upload__input" type="file" name="file"
+									Image</label> <input class="img-upload__input" type="file" name="fileEdit"
 									id="imgInp">
 							</div>
 

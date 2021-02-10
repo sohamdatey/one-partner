@@ -30,7 +30,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/OnePartner/UserRegistrationCtl" })
+@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
 	/**
 	 * 
@@ -38,6 +38,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
 	public static final String OP_SIGN_UP = "SignUp";
+
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 		log.info("UserRegistrationCtl Method validat Started");
@@ -126,6 +127,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		ServletUtility.forward(getView(), request, response);
 
 	}

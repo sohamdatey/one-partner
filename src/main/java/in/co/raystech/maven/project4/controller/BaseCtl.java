@@ -24,7 +24,12 @@ import in.co.raystech.maven.project4.util.ServletUtility;
 
 public abstract class BaseCtl extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String OP_ADD = "Add";
+	public static final String OP_APPLY = "Apply";
 	public static final String OP_EDIT = "Edit";
 	public static final String OP_SAVE = "save";
 	public static final String OP_CANCEL = "Cancel";

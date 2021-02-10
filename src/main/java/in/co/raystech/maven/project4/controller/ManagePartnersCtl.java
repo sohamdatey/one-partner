@@ -27,7 +27,7 @@ import in.co.raystech.maven.project4.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/OnePartner/ctl/ManagePartnersCtl" })
+@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/ctl/ManagePartnersCtl" })
 public class ManagePartnersCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManagePartnersCtl.class);
 
@@ -52,7 +52,7 @@ public class ManagePartnersCtl extends BaseCtl {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		log.info("ManageMarketPartnersCtl Method doGet Started");
-		List list = null;
+		List<UserBean> list = null;
 		UserModel model = new UserModel();
 		UserBean bean = (UserBean) populateBean(request);
 		long id = DataUtility.getLong(request.getParameter("id"));
@@ -96,7 +96,6 @@ public class ManagePartnersCtl extends BaseCtl {
 		log.info("ManageMarketPartnersCtl Method doPost Started");
 		UserBean bean = (UserBean) populateBean(request);
 		String op = DataUtility.getString(request.getParameter("operation"));
-		String search = DataUtility.getString(request.getParameter("search"));
 		String[] ids = request.getParameterValues("ids");
 		UserModel model = new UserModel();
 		if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -119,8 +118,8 @@ public class ManagePartnersCtl extends BaseCtl {
 			return;
 		}
 		try {
-			List list = null;
-			list = model.searchSpecific(bean, 0, 0);
+			List<UserBean> list = null;
+			list = model.searchSpecificUser(bean, 0, 0);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
