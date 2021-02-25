@@ -1,15 +1,15 @@
 <%@page
-	import="in.co.raystech.maven.project4.controller.ManagePartnersCtl"%>
-<%@page import="in.co.raystech.maven.project4.controller.BaseCtl"%>
-<%@page import="in.co.raystech.maven.project4.bean.UserBean"%>
-<%@page import="in.co.raystech.maven.project4.controller.ORSView"%>
-<%@page import="in.co.raystech.maven.project4.util.DataValidator"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
+	import="in.onepartner.controller.ManagePartnersCtl"%>
+<%@page import="in.onepartner.controller.BaseCtl"%>
+<%@page import="in.onepartner.bean.UserBean"%>
+<%@page import="in.onepartner.controller.ORSView"%>
+<%@page import="in.onepartner.util.DataValidator"%>
+<%@page import="in.onepartner.util.DataUtility"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="in.co.raystech.maven.project4.util.HTMLUtility"%>
+<%@page import="in.onepartner.util.HTMLUtility"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,7 +37,7 @@
 	<form action="<%=ORSView.MANAGE_PARTNERS_CTL%>" method="post"
 		id="partnerForm">
 		<jsp:useBean id="bean" scope="request"
-			class="in.co.raystech.maven.project4.bean.UserBean"></jsp:useBean>
+			class="in.onepartner.bean.UserBean"></jsp:useBean>
 
 		<%@include file="Header.jsp"%>
 

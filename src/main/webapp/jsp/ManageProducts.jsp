@@ -1,7 +1,7 @@
-<%@page import="in.co.raystech.maven.project4.bean.ProductsBean"%>
-<%@page import="in.co.raystech.maven.project4.bean.CategoryBean"%>
+<%@page import="in.onepartner.bean.ProductsBean"%>
+<%@page import="in.onepartner.bean.CategoryBean"%>
 <%@page import="java.io.Console"%>
-<%@page import="in.co.raystech.maven.project4.bean.UserBean"%>
+<%@page import="in.onepartner.bean.UserBean"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">

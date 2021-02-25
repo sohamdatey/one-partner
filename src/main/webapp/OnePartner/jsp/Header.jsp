@@ -1,17 +1,17 @@
-<%@page import="in.co.raystech.maven.project4.bean.UserBean"%>
-<%@page import="in.co.raystech.maven.project4.controller.ORSView"%>
-<%@page import="in.co.raystech.maven.project4.util.DataValidator"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.controller.LoginCtl"%>
+<%@page import="in.onepartner.bean.UserBean"%>
+<%@page import="in.onepartner.controller.ORSView"%>
+<%@page import="in.onepartner.util.DataValidator"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.controller.LoginCtl"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="in.co.raystech.maven.project4.util.HTMLUtility"%>
+<%@page import="in.onepartner.util.HTMLUtility"%>
 <nav class="navbar navbar-blue navbar-fixed-top">
 
 	<jsp:useBean id="userBean"
-		class="in.co.raystech.maven.project4.bean.UserBean" scope="session"></jsp:useBean>
+		class="in.onepartner.bean.UserBean" scope="session"></jsp:useBean>
 	<!-- Brand and toggle get grouped for better mobile display -->
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed"

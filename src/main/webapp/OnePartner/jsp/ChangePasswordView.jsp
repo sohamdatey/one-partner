@@ -1,9 +1,9 @@
 <%@page
-	import="in.co.raystech.maven.project4.controller.ChangePasswordCtl"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+	import="in.onepartner.controller.ChangePasswordCtl"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 
-<%@page import="in.co.raystech.maven.project4.controller.ORSView"%>
+<%@page import="in.onepartner.controller.ORSView"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
 	<form action="<%=ORSView.CHANGE_PASSWORD_CTL%>" method="post">
 
 		<jsp:useBean id="bean"
-			class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
+			class="in.onepartner.bean.UserBean" scope="request"></jsp:useBean>
 		
 		<nav class="navbar navbar-blue navbar-white navbar-fixed-top">
 			<!-- Brand and toggle get grouped for better mobile display -->

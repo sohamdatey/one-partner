@@ -1,19 +1,19 @@
-<%@page import="in.co.raystech.maven.project4.controller.BaseCtl"%>
-<%@page import="in.co.raystech.maven.project4.bean.ProductsBean"%>
-<%@page import="in.co.raystech.maven.project4.bean.CategoryBean"%>
+<%@page import="in.onepartner.controller.BaseCtl"%>
+<%@page import="in.onepartner.bean.ProductsBean"%>
+<%@page import="in.onepartner.bean.CategoryBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<%@page import="in.co.raystech.maven.project4.bean.UserBean"%>
-<%@page import="in.co.raystech.maven.project4.controller.ORSView"%>
-<%@page import="in.co.raystech.maven.project4.util.DataValidator"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.controller.LoginCtl"%>
+<%@page import="in.onepartner.bean.UserBean"%>
+<%@page import="in.onepartner.controller.ORSView"%>
+<%@page import="in.onepartner.util.DataValidator"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.controller.LoginCtl"%>
 <%@page import="javax.mail.Header"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="in.co.raystech.maven.project4.util.HTMLUtility"%>
+<%@page import="in.onepartner.util.HTMLUtility"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,14 +33,14 @@
 		id="marketPlaceForm">
 
 		<jsp:useBean id="userBean"
-			class="in.co.raystech.maven.project4.bean.UserBean" scope="session"></jsp:useBean>
+			class="in.onepartner.bean.UserBean" scope="session"></jsp:useBean>
 
 		<jsp:useBean id="categoryBean"
-			class="in.co.raystech.maven.project4.bean.CategoryBean"
+			class="in.onepartner.bean.CategoryBean"
 			scope="request"></jsp:useBean>
 
 		<jsp:useBean id="productBean"
-			class="in.co.raystech.maven.project4.bean.ProductsBean"
+			class="in.onepartner.bean.ProductsBean"
 			scope="request"></jsp:useBean>
 
 

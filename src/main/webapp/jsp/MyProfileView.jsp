@@ -1,8 +1,8 @@
-<%@page import="in.co.raystech.maven.project4.controller.MyProfileCtl"%>
-<%@page import="in.co.raystech.maven.project4.util.HTMLUtility"%>
+<%@page import="in.onepartner.controller.MyProfileCtl"%>
+<%@page import="in.onepartner.util.HTMLUtility"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <html>
 <head>
 
@@ -25,7 +25,7 @@
 
 	<form action="<%=ORSView.MY_PROFILE_CTL%>" method="post">
 		<jsp:useBean id="bean"
-			class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
+			class="in.onepartner.bean.UserBean" scope="request"></jsp:useBean>
 		<nav class="navbar navbar-blue navbar-white navbar-fixed-top">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">

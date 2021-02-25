@@ -1,8 +1,8 @@
-<%@page import="in.co.raystech.maven.project4.controller.*"%>
-<%@page import="in.co.raystech.maven.project4.bean.*"%>
-<%@page import="in.co.raystech.maven.project4.exception.*"%>
-<%@page import="in.co.raystech.maven.project4.model.*"%>
-<%@page import="in.co.raystech.maven.project4.util.*"%>
+<%@page import="in.onepartner.controller.*"%>
+<%@page import="in.onepartner.bean.*"%>
+<%@page import="in.onepartner.exception.*"%>
+<%@page import="in.onepartner.model.*"%>
+<%@page import="in.onepartner.util.*"%>
 <%@page import="java.util.HashMap"%>
 <html>
 <head>
@@ -21,7 +21,7 @@
 <body class="form-v8">
 
 	<jsp:useBean id="bean"
-		class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
+		class="in.onepartner.bean.UserBean" scope="request"></jsp:useBean>
 
 	<form action="<%=ORSView.USER_REGISTRATION_CTL%>" method="post">
 

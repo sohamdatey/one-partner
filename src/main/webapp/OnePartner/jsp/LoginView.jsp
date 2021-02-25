@@ -1,9 +1,9 @@
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%@page import="in.co.raystech.maven.project4.controller.*"%>
+<%@page import="in.onepartner.controller.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +23,7 @@
 
 	<form action="<%=ORSView.LOGIN_CTL%>" method="post">
 		<jsp:useBean id="bean"
-			class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
+			class="in.onepartner.bean.UserBean" scope="request"></jsp:useBean>
 
 		<div class="login-wrap">
 			<div class="login-html">

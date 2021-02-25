@@ -1,8 +1,8 @@
-<%@page import="in.co.raystech.maven.project4.controller.MyProfileCtl"%>
-<%@page import="in.co.raystech.maven.project4.util.HTMLUtility"%>
+<%@page import="in.onepartner.controller.MyProfileCtl"%>
+<%@page import="in.onepartner.util.HTMLUtility"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.raystech.maven.project4.util.DataUtility"%>
-<%@page import="in.co.raystech.maven.project4.util.ServletUtility"%>
+<%@page import="in.onepartner.util.DataUtility"%>
+<%@page import="in.onepartner.util.ServletUtility"%>
 <html>
 <head>
 
@@ -25,7 +25,7 @@
 
 
 		<jsp:useBean id="bean"
-			class="in.co.raystech.maven.project4.bean.UserBean" scope="request"></jsp:useBean>
+			class="in.onepartner.bean.UserBean" scope="request"></jsp:useBean>
 
 
 

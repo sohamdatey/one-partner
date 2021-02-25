@@ -1,6 +1,6 @@
-<%@page import="in.co.raystech.maven.project4.controller.*"%>
-<%@page import="in.co.raystech.maven.project4.util.*"%>
-<%@page import="in.co.raystech.maven.project4.bean.*"%>
+<%@page import="in.onepartner.controller.*"%>
+<%@page import="in.onepartner.util.*"%>
+<%@page import="in.onepartner.bean.*"%>
 <!DOCTYPE html>
 <html>
 <head>
