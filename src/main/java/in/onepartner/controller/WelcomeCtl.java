@@ -23,7 +23,7 @@ import in.onepartner.util.S3Handler;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/OnePartner/WelcomeCtl" })
 @MultipartConfig
 public class WelcomeCtl extends BaseCtl {
 

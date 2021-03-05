@@ -24,7 +24,7 @@ import in.onepartner.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/ctl/ManageMarketPlaceCtl" })
+@WebServlet(name = "ManageMarketPlaceCtl", urlPatterns = { "/OnePartner/ctl/ManageMarketPlaceCtl" })
 public class ManageMarketPlaceCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Logger.getLogger(ManageMarketPlaceCtl.class);
@@ -111,38 +111,11 @@ public class ManageMarketPlaceCtl extends BaseCtl {
 			throws ServletException, IOException {
 
 		log.info("ManageMarketPlaceCtl Method doPost Started");
-		System.out.println("inside do post.................................................................");
-		System.out.println("inside do post.................................................................");
-		System.out.println("inside do post.................................................................");
-		System.out.println("inside do post.................................................................");
-		System.out.println("inside do post.................................................................");
-
+	
 		String op = DataUtility.getString(request.getParameter("operation"));
 		ProductsBean bean = (ProductsBean) populateBean(request);
-
-		System.out.println(op);
-		System.out.println(op);
-		System.out.println(op);
-		System.out.println(op);
-		System.out.println(op);
-		System.out.println(op);
-		System.out.println(op);
 		String[] ids = request.getParameterValues("ids");
-
-		System.out.println(bean.getProductName());
-
-		System.out.println(bean.getProductName());
-		System.out.println(bean.getProductName());
-		System.out.println(bean.getProductName());
-		System.out.println(bean.getProductName());
-		System.out.println(ids.length);
-		System.out.println(ids.length);
-		System.out.println(ids.length);
-		System.out.println(ids.length);
-		System.out.println(ids.length);
-
 		UserModel model = new UserModel();
-
 		if (ids.length >= 0 && op.equalsIgnoreCase(BaseCtl.OP_APPLY) && bean.getProductName() == null) {
 			try {
 				List<ProductsBean> list = null;

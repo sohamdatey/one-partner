@@ -29,7 +29,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
+@WebServlet(name = "LoginCtl", urlPatterns = { "/OnePartner/LoginCtl" })
 public class LoginCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
@@ -132,10 +132,10 @@ public class LoginCtl extends BaseCtl {
 						session.setAttribute("role", rolebean);
 					}
 					if (bean.getLogin().equals("admin@onepartner.in")) {
-						ServletUtility.forward(ORSView.MANAGE_PARTNERS_CTL, request, response);
+						ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
 						return;
 					} else {
-						ServletUtility.forward(ORSView.MARKET_PLACE_CTL, request, response);
+						ServletUtility.redirect(ORSView.MARKET_PLACE_CTL, request, response);
 						return;
 					}
 				} else {
@@ -148,6 +148,7 @@ public class LoginCtl extends BaseCtl {
 				}
 			} catch (ApplicationException e) {
 				log.error(e);
+				ServletUtility.setErrorMessage(e.getMessage(), request);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}

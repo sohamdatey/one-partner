@@ -27,7 +27,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebFilter(filterName = "FrontController", urlPatterns = { "/ctl/*" })
+@WebFilter(filterName = "FrontController", urlPatterns = { "/OnePartner/ctl/*" })
 public class FrontController implements Filter {
 
 	public void destroy() {

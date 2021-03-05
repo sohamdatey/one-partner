@@ -22,7 +22,7 @@ import in.onepartner.util.ServletUtility;
  * Servlet implementation class ManageCategoryCtl
  */
 
-@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/ctl/ManageCategoryCtl" })
+@WebServlet(name = "ManageCategoryCtl", urlPatterns = { "/OnePartner/ctl/ManageCategoryCtl" })
 public class ManageCategoryCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 

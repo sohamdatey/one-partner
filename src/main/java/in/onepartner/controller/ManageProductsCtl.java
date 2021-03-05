@@ -36,7 +36,7 @@ import in.onepartner.util.ServletUtility;
  * Servlet implementation class ManageProductsCtl
  */
 
-@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/ctl/ManageProductsCtl" })
+@WebServlet(name = "ManageProductsCtl", urlPatterns = { "/OnePartner/ctl/ManageProductsCtl" })
 @MultipartConfig
 public class ManageProductsCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManageProductsCtl.class);
@@ -184,11 +184,6 @@ public class ManageProductsCtl extends BaseCtl {
 					prodBean = model.findByPKProducts(bean.getId());
 					S3Handler.deleteImage(prodBean.getImageId());
 					String[] ids = request.getParameterValues("categoryId");
-					log.info("lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
-					log.info(extensionEdit);
-					log.info(extensionEdit);
-					log.info(extensionEdit);
-					log.info(extensionEdit);
 					if (extensionEdit.length() > 2) {
 						bean.setImageId(String.valueOf(bean.getId() + "." + extensionEdit));
 						bean.setImageURL(S3Handler.getUrl(bean.getImageId()));

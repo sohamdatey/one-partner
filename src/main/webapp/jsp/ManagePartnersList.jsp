@@ -1,5 +1,5 @@
-	<%@page
-	import="in.onepartner.controller.ManagePartnersCtl"%>
+
+<%@page import="in.onepartner.controller.ManagePartnersCtl"%>
 <%@page import="in.onepartner.controller.BaseCtl"%>
 <%@page import="in.onepartner.bean.UserBean"%>
 <%@page import="in.onepartner.controller.ORSView"%>
@@ -50,7 +50,8 @@
 					<div class="col-sm-6">
 						<div class="clearfix">
 							<div class="srchWrp pull-right mrR1">
-								<i class="fa fa-search"></i> <input type="text" name="search" placeholder="Search"
+								<i class="fa fa-search"></i> <input type="text" name="search"
+									placeholder="Search"
 									value="<%=ServletUtility.getParameter("search", request)%>">
 
 								<input type="submit" name="operation" style="display: none"
@@ -85,19 +86,6 @@
 							bean = it.next();
 					%>
 					<tr class="partTr">
-						<%
-							UserBean ubean = (UserBean) session.getAttribute("user");
-
-								if (ubean.getId() == bean.getId()) {
-						%>
-
-						<%
-							} else {
-						%>
-
-						<%
-							}
-						%>
 						<td><input type="checkbox" name="ids" class="checkbox1"
 							value="<%=bean.getId()%>"
 							onclick="$(this).closest('.partTr').find('.fa-trash').fadeToggle()">
@@ -115,7 +103,6 @@
 						<%
 							}
 						%>
-
 
 						<script>
 							$('.partTr .fa-check').click(function() {

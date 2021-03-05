@@ -27,7 +27,7 @@ import in.onepartner.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/ctl/ManagePartnersCtl" })
+@WebServlet(name = "ManagePartnersCtl", urlPatterns = { "/OnePartner/ctl/ManagePartnersCtl" })
 public class ManagePartnersCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ManagePartnersCtl.class);
 
@@ -63,13 +63,23 @@ public class ManagePartnersCtl extends BaseCtl {
 				bean.setDescription(description);
 				model.updatePartner(bean);
 				ServletUtility.setBean(bean, request);
+				try {
+					list = model.searchInGetMethod(0, 0);
+				} catch (ApplicationException e) {
+					log.error(e);
+					ServletUtility.handleException(e, request, response);
+					return;
+				}
+				if (list == null || list.size() == 0) {
+					ServletUtility.setErrorMessage("No record found ", request);
+				}
+				ServletUtility.setList(list, request);
+
 			} catch (Exception e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-			ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
-			return;
 		} else {
 			try {
 				list = model.search(bean, 0, 0);
@@ -82,8 +92,8 @@ public class ManagePartnersCtl extends BaseCtl {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setList(list, request);
-			ServletUtility.forward(getView(), request, response);
 		}
+		ServletUtility.forward(getView(), request, response);
 		log.info("ManageMarketPartnersCtl Method doGet Ended");
 
 	}
@@ -114,7 +124,7 @@ public class ManagePartnersCtl extends BaseCtl {
 			} else {
 				ServletUtility.setErrorMessage("Select at least one record", request);
 			}
-			ServletUtility.redirect(ORSView.MANAGE_PARTNERS_CTL, request, response);
+			ServletUtility.redirect(getView(), request, response);
 			return;
 		}
 		try {

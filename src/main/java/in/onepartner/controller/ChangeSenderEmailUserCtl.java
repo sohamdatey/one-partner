@@ -28,7 +28,7 @@ import in.onepartner.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ChangeSenderEmailUserCtl", urlPatterns = { "/ctl/ChangeSenderEmailUserCtl" })
+@WebServlet(name = "ChangeSenderEmailUserCtl", urlPatterns = { "/OnePartner/ctl/ChangeSenderEmailUserCtl" })
 public class ChangeSenderEmailUserCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(ChangeSenderEmailUserCtl.class);
 

@@ -12,9 +12,13 @@
 <%@page isErrorPage="true"%>
 
 <body>
-	this is Error page
+	this is Error page -------- -------- --------
+
 
 	<font color="red"><%=ServletUtility.getErrorMessage(request)%></font>
+	--------
+
+
 
 </body>
 </html>

@@ -29,7 +29,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/ForgetPasswordCtl" })
+@WebServlet(name = "ForgetPasswordCtl", urlPatterns = { "/OnePartner/ForgetPasswordCtl" })
 public class ForgetPasswordCtl extends BaseCtl {
 
 	/**
@@ -89,17 +89,18 @@ public class ForgetPasswordCtl extends BaseCtl {
 				model.forgetPassword(bean.getLogin());
 				ServletUtility.setSuccessMessage("Password has been sent successfully to your Email-Id", request);
 			} catch (RecordNotFoundException e) {
-				log.error("error",e);
+				log.error("error", e);
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 			} catch (ApplicationException e) {
-				log.error("error",e);
+				log.error("error", e);
 				session.setAttribute("chngpwd", e.getMessage());
-				//response.sendRedirect(ORSView.USER_REGISTRATION_CTL);
-				 ServletUtility.handleException(e, request, response);
+				ServletUtility.setErrorMessage(e.getMessage(), request);
+				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (Exception e) {
-				log.error("error",e);
+				log.error("error", e);
 				request.setAttribute(BaseCtl.MSG_ERROR, "leo aagya, p2 bualo ab..");
+				ServletUtility.setErrorMessage(e.getMessage(), request);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}

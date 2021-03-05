@@ -62,8 +62,6 @@ public class EmailUtility {
 		return bean;
 
 	}
-	
-
 
 	private static final String emailFromAddress = EmailUtility.getSenderEmail().getLogin();
 
@@ -111,7 +109,6 @@ public class EmailUtility {
 	 */
 
 	public static void sendMail(EmailMessage emailMessageDTO) throws ApplicationException {
-
 
 		try {
 
@@ -198,7 +195,8 @@ public class EmailUtility {
 			Transport.send(msg);
 
 		} catch (Exception ex) {
-			throw new ApplicationException("Internet not connected, please re-check the connection");
+
+			throw new ApplicationException(ex.getMessage());
 
 		}
 	}

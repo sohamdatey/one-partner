@@ -29,7 +29,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "AdminProfileCtl", urlPatterns = { "/ctl/AdminProfileCtl" })
+@WebServlet(name = "AdminProfileCtl", urlPatterns = { "/OnePartner/ctl/AdminProfileCtl" })
 public class AdminProfileCtl extends BaseCtl {
 
 	/**

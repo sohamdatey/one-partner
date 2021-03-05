@@ -29,7 +29,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "MyProfileCtl", urlPatterns = { "/ctl/MyProfileCtl" })
+@WebServlet(name = "MyProfileCtl", urlPatterns = { "/OnePartner/ctl/MyProfileCtl" })
 public class MyProfileCtl extends BaseCtl {
 
 	/**

@@ -30,7 +30,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/UserRegistrationCtl" })
+@WebServlet(name = "UserRegistrationCtl", urlPatterns = { "/OnePartner/UserRegistrationCtl" })
 public class UserRegistrationCtl extends BaseCtl {
 	/**
 	 * 

@@ -18,7 +18,7 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  */
 
-@WebServlet(name = "ErrorCtl", urlPatterns = { "/ErrorCtl" })
+@WebServlet(name = "ErrorCtl", urlPatterns = { "/OnePartner/ErrorCtl" })
 public class ErrorCtl extends BaseCtl {
 	private static final long serialVersionUID = 1L;
 

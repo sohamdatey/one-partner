@@ -85,7 +85,9 @@ public class ServletUtility {
 	 */
 	public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		response.sendRedirect(ORSView.ERROR_CTL);
+
+		RequestDispatcher rd = request.getRequestDispatcher(ORSView.ERROR_CTL);
+		rd.forward(request, response);
 
 	}
 
@@ -214,7 +216,7 @@ public class ServletUtility {
 	public static void setBeanP(BaseBean bean, HttpServletRequest request) {
 		request.setAttribute("beanP", bean);
 	}
-	
+
 	public static void setUserModel(UserModel model, HttpServletRequest request) {
 		request.getSession().setAttribute("user", model);
 	}

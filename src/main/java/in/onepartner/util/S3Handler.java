@@ -1,6 +1,8 @@
 package in.onepartner.util;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -10,7 +12,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.util.Base64;
 
 import in.onepartner.exception.ImageSaveException;
 
@@ -18,8 +19,7 @@ public class S3Handler {
 	private static Logger log = Logger.getLogger(S3Handler.class);
 
 	public static void main(String[] args) {
-
-		System.out.println(getUrl("1.jpg"));
+		setCreds();
 	}
 
 	public static void uploadProductImage(InputStream file, String imageId) throws ImageSaveException {
@@ -70,8 +70,10 @@ public class S3Handler {
 
 	private static void setCreds() {
 
-		System.setProperty("aws.accessKeyId", String.valueOf(Base64.decode(rb.getString("aws.accessKeyId"))));
-		System.setProperty("aws.secretKey", String.valueOf(Base64.decode(rb.getString("aws.secretKey"))));
+		System.setProperty("aws.accessKeyId",
+				new String(Base64.getDecoder().decode(rb.getString("aws.accessKeyId")), StandardCharsets.UTF_8));
+		System.setProperty("aws.secretKey",
+				new String(Base64.getDecoder().decode(rb.getString("aws.secretKey")), StandardCharsets.UTF_8));
 	}
 
 }

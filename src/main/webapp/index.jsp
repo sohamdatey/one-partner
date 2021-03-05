@@ -13,18 +13,6 @@
 <html>
 
 <body>
-
-	<H1>
-		<a href="jsp/LoginView.jsp">Welcome</a>
-	</H1>   
-
-
-	<form method="POST" action="<%=ORSView.MANAGE_PRODUCTS_CTL%>"
-		enctype="multipart/form-data">
-		File: <input type="file" name="file" id="file" /> <br />
-		Destination: <input type="text" value="/tmp" name="destination" /> </br> <input
-			type="submit" value="Upload" name="upload" id="upload" />
-	</form>
-
+	<jsp:forward page="<%=ORSView.LOGIN_VIEW%>"></jsp:forward>
 </body>
 </html>

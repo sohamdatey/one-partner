@@ -28,7 +28,6 @@ public interface ORSView {
 	public String FORGET_PASSWORD_VIEW = PAGE_FOLDER + "/ForgetPasswordView.jsp";
 	public String MARKET_PLACE_VIEW = PAGE_FOLDER + "/MarketPlace.jsp";
 	public String MANAGE_PARTNER_LIST_VIEW = PAGE_FOLDER + "/ManagePartnersList.jsp";
-	public String MANAGE_PARTNER_VIEW = PAGE_FOLDER + "/ManagePartners.jsp";
 	public String MANAGE_PRODUCTS_VIEW = PAGE_FOLDER + "/ManageProducts.jsp";
 	public String MANAGE_CATEGORY_VIEW = PAGE_FOLDER + "/ManageCategory.jsp";
 	public String CATEGORYPOPUP_VIEW = PAGE_FOLDER + "/CategoryPopup.jsp";

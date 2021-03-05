@@ -28,7 +28,7 @@ import in.onepartner.util.ServletUtility;
  * @version 1.0
  * @Copyright (c) SunilOS
  */
-@WebServlet(name = "ChangePasswordCtl", urlPatterns = { "/ctl/ChangePasswordCtl" })
+@WebServlet(name = "ChangePasswordCtl", urlPatterns = { "/OnePartner/ctl/ChangePasswordCtl" })
 public class ChangePasswordCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;

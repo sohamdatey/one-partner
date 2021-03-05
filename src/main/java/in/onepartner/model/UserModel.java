@@ -21,6 +21,7 @@ import in.onepartner.util.EmailBuilder;
 import in.onepartner.util.EmailMessage;
 import in.onepartner.util.EmailUtility;
 import in.onepartner.util.JDBCDataSource;
+import in.onepartner.util.S3Handler;
 
 public class UserModel {
 
@@ -425,14 +426,13 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update product_table set product_name=?, description=?, partnershipoffer=?, formlink=?, image_url=?, imageId=?  where id=?");
+					"update product_table set product_name=?, description=?, partnershipoffer=?, formlink=?, imageId=?  where id=?");
 			pstmt.setString(1, bean.getProductName());
 			pstmt.setString(2, bean.getDescription());
 			pstmt.setString(3, bean.getPartnershipOffer());
 			pstmt.setString(4, bean.getFormLink());
-			pstmt.setString(5, bean.getImageURL());
-			pstmt.setString(6, bean.getImageId());
-			pstmt.setLong(7, bean.getId());
+			pstmt.setString(5, bean.getImageId());
+			pstmt.setLong(6, bean.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -492,14 +492,13 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			pk = nextProductPK();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("insert into product_table values(?,?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("insert into product_table values(?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
 			pstmt.setString(2, bean.getProductName());
 			pstmt.setString(3, bean.getDescription());
 			pstmt.setString(4, bean.getPartnershipOffer());
 			pstmt.setString(5, bean.getFormLink());
-			pstmt.setString(6, bean.getImageURL());
-			pstmt.setString(7, bean.getImageId());
+			pstmt.setString(6, bean.getImageId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -620,8 +619,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 			}
 			rs.close();
@@ -683,13 +682,13 @@ public class UserModel {
 				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" and `name` like '" + bean.getName() + "%'");
+				sql.append(" and `name` like '%" + bean.getName() + "%'");
 			}
 			if (bean.getLogin() != null && bean.getLogin().length() > 0) {
-				sql.append(" and login like '" + bean.getLogin() + "%'");
+				sql.append(" and login like '%" + bean.getLogin() + "%'");
 			}
 			if (bean.getPassword() != null && bean.getPassword().length() > 0) {
-				sql.append(" and password like '" + bean.getPassword() + "%'");
+				sql.append(" and password like '%" + bean.getPassword() + "%'");
 			}
 
 			if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
@@ -699,7 +698,7 @@ public class UserModel {
 				sql.append(" and role_id= " + bean.getRoleId());
 			}
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" and description like '" + bean.getDescription() + "%'");
+				sql.append(" and description like '%" + bean.getDescription() + "%'");
 			}
 		}
 
@@ -718,6 +717,51 @@ public class UserModel {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean = new UserBean();
+				bean.setId(rs.getLong(1));
+				bean.setName(rs.getString(2));
+				bean.setLogin(rs.getString(3));
+				bean.setPassword(rs.getString(4));
+				bean.setMobileNo(rs.getString(5));
+				bean.setRoleId(rs.getLong(6));
+				bean.setCreatedBy(rs.getString(7));
+				bean.setModifiedBy(rs.getString(8));
+				bean.setCreatedDatetime(rs.getTimestamp(9));
+				bean.setModifiedDatetime(rs.getTimestamp(10));
+				bean.setDescription(rs.getString(11));
+				list.add(bean);
+			}
+			rs.close();
+
+		} catch (Exception e) {
+			throw new ApplicationException("Exception : Exception in search user");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+
+		return list;
+	}
+
+	public List<UserBean> searchInGetMethod(int pageNo, int pageSize) throws ApplicationException {
+		StringBuffer sql = new StringBuffer("select * from st_user");
+
+		// if page size is greater than zero then apply pagination
+		if (pageSize > 0) {
+			// Calculate start record index
+			pageNo = (pageNo - 1) * pageSize;
+
+			sql.append(" Limit " + pageNo + ", " + pageSize);
+			// sql.append(" limit " + pageNo + "," + pageSize);
+		}
+
+		ArrayList list = new ArrayList();
+		Connection conn = null;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			ResultSet rs = pstmt.executeQuery();
+			UserBean bean = null;
 			while (rs.next()) {
 				bean = new UserBean();
 				bean.setId(rs.getLong(1));
@@ -827,9 +871,6 @@ public class UserModel {
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
 				sql.append(" or formlink like '%" + bean.getProductName() + "%'");
 			}
-			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
-				sql.append(" or image_url like'" + bean.getImageURL() + "%'");
-			}
 			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
 				sql.append(" or imageid like '" + bean.getImageId() + "%'");
 			}
@@ -859,8 +900,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
 			}
@@ -982,23 +1023,17 @@ public class UserModel {
 				sql.append(" and id = " + bean.getId());
 			}
 			if (bean.getProductName() != null && bean.getProductName().length() > 0) {
-				sql.append(" and product_name like '" + bean.getProductName() + "%'");
+				sql.append(" and product_name like '%" + bean.getProductName() + "%'");
 			}
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" and description like '" + bean.getDescription() + "%'");
+				sql.append(" and description like '%" + bean.getDescription() + "%'");
 			}
 
 			if (bean.getPartnershipOffer() != null && bean.getPartnershipOffer().length() > 0) {
-				sql.append(" and partnershipoffer like '" + bean.getPartnershipOffer() + "%'");
+				sql.append(" and partnershipoffer like '%" + bean.getPartnershipOffer() + "%'");
 			}
 			if (bean.getFormLink() != null && bean.getFormLink().length() > 0) {
-				sql.append(" and formlink like '" + bean.getFormLink() + "%'");
-			}
-			if (bean.getImageURL() != null && bean.getImageURL().length() > 0) {
-				sql.append(" and image_url like '" + bean.getImageURL() + "%'");
-			}
-			if (bean.getImageId() != null && bean.getImageId().length() > 0) {
-				sql.append(" and imageid like '" + bean.getImageId() + "%'");
+				sql.append(" and formlink like '%" + bean.getFormLink() + "%'");
 			}
 
 			System.out.println(sql);
@@ -1027,12 +1062,12 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
-
 			}
+
 			rs.close();
 		} catch (Exception e) {
 			e.getMessage();
@@ -1071,12 +1106,12 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(bean.getId()));
 				list.add(bean);
-
 			}
+
 			rs.close();
 		} catch (Exception e) {
 			e.getMessage();
@@ -1255,10 +1290,11 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 				list.add(bean);
 			}
+
 			rs.close();
 		} catch (Exception e) {
 			throw new ApplicationException("Exception : Exception in getting list of product");
@@ -1323,7 +1359,7 @@ public class UserModel {
 				bean.setDescription(rs.getString(2));
 				bean.setPartnershipOffer(rs.getString(3));
 				bean.setFormLink(rs.getString(4));
-				bean.setImageURL(rs.getString(5));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
 				bean.setImageId(rs.getString(6));
 				bean.setCategories(createCategoryBeans(rs.getInt(7)));
 				list.add(bean);
@@ -1411,8 +1447,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -1469,8 +1505,8 @@ public class UserModel {
 				bean.setDescription(rs.getString(3));
 				bean.setPartnershipOffer(rs.getString(4));
 				bean.setFormLink(rs.getString(5));
-				bean.setImageURL(rs.getString(6));
-				bean.setImageId(rs.getString(7));
+				bean.setImageURL(S3Handler.getUrl(rs.getString(6)));
+				bean.setImageId(rs.getString(6));
 			}
 			rs.close();
 		} catch (Exception e) {

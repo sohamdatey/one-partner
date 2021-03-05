@@ -32,13 +32,13 @@ import in.onepartner.util.ServletUtility;
  * @Copyright (c) SunilOS
  * 
  */
-@WebServlet(name = "UserCtl", urlPatterns = { "/ctl/UserCtl" })
+@WebServlet(name = "UserCtl", urlPatterns = { "/OnePartner/ctl/UserCtl" })
 public class UserCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(UserCtl.class);
-	
+
 	@Override
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
@@ -225,6 +225,7 @@ public class UserCtl extends BaseCtl {
 				ServletUtility.setBean(bean, request);
 			} catch (ApplicationException e) {
 				log.error(e);
+				ServletUtility.setErrorMessage(e.getMessage(), request);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
@@ -251,26 +252,19 @@ public class UserCtl extends BaseCtl {
 		long id = DataUtility.getLong(request.getParameter("id"));
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			UserBean bean = (UserBean) populateBean(request);
-
 			try {
 				if (id > 0) {
-
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setSuccessMessage("Data is successfully Updated", request);
-
-				}
-
-				else {
-
+				} else {
 					long pk = 0;
 					pk = model.add(bean);
 					bean.setId(pk);
 					ServletUtility.setSuccessMessage("Data is successfully saved", request);
-
 				}
-
 			} catch (ApplicationException e) {
 				log.error(e);
+				ServletUtility.setErrorMessage(e.getMessage(), request);
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
@@ -288,6 +282,7 @@ public class UserCtl extends BaseCtl {
 				return;
 			} catch (ApplicationException e) {
 				log.error(e);
+				ServletUtility.setErrorMessage(e.getMessage(), request);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
